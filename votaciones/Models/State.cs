@@ -16,6 +16,11 @@ namespace votaciones.Models
         [StringLength(50,ErrorMessage =
             "El campo {0} puede contener un maximo de {1} y un minimo de {2} de carcteres."
            ,MinimumLength = 3)]
+        [Display(Name = "Estado de la votacion")]
         public string Description { get; set; }
+
+        //relacion de 1 - * entre voting y estate
+        public virtual ICollection<Voting> Votings { get; set; }
+
     }
 }

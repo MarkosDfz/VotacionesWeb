@@ -6,9 +6,8 @@ using System.Web;
 
 namespace votaciones.Models
 {
-    public class Voting
+    public class VotingView
     {
-        [Key]
         public int VotingId { get; set; }
 
         [Required(ErrorMessage = "El campo {0} es requerido")]
@@ -28,15 +27,27 @@ namespace votaciones.Models
 
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [Display(Name = "Fecha de Inicio")]
-        [DataType(DataType.DateTime)]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd HH:mm }", ApplyFormatInEditMode = true)]
-        public DateTime DateTimeStart { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
+        public DateTime DateStart { get; set; }
 
         [Required(ErrorMessage = "El campo {0} es requerido")]
-        [Display(Name = "Fecha de Finalizacion")]
-        [DataType(DataType.DateTime)]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd HH:mm }", ApplyFormatInEditMode = true)]
-        public DateTime DateTimeEnd { get; set; }
+        [Display(Name = "Hora de Inicio")]
+        [DataType(DataType.Time)]
+        [DisplayFormat(DataFormatString = "{0:HH:mm }", ApplyFormatInEditMode = true)]
+        public DateTime TimeStart { get; set; }
+
+        [Required(ErrorMessage = "El campo {0} es requerido")]
+        [Display(Name = "Fecha de Finalización")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
+        public DateTime DateEnd { get; set; }
+
+        [Required(ErrorMessage = "El campo {0} es requerido")]
+        [Display(Name = "Hora de Finalización")]
+        [DataType(DataType.Time)]
+        [DisplayFormat(DataFormatString = "{0:HH:mm }", ApplyFormatInEditMode = true)]
+        public DateTime TimeEnd { get; set; }
 
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [Display(Name = "Esta habilitado para todos los usuarios?")]
@@ -45,19 +56,5 @@ namespace votaciones.Models
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [Display(Name = "Esta habilitado los votos en blanco?")]
         public bool IsEnableBlankVote { get; set; }
-
-        [Display(Name = "Cantidad de votos")]
-        public int QuantityVotes { get; set; }
-
-        [Display(Name = "Cantidad de votos en blanco")]
-        public int QuantityBlankVotes { get; set; }
-
-        [Display(Name = "Ganador")]
-        public int CandidateWinId { get; set; }
-
-        //relacion de 1 - * entre voting y estate
-        public virtual State State { get; set; }
-
-        public virtual ICollection<VotingGroup> VotingGroups { get; set; }
     }
 }

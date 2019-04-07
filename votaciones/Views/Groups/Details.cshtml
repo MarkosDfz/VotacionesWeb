@@ -1,13 +1,13 @@
-﻿@model votaciones.Models.Group
+﻿@model votaciones.Models.GroupDetailsView
 
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>Detalle</h2>
 
 <div>
-    <h4>Group</h4>
+    <h4>Grupo</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -21,6 +21,53 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.GroupId }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Editar", "Edit", new { id = Model.GroupId }, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Agregar Miembro", "AddMember", new { groupId = Model.GroupId }, new { @class = "btn btn-warning" })
+    @Html.ActionLink("Regresar", "Index", new { }, new { @class = "btn btn-success" })
 </p>
+
+<h3>Miembros</h3>
+
+@if (Model.Members.Count == 0)
+{
+    <h4>No hay miembros actualmente</h4>
+}
+else
+{
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => Model.Members[0].User.UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => Model.Members[0].User.FullName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => Model.Members[0].User.Photo)
+        </th>
+        <th></th>
+    </tr>
+
+    @for (int i = 0; i < Model.Members.Count; i++)
+     { 
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Members[i].User.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Members[i].User.FullName)
+            </td>
+            <td>
+                @if (!string.IsNullOrEmpty(Model.Members[i].User.Photo))
+                {
+                    <img src="@Url.Content(Model.Members[i].User.Photo)" alt="Image" style="width:100px;height:100px;max-width:100%; height:auto;" />
+                }
+            </td>
+            <td>
+                @Html.ActionLink("Eliminar", "DeleteMember", new { id = Model.Members[i].GroupMemberId }, new { @class = "btn btn-danger", onclick = "return confirm('Esta seguro de eliminar miembro?')" })
+            </td>
+        </tr>
+     }
+
+</table>
+}

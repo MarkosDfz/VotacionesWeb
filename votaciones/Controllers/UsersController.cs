@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -10,6 +13,7 @@ using votaciones.Models;
 
 namespace votaciones.Controllers
 {
+    [Authorize]
     public class UsersController : Controller
     {
         private DemocracyContext db = new DemocracyContext();
@@ -46,16 +50,104 @@ namespace votaciones.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "UserId,UserName,FirstName,LastName,Phone,Adress,Grade,Group,Photo")] User user)
+        public ActionResult Create(UserView userView)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                db.Users.Add(user);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                return View(userView);
             }
 
-            return View(user);
+            //Subir Imagen
+
+            string path = string.Empty;
+            string pic = string.Empty;
+
+            if (userView.Photo != null)
+            {
+                pic = Path.GetFileName(userView.Photo.FileName);
+                path = Path.Combine(Server.MapPath("~/Content/Photos"), pic);
+                userView.Photo.SaveAs(path);
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    userView.Photo.InputStream.CopyTo(ms);
+                    byte[] array = ms.GetBuffer();
+                }
+            }
+
+            //Guardar registro
+
+            var user = new User
+            {
+                Adress = userView.Adress,
+                FirstName = userView.FirstName,
+                Grade = userView.Grade,
+                Group = userView.Group,
+                LastName = userView.LastName,
+                Phone = userView.Phone,
+                Photo = pic == string.Empty ? string.Empty : string.Format("~/Content/Photos/{0}",pic),
+                UserName = userView.UserName,
+            };
+
+            db.Users.Add(user);
+
+            try
+            {
+                db.SaveChanges();
+                this.CreateASPUser(userView);
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException != null &&
+                    ex.InnerException.InnerException != null && 
+                    ex.InnerException.InnerException.Message.Contains("UserNameIndex"))
+                {
+                    ViewBag.Error = "El e-mail ya esta registrado";
+                }
+                else
+                {
+                    ViewBag.Error = ex.Message;
+                }
+
+                return View(userView);
+            }
+
+            return RedirectToAction("Index");
+
+        }
+
+        private void CreateASPUser(UserView userView)
+        {
+            //Gestion de usuarios
+
+            var userContext = new ApplicationDbContext();
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(userContext));
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(userContext));
+
+            //crear el rol del usuario
+
+            string roleName = "User";
+
+            //comprobar que el rol no existe sino lo creamos
+
+            if (!roleManager.RoleExists(roleName))
+            {
+                roleManager.Create(new IdentityRole(roleName));
+            }
+
+            // creamos el usuario de ASPNET
+
+            var userASP = new ApplicationUser
+            {
+                UserName = userView.UserName,
+                Email = userView.UserName,
+                PhoneNumber = userView.Phone,
+            };
+
+            userManager.Create(userASP, userASP.UserName);
+
+            userASP = userManager.FindByName(userView.UserName);
+            userManager.AddToRole(userASP.Id, "User");
+
         }
 
         // GET: Users/Edit/5
@@ -65,12 +157,27 @@ namespace votaciones.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = db.Users.Find(id);
+
+            var user = db.Users.Find(id);
+
             if (user == null)
             {
                 return HttpNotFound();
             }
-            return View(user);
+
+            var userView = new UserView
+            {
+                Adress = user.Adress,
+                FirstName = user.FirstName,
+                Grade = user.Grade,
+                Group = user.Group,
+                LastName = user.LastName,
+                Phone = user.Phone,
+                UserId = user.UserId,
+                UserName = user.UserName,
+            };
+
+            return View(userView);
         }
 
         // POST: Users/Edit/5
@@ -78,15 +185,48 @@ namespace votaciones.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "UserId,UserName,FirstName,LastName,Phone,Adress,Grade,Group,Photo")] User user)
+        public ActionResult Edit(UserView userView)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                db.Entry(user).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                return View(userView);
             }
-            return View(user);
+
+            //Subir Imagen
+
+            string path = string.Empty;
+            string pic = string.Empty;
+
+            if (userView.Photo != null)
+            {
+                pic = Path.GetFileName(userView.Photo.FileName);
+                path = Path.Combine(Server.MapPath("~/Content/Photos"), pic);
+                userView.Photo.SaveAs(path);
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    userView.Photo.InputStream.CopyTo(ms);
+                    byte[] array = ms.GetBuffer();
+                }
+            }
+
+            var user = db.Users.Find(userView.UserId);
+
+            user.Adress = userView.Adress;
+            user.FirstName = userView.FirstName;
+            user.Grade = userView.Grade;
+            user.Group = userView.Group;
+            user.LastName = userView.LastName;
+            user.Phone = userView.Phone;
+
+            if (!string.IsNullOrEmpty(pic))
+            {
+                user.Photo = string.Format("~/Content/Photos/{0}", pic);
+            }
+
+            db.Entry(user).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Index");
+
         }
 
         // GET: Users/Delete/5

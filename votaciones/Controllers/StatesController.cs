@@ -121,7 +121,27 @@ namespace votaciones.Controllers
             }
 
             db.States.Remove(state);
-            db.SaveChanges();
+
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException != null &&
+                    ex.InnerException.InnerException != null &&
+                    ex.InnerException.InnerException.Message.Contains("REFERENCE"))
+                {
+                    ViewBag.Error = "No se puede borrar el registro porque tiene valores asociados";
+                }
+                else
+                {
+                    ViewBag.Error = ex.Message;
+                }
+
+                return View(state);
+            }
+            
             return RedirectToAction("Index");
         }
 

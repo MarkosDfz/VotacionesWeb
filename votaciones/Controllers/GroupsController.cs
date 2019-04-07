@@ -14,6 +14,71 @@ namespace votaciones.Controllers
     {
         private DemocracyContext db = new DemocracyContext();
 
+        [HttpGet]
+        public ActionResult DeleteMember(int id)
+        {
+            var member = db.GroupMembers.Find(id);
+            if (member != null)
+            {
+                db.GroupMembers.Remove(member);
+                db.SaveChanges();
+            }
+
+            return RedirectToAction(string.Format("Details/{0}", member.GroupId));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddMember(AddMemberView view)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.UserId = new SelectList(db.Users
+                .OrderBy(u => u.FirstName)
+                .ThenBy(u => u.LastName), "UserId", "FullName");
+                return View(view);
+            }
+
+            var member = db.GroupMembers
+                .Where(gm => gm.GroupId == view.GroupId && gm.UserId == view.UserId)
+                .FirstOrDefault();
+
+            if (member != null)
+            {
+                ViewBag.UserId = new SelectList(db.Users
+                .OrderBy(u => u.FirstName)
+                .ThenBy(u => u.LastName), "UserId", "FullName");
+                ViewBag.Error = "El miembro ya pertenece al grupo";
+                return View(view);
+            }
+
+            member = new GroupMember
+            {
+                GroupId = view.GroupId,
+                UserId = view.UserId,
+            };
+
+            db.GroupMembers.Add(member);
+            db.SaveChanges();
+            return RedirectToAction(string.Format("Details/{0}",view.GroupId));
+
+        }
+
+
+        [HttpGet]
+        public ActionResult AddMember(int groupId)
+        {
+            ViewBag.UserId = new SelectList(db.Users
+                .OrderBy(u => u.FirstName)
+                .ThenBy(u => u.LastName), "UserId", "FullName");
+            var view = new AddMemberView
+            {
+                GroupId = groupId,
+            }; 
+
+            return View(view);
+        }
+
         // GET: Groups
         public ActionResult Index()
         {
@@ -32,7 +97,15 @@ namespace votaciones.Controllers
             {
                 return HttpNotFound();
             }
-            return View(group);
+
+            var view = new GroupDetailsView
+            {
+                GroupId = group.GroupId,
+                Description = group.Description,
+                Members = group.GroupMembers.ToList(),
+            };
+
+            return View(view);
         }
 
         // GET: Groups/Create
@@ -111,7 +184,26 @@ namespace votaciones.Controllers
         {
             Group group = db.Groups.Find(id);
             db.Groups.Remove(group);
-            db.SaveChanges();
+
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException != null &&
+                    ex.InnerException.InnerException != null &&
+                    ex.InnerException.InnerException.Message.Contains("REFERENCE"))
+                {
+                    ViewBag.Error = "No se puede borrar el registro porque tiene valores asociados";
+                }
+                else
+                {
+                    ViewBag.Error = ex.Message;
+                }
+
+                return View(group);
+            }
             return RedirectToAction("Index");
         }
 

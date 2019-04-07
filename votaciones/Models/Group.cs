@@ -18,5 +18,9 @@ namespace votaciones.Models
            , MinimumLength = 3)]
         public string Description { get; set; }
 
+        public virtual ICollection<GroupMember> GroupMembers { get; set; }
+
+        public virtual ICollection<VotingGroup> VotingGroups { get; set; }
+
     }
 }

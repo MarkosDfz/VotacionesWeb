@@ -14,20 +14,26 @@
         <th>
             @Html.DisplayNameFor(model => model.Description)
         </th>
+        <th>
+            Numero De Miembros
+        </th>
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.GroupId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.GroupId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.GroupId })
-        </td>
-    </tr>
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Description)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.GroupMembers.Count)
+    </td>
+    <td>
+        @Html.ActionLink("Editar", "Edit", new { id = item.GroupId }) |
+        @Html.ActionLink("Detaille", "Details", new { id = item.GroupId }) |
+        @Html.ActionLink("Eliminar", "Delete", new { id = item.GroupId })
+    </td>
+</tr>
 }
 
 </table>

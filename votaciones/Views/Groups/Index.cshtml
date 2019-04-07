@@ -7,7 +7,7 @@
     <h2>Grupos de Votacion</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Crear Nuevo", "Create")
 </p>
 <table class="table">
     <tr>
@@ -15,7 +15,7 @@
             @Html.DisplayNameFor(model => model.Description)
         </th>
         <th>
-            Numero De Miembros
+            Número De Miembros
         </th>
         <th></th>
     </tr>
@@ -30,7 +30,7 @@
     </td>
     <td>
         @Html.ActionLink("Editar", "Edit", new { id = item.GroupId }) |
-        @Html.ActionLink("Detaille", "Details", new { id = item.GroupId }) |
+        @Html.ActionLink("Detalle", "Details", new { id = item.GroupId }) |
         @Html.ActionLink("Eliminar", "Delete", new { id = item.GroupId })
     </td>
 </tr>

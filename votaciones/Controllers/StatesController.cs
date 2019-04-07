@@ -132,11 +132,11 @@ namespace votaciones.Controllers
                     ex.InnerException.InnerException != null &&
                     ex.InnerException.InnerException.Message.Contains("REFERENCE"))
                 {
-                    ViewBag.Error = "No se puede borrar el registro porque tiene valores asociados";
+                    ModelState.AddModelError(string.Empty, "No se puede borrar el registro porque tiene valores asociados");
                 }
                 else
                 {
-                    ViewBag.Error = ex.Message;
+                    ModelState.AddModelError(string.Empty, ex.Message);
                 }
 
                 return View(state);

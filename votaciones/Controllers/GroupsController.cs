@@ -48,7 +48,7 @@ namespace votaciones.Controllers
                 ViewBag.UserId = new SelectList(db.Users
                 .OrderBy(u => u.FirstName)
                 .ThenBy(u => u.LastName), "UserId", "FullName");
-                ViewBag.Error = "El miembro ya pertenece al grupo";
+                ModelState.AddModelError(string.Empty, "El miembro ya pertenece al grupo");
                 return View(view);
             }
 
@@ -115,8 +115,7 @@ namespace votaciones.Controllers
         }
 
         // POST: Groups/Create
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
-        // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "GroupId,Description")] Group group)
@@ -147,8 +146,6 @@ namespace votaciones.Controllers
         }
 
         // POST: Groups/Edit/5
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
-        // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "GroupId,Description")] Group group)
@@ -195,11 +192,11 @@ namespace votaciones.Controllers
                     ex.InnerException.InnerException != null &&
                     ex.InnerException.InnerException.Message.Contains("REFERENCE"))
                 {
-                    ViewBag.Error = "No se puede borrar el registro porque tiene valores asociados";
+                    ModelState.AddModelError(string.Empty, "No se puede borrar el registro porque tiene valores asociados");
                 }
                 else
                 {
-                    ViewBag.Error = ex.Message;
+                    ModelState.AddModelError(string.Empty, ex.Message);
                 }
 
                 return View(group);

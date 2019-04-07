@@ -15,6 +15,87 @@ namespace votaciones.Controllers
     {
         private DemocracyContext db = new DemocracyContext();
 
+        public ActionResult DeleteGroup(int id)
+        {
+            var votingGroup = db.VotingGroups.Find(id);
+            if (votingGroup != null)
+            {
+                db.VotingGroups.Remove(votingGroup);
+                db.SaveChanges();
+
+            }
+
+            return RedirectToAction(string.Format("Details/{0}", votingGroup.VotingId));
+        }
+
+        public ActionResult DeleteCandidate(int id)
+        {
+            var candidate = db.Candidates.Find(id);
+            if (candidate != null)
+            {
+                db.Candidates.Remove(candidate);
+                db.SaveChanges();
+
+            }
+
+            return RedirectToAction(string.Format("Details/{0}", candidate.VotingId));
+        }
+
+        [HttpPost]
+        public ActionResult AddCandidate(AddCandidateView view)
+        {
+            if (ModelState.IsValid)
+            {
+                var candidate = db.Candidates
+                    .Where(c => c.VotingId == view.VotingId &&
+                                c.UserId == view.UserId)
+                    .FirstOrDefault();
+
+                if (candidate != null)
+                {
+                    ModelState.AddModelError(string.Empty, "El candidato ya pertenece a la votación");
+                    ViewBag.UserId = new SelectList(db.Users
+                    .OrderBy(u => u.FirstName)
+                    .ThenBy(u => u.LastName), "UserId", "FullName");
+
+                    return View(view);
+                }
+
+                candidate = new Candidate
+                {
+                    UserId = view.UserId,
+                    VotingId = view.VotingId,
+
+                };
+
+                db.Candidates.Add(candidate);
+                db.SaveChanges();
+                return RedirectToAction(string.Format("Details/{0}", view.VotingId));
+
+            }
+
+            ViewBag.UserId = new SelectList(db.Users
+                    .OrderBy(u => u.FirstName)
+                    .ThenBy(u => u.LastName), "UserId", "FullName");
+
+            return View(view);
+        }
+
+            public ActionResult AddCandidate(int id)
+            {
+                var view = new AddCandidateView
+                {
+                    VotingId = id,
+
+                };
+
+                ViewBag.UserId = new SelectList(db.Users
+                    .OrderBy(u => u.FirstName)
+                    .ThenBy(u => u.LastName), "UserId", "FullName");
+
+                return View(view);
+            }
+
         [HttpPost]
         public ActionResult AddGroup(AddGroupView view)
         {
@@ -27,7 +108,7 @@ namespace votaciones.Controllers
 
                 if (votingGroup != null)
                 {
-                    ViewBag.Error = "El grupo ya pertenece a la votación";
+                    ModelState.AddModelError(string.Empty, "El grupo ya pertenece a la votación");
                     ViewBag.GroupId = new SelectList(
                     db.Groups.OrderBy(g => g.Description),
                     "GroupId",
@@ -90,7 +171,26 @@ namespace votaciones.Controllers
             {
                 return HttpNotFound();
             }
-            return View(voting);
+
+            var view = new DetailsVotingView
+            {
+                Candidates = voting.Candidates.ToList(),
+                CandidateWinId = voting.CandidateWinId,
+                DateTimeStart = voting.DateTimeStart,
+                DateTimeEnd = voting.DateTimeEnd,
+                Description = voting.Description,
+                IsEnableBlankVote = voting.IsEnableBlankVote,
+                IsForAllUsers = voting.IsForAllUsers,
+                QuantityVotes = voting.QuantityVotes,
+                QuantityBlankVotes = voting.QuantityBlankVotes,
+                Remarks = voting.Remarks,
+                StateId = voting.StateId,
+                VotingGroups = voting.VotingGroups.ToList(),
+                VotingId = voting.VotingId,
+
+            };
+
+            return View(view);
         }
 
         // GET: Votings/Create

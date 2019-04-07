@@ -68,5 +68,7 @@ namespace votaciones.Models
 
         public virtual ICollection<GroupMember> GroupMembers { get; set; }
 
+        public virtual ICollection<Candidate> Candidates { get; set; }
+
     }
 }

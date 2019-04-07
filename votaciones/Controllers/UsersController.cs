@@ -46,8 +46,7 @@ namespace votaciones.Controllers
         }
 
         // POST: Users/Create
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
-        // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(UserView userView)
@@ -101,11 +100,11 @@ namespace votaciones.Controllers
                     ex.InnerException.InnerException != null && 
                     ex.InnerException.InnerException.Message.Contains("UserNameIndex"))
                 {
-                    ViewBag.Error = "El e-mail ya esta registrado";
+                    ModelState.AddModelError(string.Empty, "El e-mail ya esta registrado");
                 }
                 else
                 {
-                    ViewBag.Error = ex.Message;
+                    ModelState.AddModelError(string.Empty, ex.Message);
                 }
 
                 return View(userView);

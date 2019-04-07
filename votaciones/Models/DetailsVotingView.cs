@@ -6,9 +6,8 @@ using System.Web;
 
 namespace votaciones.Models
 {
-    public class Voting
+    public class DetailsVotingView
     {
-        [Key]
         public int VotingId { get; set; }
 
         [Required(ErrorMessage = "El campo {0} es requerido")]
@@ -56,10 +55,10 @@ namespace votaciones.Models
         public int CandidateWinId { get; set; }
 
         //relacion de 1 - * entre voting y estate
-        public virtual State State { get; set; }
+        public State State { get; set; }
 
-        public virtual ICollection<VotingGroup> VotingGroups { get; set; }
+        public List<VotingGroup> VotingGroups { get; set; }
 
-        public virtual ICollection<Candidate> Candidates { get; set; }
+        public List<Candidate> Candidates { get; set; }
     }
 }

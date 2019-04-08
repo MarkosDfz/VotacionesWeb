@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using votaciones.Models;
@@ -147,29 +149,108 @@ namespace votaciones.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(RegisterUserView userView)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    // Para obtener más información sobre cómo habilitar la confirmación de cuentas y el restablecimiento de contraseña, visite https://go.microsoft.com/fwlink/?LinkID=320771
-                    // Enviar correo electrónico con este vínculo
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirmar cuenta", "Para confirmar la cuenta, haga clic <a href=\"" + callbackUrl + "\">aquí</a>");
+                //Subir Imagen
 
+                string path = string.Empty;
+                string pic = string.Empty;
+
+                if (userView.Photo != null)
+                {
+                    pic = Path.GetFileName(userView.Photo.FileName);
+                    path = Path.Combine(Server.MapPath("~/Content/Photos"), pic);
+                    userView.Photo.SaveAs(path);
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        userView.Photo.InputStream.CopyTo(ms);
+                        byte[] array = ms.GetBuffer();
+                    }
+                }
+
+                //Guardar registro
+
+                var user = new User
+                {
+                    Adress = userView.Adress,
+                    FirstName = userView.FirstName,
+                    Grade = userView.Grade,
+                    Group = userView.Group,
+                    LastName = userView.LastName,
+                    Phone = userView.Phone,
+                    Photo = string.IsNullOrEmpty(pic) ? string.Empty : string.Format("~/Content/Photos/{0}", pic),
+                    UserName = userView.UserName,
+                };
+
+                var db = new DemocracyContext();
+
+                db.Users.Add(user);
+
+                try
+                {
+                    db.SaveChanges();
+                    var userASP = this.CreateASPUser(userView);
+                    await SignInManager.SignInAsync(userASP, isPersistent: false, rememberBrowser: false);
                     return RedirectToAction("Index", "Home");
                 }
-                AddErrors(result);
+                catch (Exception ex)
+                {
+                    if (ex.InnerException != null &&
+                        ex.InnerException.InnerException != null &&
+                        ex.InnerException.InnerException.Message.Contains("UserNameIndex"))
+                    {
+                        ModelState.AddModelError(string.Empty, "El e-mail ya esta registrado");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.Message);
+                    }
+
+                    return View(userView);
+                }
+
+
             }
 
-            // Si llegamos a este punto, es que se ha producido un error y volvemos a mostrar el formulario
-            return View(model);
+            // If we got this far, something failed, redisplay form
+            return View(userView);
+        }
+
+        private ApplicationUser CreateASPUser(RegisterUserView userView)
+        {
+            //Gestion de usuarios
+
+            var userContext = new ApplicationDbContext();
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(userContext));
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(userContext));
+
+            //crear el rol del usuario
+
+            string roleName = "User";
+
+            //comprobar que el rol no existe sino lo creamos
+
+            if (!roleManager.RoleExists(roleName))
+            {
+                roleManager.Create(new IdentityRole(roleName));
+            }
+
+            // creamos el usuario de ASPNET
+
+            var userASP = new ApplicationUser
+            {
+                UserName = userView.UserName,
+                Email = userView.UserName,
+                PhoneNumber = userView.Phone,
+            };
+
+            userManager.Create(userASP, userView.Password);
+
+            userASP = userManager.FindByName(userView.UserName);
+            userManager.AddToRole(userASP.Id, "User");
+            return userASP;
         }
 
         //

@@ -10,6 +10,7 @@ using votaciones.Models;
 
 namespace votaciones.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class GroupsController : Controller
     {
         private DemocracyContext db = new DemocracyContext();
@@ -192,7 +193,7 @@ namespace votaciones.Controllers
                     ex.InnerException.InnerException != null &&
                     ex.InnerException.InnerException.Message.Contains("REFERENCE"))
                 {
-                    ModelState.AddModelError(string.Empty, "No se puede borrar el registro porque tiene valores asociados");
+                    ModelState.AddModelError(string.Empty, "No se puede borrar el registro porque tiene valores relacionados");
                 }
                 else
                 {

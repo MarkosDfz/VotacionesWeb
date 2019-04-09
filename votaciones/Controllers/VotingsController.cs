@@ -10,7 +10,7 @@ using votaciones.Models;
 
 namespace votaciones.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class VotingsController : Controller
     {
         private DemocracyContext db = new DemocracyContext();
@@ -337,7 +337,25 @@ namespace votaciones.Controllers
         {
             Voting voting = db.Votings.Find(id);
             db.Votings.Remove(voting);
-            db.SaveChanges();
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException != null &&
+                    ex.InnerException.InnerException != null &&
+                    ex.InnerException.InnerException.Message.Contains("REFERENCE"))
+                {
+                    ModelState.AddModelError(string.Empty, "El registro no puede ser eliminado porque tiene registros relacionados");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                }
+
+                return View(voting);
+            }
             return RedirectToAction("Index");
         }
 

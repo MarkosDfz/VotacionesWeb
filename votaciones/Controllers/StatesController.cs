@@ -9,7 +9,7 @@ using votaciones.Models;
 
 namespace votaciones.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class StatesController : Controller
     {
         //con esto nos conectamos a la bd
@@ -132,7 +132,7 @@ namespace votaciones.Controllers
                     ex.InnerException.InnerException != null &&
                     ex.InnerException.InnerException.Message.Contains("REFERENCE"))
                 {
-                    ModelState.AddModelError(string.Empty, "No se puede borrar el registro porque tiene valores asociados");
+                    ModelState.AddModelError(string.Empty, "No se puede borrar el registro porque tiene valores relacionados");
                 }
                 else
                 {

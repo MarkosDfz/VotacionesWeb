@@ -45,7 +45,7 @@ namespace votaciones.Models
            , MinimumLength = 8)]
         public string Phone { get; set; }
 
-        [Display(Name = "Direccion")]
+        [Display(Name = "Dirección")]
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(100, ErrorMessage =
             "El campo {0} puede contener un maximo de {1} y un minimo de {2} de carcteres."
@@ -53,7 +53,6 @@ namespace votaciones.Models
         public string Adress { get; set; }
 
         [Display(Name = "Curso")]
-        [Required(ErrorMessage = "El campo {0} es requerido")]
         public string Grade { get; set; }
 
         [Display(Name = "Grupo")]

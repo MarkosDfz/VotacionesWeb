@@ -12,7 +12,7 @@ namespace votaciones.Models
 
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(50, ErrorMessage =
-            "El campo {0} puede contener un maximo de {1} y un minimo de {2} de carcteres."
+            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caracteres."
            , MinimumLength = 3)]
         [Display(Name = "Nombre de la votacion")]
         public string Description { get; set; }
@@ -22,7 +22,7 @@ namespace votaciones.Models
         public int StateId { get; set; }
 
         [DataType(DataType.MultilineText)]
-        [Display(Name = "Descripcion de la votacion")]
+        [Display(Name = "Descripción de la votación")]
         public string Remarks { get; set; }
 
         [Required(ErrorMessage = "El campo {0} es requerido")]
@@ -50,11 +50,11 @@ namespace votaciones.Models
         public DateTime TimeEnd { get; set; }
 
         [Required(ErrorMessage = "El campo {0} es requerido")]
-        [Display(Name = "Esta habilitado para todos los usuarios?")]
+        [Display(Name = "¿Está habilitado para todos los usuarios?")]
         public bool IsForAllUsers { get; set; }
 
         [Required(ErrorMessage = "El campo {0} es requerido")]
-        [Display(Name = "Esta habilitado los votos en blanco?")]
+        [Display(Name = "¿Están habilitados los votos en blanco?")]
         public bool IsEnableBlankVote { get; set; }
     }
 }

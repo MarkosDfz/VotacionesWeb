@@ -10,11 +10,181 @@ using votaciones.Models;
 
 namespace votaciones.Controllers
 {
-    [Authorize(Roles = "Admin")]
     public class VotingsController : Controller
     {
         private DemocracyContext db = new DemocracyContext();
 
+        [Authorize(Roles = "User")]
+        public ActionResult VoteForCandidate(int candidateId, int votingId)
+        {
+            var user = db.Users
+                .Where(u => u.UserName == this.User.Identity.Name)
+                .FirstOrDefault();
+            if (user == null)
+            {
+                return RedirectToAction("Index","Home");
+            }
+
+            var candidate = db.Candidates.Find(candidateId);
+            if (candidate == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var voting = db.Votings.Find(votingId);
+            if (voting == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (this.VoteCandidate(user, candidate, voting))
+            {
+                return RedirectToAction("MyVotings");
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        private bool VoteCandidate(User user, Candidate candidate, Voting voting)
+        {
+            using (var transaction = db.Database.BeginTransaction())
+            {
+                var votingDetail = new VotingDetail
+                {
+                    CandidateId = candidate.CandidateId,
+                    DateTime = DateTime.Now,
+                    UserId = user.UserId,
+                    VotingId = voting.VotingId,
+                };
+
+                db.VotingDetails.Add(votingDetail);
+
+                candidate.QuantityVotes++;
+                db.Entry(candidate).State = EntityState.Modified;
+
+                voting.QuantityVotes++;
+                db.Entry(voting).State = EntityState.Modified;
+
+                try
+                {
+                    db.SaveChanges();
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                }
+            }
+
+            return false;
+        }
+
+        [Authorize(Roles = "User")]
+        public ActionResult Vote(int votingId)
+        {
+            var voting = db.Votings.Find(votingId);
+            var view = new VotingVoteView
+            {
+                DateTimeEnd = voting.DateTimeEnd,
+                DateTimeStart = voting.DateTimeStart,
+                Description = voting.Description,
+                IsEnableBlankVote = voting.IsEnableBlankVote,
+                IsForAllUsers = voting.IsForAllUsers,
+                MyCandidates = voting.Candidates.ToList(),
+                Remarks = voting.Remarks,
+                VotingId = voting.VotingId,
+            };
+
+            return View(view);
+        }
+
+        [Authorize(Roles = "User")]
+        public ActionResult MyVotings()
+        {
+            var user = db.Users.Where(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
+            if (user == null)
+            {
+                ModelState.AddModelError(string.Empty, "Existe un error con el usuario actual, contacte con soporte.");
+                return View();
+            }
+
+            //Obtener del evento de votaciones en el tiempo establecido
+            var state = this.GetState("Abierta");
+
+            var votings = db.Votings
+                .Where(v => v.StateId == state.StateId &&
+                            v.DateTimeStart <= DateTime.Now &&
+                            v.DateTimeEnd >= DateTime.Now)
+                            .Include(v => v.Candidates)
+                            .Include(v => v.VotingGroups)
+                            .Include(v => v.State)
+                            .ToList();
+
+            //Descartar eventos de votacion en el que el usuario ya voto
+            foreach (var voting in votings.ToList())
+            {
+
+                var votingDetail = db.VotingDetails
+                    .Where(vd => vd.VotingId == voting.VotingId &&
+                                 vd.UserId == user.UserId)
+                                 .FirstOrDefault();
+
+                if (votingDetail != null)
+                {
+                    votings.Remove(voting);
+                }
+            }
+
+
+            //descartar los eventos de votacion en los grupos que no pertenese el usuario
+            foreach (var voting in votings.ToList())
+            {
+                if (!voting.IsForAllUsers)
+                {
+                    bool userBelongsToGroup = false;
+
+                    foreach (var votingGroup in voting.VotingGroups)
+                    {
+                        var userGroup = votingGroup.Group.GroupMembers
+                            .Where(gm => gm.UserId == user.UserId)
+                            .FirstOrDefault();
+
+                        if (userGroup != null)
+                        {
+                            userBelongsToGroup = true;
+                            break;
+                        }
+                    }
+
+                    if (!userBelongsToGroup)
+                    {
+                        votings.Remove(voting);
+                    }
+                }
+            }
+
+            return View(votings);
+        }
+
+        private State GetState(string stateName)
+        {
+            var state = db.States.Where(s => s.Description == stateName).FirstOrDefault();
+            if (state == null)
+            {
+                state = new State
+                {
+                    Description = stateName,
+                };
+
+                db.States.Add(state);
+                db.SaveChanges();
+            }
+
+            return state;
+        }
+
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteGroup(int id)
         {
             var votingGroup = db.VotingGroups.Find(id);
@@ -28,6 +198,7 @@ namespace votaciones.Controllers
             return RedirectToAction(string.Format("Details/{0}", votingGroup.VotingId));
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteCandidate(int id)
         {
             var candidate = db.Candidates.Find(id);
@@ -81,20 +252,21 @@ namespace votaciones.Controllers
             return View(view);
         }
 
-            public ActionResult AddCandidate(int id)
+        [Authorize(Roles = "Admin")]
+        public ActionResult AddCandidate(int id)
+        {
+            var view = new AddCandidateView
             {
-                var view = new AddCandidateView
-                {
-                    VotingId = id,
+                VotingId = id,
 
-                };
+            };
 
-                ViewBag.UserId = new SelectList(db.Users
+             ViewBag.UserId = new SelectList(db.Users
                     .OrderBy(u => u.FirstName)
                     .ThenBy(u => u.LastName), "UserId", "FullName");
 
-                return View(view);
-            }
+            return View(view);
+        }
 
         [HttpPost]
         public ActionResult AddGroup(AddGroupView view)
@@ -137,6 +309,8 @@ namespace votaciones.Controllers
 
             return View(view);
         }
+
+        [Authorize(Roles = "Admin")]
         public ActionResult AddGroup(int id)
         {
             ViewBag.GroupId = new SelectList(
@@ -153,6 +327,7 @@ namespace votaciones.Controllers
         }
 
         // GET: Votings
+        [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
             var votings = db.Votings.Include(v => v.State);
@@ -160,6 +335,7 @@ namespace votaciones.Controllers
         }
 
         // GET: Votings/Details/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -194,6 +370,7 @@ namespace votaciones.Controllers
         }
 
         // GET: Votings/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             ViewBag.StateId = new SelectList(db.States, "StateId", "Description");
@@ -244,6 +421,7 @@ namespace votaciones.Controllers
         }
 
         // GET: Votings/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -316,6 +494,7 @@ namespace votaciones.Controllers
         }
 
         // GET: Votings/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)

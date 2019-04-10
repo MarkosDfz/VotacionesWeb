@@ -7,7 +7,10 @@
 <h2>Usuarios</h2>
 
 <p>
-    @Html.ActionLink("Nuevo Usuario", "Create")
+    @Html.ActionLink("Nuevo Usuario", "Create", new { }, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Pdf", "PDF", new { }, new { @class = "btn btn-default" })
+    @Html.ActionLink("Excel", "XLS", new { }, new { @class = "btn btn-default" })
+    @Html.ActionLink("Doc", "DOC", new { }, new { @class = "btn btn-default" })
 </p>
 <table class="table">
     <tr>

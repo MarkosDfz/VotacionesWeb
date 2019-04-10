@@ -13,11 +13,79 @@ using votaciones.Models;
 
 namespace votaciones.Controllers
 {
-    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
         private DemocracyContext db = new DemocracyContext();
 
+        [Authorize(Roles = "User")]
+        public ActionResult MySettings()
+        {
+            var user = db.Users
+                .Where(u => u.UserName == this.User.Identity.Name)
+                .FirstOrDefault();
+            var view = new UserSettingsView
+            {
+                Adress = user.Adress,
+                FirstName = user.FirstName,
+                Grade = user.Grade,
+                Group = user.Group,
+                LastName = user.LastName,
+                Phone = user.Phone,
+                Photo = user.Photo,
+                UserId = user.UserId,
+                UserName = user.UserName,
+            };
+
+            return View(view);
+        }
+
+        [HttpPost]
+        public ActionResult MySettings(UserSettingsView view)
+        {
+            if (ModelState.IsValid)
+            {
+                //Subir Imagen
+
+                string path = string.Empty;
+                string pic = string.Empty;
+
+                if (view.NewPhoto != null)
+                {
+                    pic = Path.GetFileName(view.NewPhoto.FileName);
+                    path = Path.Combine(Server.MapPath("~/Content/Photos"), pic);
+                    view.NewPhoto.SaveAs(path);
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        view.NewPhoto.InputStream.CopyTo(ms);
+                        byte[] array = ms.GetBuffer();
+                    }
+                }
+
+                var user = db.Users.Find(view.UserId);
+
+                user.Adress = view.Adress;
+                user.FirstName = view.FirstName;
+                user.Grade = view.Grade;
+                user.Group = view.Group;
+                user.LastName = view.LastName;
+                user.Phone = view.Phone;
+
+                if (!string.IsNullOrEmpty(pic))
+                {
+                    user.Photo = string.Format("~/Content/Photos/{0}", pic);
+                }
+
+                db.Entry(user).State = EntityState.Modified;
+                db.SaveChanges();
+
+                return RedirectToAction("Index", "Home");
+
+            }
+
+            return View(view);
+        }
+
+        [Authorize(Roles = "Admin")]
         public ActionResult OnOffAdmin(int id)
         {
             var user = db.Users.Find(id);
@@ -44,6 +112,7 @@ namespace votaciones.Controllers
         }
 
         // GET: Users
+        [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
             var userContext = new ApplicationDbContext();
@@ -76,6 +145,7 @@ namespace votaciones.Controllers
         }
 
         // GET: Users/Details/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -91,6 +161,7 @@ namespace votaciones.Controllers
         }
 
         // GET: Users/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             return View();
@@ -201,6 +272,7 @@ namespace votaciones.Controllers
         }
 
         // GET: Users/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -231,8 +303,6 @@ namespace votaciones.Controllers
         }
 
         // POST: Users/Edit/5
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
-        // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(UserView userView)
@@ -280,6 +350,7 @@ namespace votaciones.Controllers
         }
 
         // GET: Users/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)

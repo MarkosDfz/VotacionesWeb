@@ -26,18 +26,29 @@
                     <li>@Html.ActionLink("Acerca de", "About", "Home")</li>
                     <li>@Html.ActionLink("Contacto", "Contact", "Home")</li>
                     @if (this.User.IsInRole("Admin"))
-                     {
-                        <li>@Html.ActionLink("Estado", "Index", "States")</li>
-                        <li>@Html.ActionLink("Grupo", "Index", "Groups")</li>
-                        <li>@Html.ActionLink("Votaciones", "Index", "Votings")</li>
-                        <li>@Html.ActionLink("Usuarios", "Index", "Users")</li>
-                     }
+                    {
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Opciones del Admin<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Estados", "Index", "States")</li>
+                                <li>@Html.ActionLink("Grupos", "Index", "Groups")</li>
+                                <li>@Html.ActionLink("Votaciones", "Index", "Votings")</li>
+                                <li>@Html.ActionLink("Usuarios", "Index", "Users")</li>
+                            </ul>
+                        </li>
+                    }
                     @if (this.User.IsInRole("User"))
-                     {
-                        <li>@Html.ActionLink("Configuración", "MySettings", "Users")</li>
-                        <li>@Html.ActionLink("Mis Votaciones", "MyVotings", "Votings")</li>
-                        <li>@Html.ActionLink("Resultados", "Results", "Votings")</li>
-                     }
+                    {
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Opciones de Usuario<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Configuración", "MySettings", "Users")</li>
+                                <li>@Html.ActionLink("Mis Votaciones", "MyVotings", "Votings")</li>
+                                <li>@Html.ActionLink("Resultados", "Results", "Votings")</li>
+                            </ul>
+                        </li>
+                    }
+                    }
 
                 </ul>
                 @Html.Partial("_LoginPartial")

@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using CrystalDecisions.CrystalReports.Engine;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -16,6 +19,57 @@ namespace votaciones.Controllers
     public class UsersController : Controller
     {
         private DemocracyContext db = new DemocracyContext();
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult PDF()
+        {
+            var report = this.GenerateUserReport();
+            var stream = report.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            return File(stream, "application/pdf");
+        }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult XLS()
+        {
+            var report = this.GenerateUserReport();
+            var stream = report.ExportToStream(CrystalDecisions.Shared.ExportFormatType.Excel);
+            return File(stream, "application/xls,", "Usuarios.xls");
+        }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult DOC()
+        {
+            var report = this.GenerateUserReport();
+            var stream = report.ExportToStream(CrystalDecisions.Shared.ExportFormatType.WordForWindows);
+            return File(stream, "application/doc,", "Usuarios.doc");
+        }
+
+        private ReportClass GenerateUserReport()
+        {
+            var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            var connection = new SqlConnection(connectionString);
+            var dataTable = new DataTable();
+            var sql = "SELECT * FROM Users ORDER BY LastName, FirstName";
+
+            try
+            {
+                connection.Open();
+                var command = new SqlCommand(sql, connection);
+                var adapter = new SqlDataAdapter(command);
+                adapter.Fill(dataTable);
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+
+            var report = new ReportClass();
+            report.FileName = Server.MapPath("/Reports/Users.rpt");
+            report.Load();
+            report.SetDataSource(dataTable);
+            return report;
+
+        }
 
         [Authorize(Roles = "User")]
         public ActionResult MySettings()

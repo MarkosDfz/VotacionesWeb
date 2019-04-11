@@ -1,7 +1,10 @@
-﻿using System;
+﻿using CrystalDecisions.CrystalReports.Engine;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -13,6 +16,105 @@ namespace votaciones.Controllers
     public class VotingsController : Controller
     {
         private DemocracyContext db = new DemocracyContext();
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult Close(int id)
+        {
+            var voting = db.Votings.Find(id);
+            if (voting != null)
+            {
+                var candidate = db.Candidates
+                    .Where(c => c.VotingId == voting.VotingId)
+                    .OrderByDescending(c => c.QuantityVotes)
+                    .FirstOrDefault();
+
+                if (candidate != null)
+                {
+                    var state = this.GetState("Cerrada");
+                    voting.StateId = state.StateId;
+                    voting.CandidateWinId = candidate.User.UserId;
+
+                    db.Entry(voting).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult ShowResults(int id)
+        {
+            var report = this.GenerateResultReport(id);
+            var stream = report.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            return File(stream, "application/pdf");
+        }
+
+        private ReportClass GenerateResultReport(int id)
+        {
+            var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            var connection = new SqlConnection(connectionString);
+            var dataTable = new DataTable();
+            var sql = @"SELECT Votings.VotingId, Votings.Description AS Voting, States.Description AS State, 
+                               Users.FirstName + ' ' + Users.LastName AS Candidate, Candidates.QuantityVotes
+                        FROM   Candidates INNER JOIN
+                               Users ON Candidates.UserId = Users.UserId INNER JOIN
+                               Votings ON Candidates.VotingId = Votings.VotingId INNER JOIN
+                               States ON Votings.StateId = States.StateId
+                        WHERE  Votings.VotingId = " + id;
+
+            try
+            {
+                connection.Open();
+                var command = new SqlCommand(sql, connection);
+                var adapter = new SqlDataAdapter(command);
+                adapter.Fill(dataTable);
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+
+            var report = new ReportClass();
+            report.FileName = Server.MapPath("/Reports/Results.rpt");
+            report.Load();
+            report.SetDataSource(dataTable);
+            return report;
+        }
+
+        [Authorize(Roles = "User")]
+        public ActionResult Results()
+        {
+            var state = this.GetState("Cerrada");
+            var votings = db.Votings
+                .Where(v => v.StateId == state.StateId)
+                .Include(v => v.State);
+            var views = new List<VotingIndexView>();
+            var db2 = new DemocracyContext();
+            foreach (var voting in votings)
+            {
+                User user = null;
+                if (voting.CandidateWinId != 0)
+                {
+                    user = db2.Users.Find(voting.CandidateWinId);
+                }
+
+                views.Add(new VotingIndexView
+                {
+                    CandidateWinId = voting.CandidateWinId,
+                    DateTimeEnd = voting.DateTimeEnd,
+                    DateTimeStart = voting.DateTimeStart,
+                    Description = voting.Description,
+                    IsEnableBlankVote = voting.IsEnableBlankVote,
+                    IsForAllUsers = voting.IsForAllUsers,
+                    QuantityBlankVotes = voting.QuantityBlankVotes,
+                    StateId = voting.StateId,
+                    State = voting.State,
+                    VotingId = voting.VotingId,
+                    Winner = user,
+                });
+            }
+            return View(views);
+
+        }
 
         [Authorize(Roles = "User")]
         public ActionResult VoteForCandidate(int candidateId, int votingId)
@@ -331,7 +433,32 @@ namespace votaciones.Controllers
         public ActionResult Index()
         {
             var votings = db.Votings.Include(v => v.State);
-            return View(votings.ToList());
+            var views = new List<VotingIndexView>();
+            var db2 = new DemocracyContext();
+            foreach (var voting in votings)
+            {
+                User user = null;
+                if (voting.CandidateWinId != 0)
+                {
+                    user = db2.Users.Find(voting.CandidateWinId);
+                }
+
+                views.Add(new VotingIndexView
+                {
+                    CandidateWinId = voting.CandidateWinId,
+                    DateTimeEnd = voting.DateTimeEnd,
+                    DateTimeStart = voting.DateTimeStart,
+                    Description = voting.Description,
+                    IsEnableBlankVote = voting.IsEnableBlankVote,
+                    IsForAllUsers = voting.IsForAllUsers,
+                    QuantityBlankVotes = voting.QuantityBlankVotes,
+                    StateId = voting.StateId,
+                    State = voting.State,
+                    VotingId = voting.VotingId,
+                    Winner = user,
+                });
+            }
+            return View(views);
         }
 
         // GET: Votings/Details/5

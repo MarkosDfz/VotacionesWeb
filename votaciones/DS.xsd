@@ -70,6 +70,31 @@
             </Mappings>
             <Sources />
           </TableAdapter>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="ResultsReportTableAdapter" GeneratorDataComponentClassName="ResultsReportTableAdapter" Name="ResultsReport" UserDataComponentName="ResultsReportTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="DefaultConnection (Web.config)" DbObjectType="Unknown" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>SELECT Votings.VotingId, Votings.Description AS Voting, States.Description AS State, 
+Users.FirstName + ' ' + Users.LastName AS Candidate, Candidates.QuantityVotes
+FROM Candidates INNER JOIN
+ Users ON Candidates.UserId = Users.UserId INNER JOIN
+ Votings ON Candidates.VotingId = Votings.VotingId INNER JOIN
+ States ON Votings.StateId = States.StateId</CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="VotingId" DataSetColumn="VotingId" />
+              <Mapping SourceColumn="Voting" DataSetColumn="Voting" />
+              <Mapping SourceColumn="State" DataSetColumn="State" />
+              <Mapping SourceColumn="Candidate" DataSetColumn="Candidate" />
+              <Mapping SourceColumn="QuantityVotes" DataSetColumn="QuantityVotes" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
         </Tables>
         <Sources />
       </DataSource>
@@ -78,7 +103,7 @@
   <xs:element name="DS" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="DS" msprop:Generator_UserDSName="DS">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="Users" msprop:Generator_TableClassName="UsersDataTable" msprop:Generator_TableVarName="tableUsers" msprop:Generator_TablePropName="Users" msprop:Generator_RowDeletingName="UsersRowDeleting" msprop:Generator_RowChangingName="UsersRowChanging" msprop:Generator_RowEvHandlerName="UsersRowChangeEventHandler" msprop:Generator_RowDeletedName="UsersRowDeleted" msprop:Generator_UserTableName="Users" msprop:Generator_RowChangedName="UsersRowChanged" msprop:Generator_RowEvArgName="UsersRowChangeEvent" msprop:Generator_RowClassName="UsersRow">
+        <xs:element name="Users" msprop:Generator_TableClassName="UsersDataTable" msprop:Generator_TableVarName="tableUsers" msprop:Generator_RowChangedName="UsersRowChanged" msprop:Generator_TablePropName="Users" msprop:Generator_RowDeletingName="UsersRowDeleting" msprop:Generator_RowChangingName="UsersRowChanging" msprop:Generator_RowEvHandlerName="UsersRowChangeEventHandler" msprop:Generator_RowDeletedName="UsersRowDeleted" msprop:Generator_RowClassName="UsersRow" msprop:Generator_UserTableName="Users" msprop:Generator_RowEvArgName="UsersRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="UserId" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnUserId" msprop:Generator_ColumnPropNameInRow="UserId" msprop:Generator_ColumnPropNameInTable="UserIdColumn" msprop:Generator_UserColumnName="UserId" type="xs:int" />
@@ -141,11 +166,44 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        <xs:element name="ResultsReport" msprop:Generator_TableClassName="ResultsReportDataTable" msprop:Generator_TableVarName="tableResultsReport" msprop:Generator_TablePropName="ResultsReport" msprop:Generator_RowDeletingName="ResultsReportRowDeleting" msprop:Generator_RowChangingName="ResultsReportRowChanging" msprop:Generator_RowEvHandlerName="ResultsReportRowChangeEventHandler" msprop:Generator_RowDeletedName="ResultsReportRowDeleted" msprop:Generator_UserTableName="ResultsReport" msprop:Generator_RowChangedName="ResultsReportRowChanged" msprop:Generator_RowEvArgName="ResultsReportRowChangeEvent" msprop:Generator_RowClassName="ResultsReportRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="VotingId" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnVotingId" msprop:Generator_ColumnPropNameInRow="VotingId" msprop:Generator_ColumnPropNameInTable="VotingIdColumn" msprop:Generator_UserColumnName="VotingId" type="xs:int" />
+              <xs:element name="Voting" msprop:Generator_ColumnVarNameInTable="columnVoting" msprop:Generator_ColumnPropNameInRow="Voting" msprop:Generator_ColumnPropNameInTable="VotingColumn" msprop:Generator_UserColumnName="Voting">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="State" msprop:Generator_ColumnVarNameInTable="columnState" msprop:Generator_ColumnPropNameInRow="State" msprop:Generator_ColumnPropNameInTable="StateColumn" msprop:Generator_UserColumnName="State">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Candidate" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnCandidate" msprop:Generator_ColumnPropNameInRow="Candidate" msprop:Generator_ColumnPropNameInTable="CandidateColumn" msprop:Generator_UserColumnName="Candidate" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="101" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="QuantityVotes" msprop:Generator_ColumnVarNameInTable="columnQuantityVotes" msprop:Generator_ColumnPropNameInRow="QuantityVotes" msprop:Generator_ColumnPropNameInTable="QuantityVotesColumn" msprop:Generator_UserColumnName="QuantityVotes" type="xs:int" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
       </xs:choice>
     </xs:complexType>
     <xs:unique name="Constraint1" msdata:PrimaryKey="true">
       <xs:selector xpath=".//mstns:Users" />
       <xs:field xpath="mstns:UserId" />
+    </xs:unique>
+    <xs:unique name="ResultsReport_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:ResultsReport" />
+      <xs:field xpath="mstns:VotingId" />
     </xs:unique>
   </xs:element>
 </xs:schema>

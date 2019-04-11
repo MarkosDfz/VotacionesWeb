@@ -59,9 +59,6 @@ namespace votaciones.Models
         public string Group { get; set; }
 
         [Display(Name = "Foto")]
-        [StringLength(200, ErrorMessage =
-            "El campo {0} puede contener un maximo de {1} y un minimo de {2} de carcteres."
-           , MinimumLength = 5)]
         [DataType(DataType.ImageUrl)]
         public string Photo { get; set; }
 

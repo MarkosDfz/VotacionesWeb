@@ -50,10 +50,10 @@ namespace votaciones.Models
         public DateTime TimeEnd { get; set; }
 
         [Required(ErrorMessage = "El campo {0} es requerido")]
-        [Display(Name = "¿Está habilitado para todos los usuarios?")]
+        [Display(Name = "¿Para todos los usuarios?")]
         public bool IsForAllUsers { get; set; }
 
-        [Required(ErrorMessage = "El campo {0} es requerido")]
+        //[Required(ErrorMessage = "El campo {0} es requerido")]
         [Display(Name = "¿Están habilitados los votos en blanco?")]
         public bool IsEnableBlankVote { get; set; }
     }

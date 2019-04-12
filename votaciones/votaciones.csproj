@@ -252,7 +252,9 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\config.png" />
+    <Content Include="Content\Images\login.png" />
     <Content Include="Content\Images\logo.png" />
+    <Content Include="Content\Images\register.png" />
     <Content Include="Content\Images\resul.png" />
     <Content Include="Content\Images\voto.png" />
     <Content Include="favicon.ico" />

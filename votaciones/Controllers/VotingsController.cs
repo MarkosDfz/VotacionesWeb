@@ -59,7 +59,7 @@ namespace votaciones.Controllers
                                Users ON Candidates.UserId = Users.UserId INNER JOIN
                                Votings ON Candidates.VotingId = Votings.VotingId INNER JOIN
                                States ON Votings.StateId = States.StateId
-                        WHERE  Votings.VotingId = " + id;
+                        WHERE  Votings.VotingId = " + id + " ORDER BY Candidates.QuantityVotes DESC";
 
             try
             {
@@ -80,7 +80,7 @@ namespace votaciones.Controllers
             return report;
         }
 
-        [Authorize(Roles = "User")]
+
         public ActionResult Results()
         {
             var state = this.GetState("Cerrada");
@@ -106,6 +106,7 @@ namespace votaciones.Controllers
                     IsEnableBlankVote = voting.IsEnableBlankVote,
                     IsForAllUsers = voting.IsForAllUsers,
                     QuantityBlankVotes = voting.QuantityBlankVotes,
+                    Remarks = voting.Remarks,
                     StateId = voting.StateId,
                     State = voting.State,
                     VotingId = voting.VotingId,
@@ -452,6 +453,7 @@ namespace votaciones.Controllers
                     IsEnableBlankVote = voting.IsEnableBlankVote,
                     IsForAllUsers = voting.IsForAllUsers,
                     QuantityBlankVotes = voting.QuantityBlankVotes,
+                    Remarks = voting.Remarks,
                     StateId = voting.StateId,
                     State = voting.State,
                     VotingId = voting.VotingId,

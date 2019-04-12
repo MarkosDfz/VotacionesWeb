@@ -6,9 +6,9 @@
 
     <h2>Estados de la votacion</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+    <p>
+        @Html.ActionLink("Crear Estado", "Create", new { }, new { @class = "btn btn-primary" })
+    </p>
 <table class="table">
     <tr>
         <th>
@@ -23,9 +23,9 @@
             @Html.DisplayFor(modelItem => item.Description)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.StateId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.StateId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.StateId })
+            @Html.ActionLink("Editar", "Edit", new { id=item.StateId }, new { @class = "btn btn-success" }) 
+            @Html.ActionLink("Detalles", "Details", new { id=item.StateId }, new { @class = "btn btn-info" }) 
+            @Html.ActionLink("Eliminar", "Delete", new { id=item.StateId }, new { @class = "btn btn-danger" })
         </td>
     </tr>
 }

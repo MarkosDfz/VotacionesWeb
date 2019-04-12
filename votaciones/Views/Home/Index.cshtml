@@ -9,7 +9,7 @@
             <p class="lead">Sistema de votaciones de la Universidad Técnica de Cotopaxi.</p>
             @if (!this.User.IsInRole("Admin") && !this.User.IsInRole("User"))
             {
-                <p class="text-danger">Para usar el sistema por favor Inicia Sesión, si usas el sistema por primera vez por favor registrate en el sistema. </p>
+                <p class="text-danger",  style="text-align:justify">Para usar el sistema por favor Inicia Sesión, si ingresas por primera vez por favor registrate en el sistema. </p>
 
             }
             @*<p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>*@
@@ -19,29 +19,59 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-4">
-        <h2>Mi Configuración</h2>
-        <p>
-            Cambia tu información personal y contraseña.
 
-        </p>
-        @Html.ActionLink("Configuración", "MySettings", "Users", new { }, new { @class = "btn btn-primary" })
-        <img src="~/Content/Images/config.png" style="width:150px; height:150px; max-width:100%" />
+@if (!this.User.IsInRole("Admin") && !this.User.IsInRole("User"))
+{
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Registrarse</h2>
+            <p>Crea tu propio usuario en el sistema.</p>
+            @Html.ActionLink("Registrarse", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "btn btn-primary" })&nbsp;&nbsp;&nbsp;
+            <img src="~/Content/Images/register.png" style="width:150px; height:150px; max-width:100%" />
 
+        </div>
+        <div class="col-md-4">
+            <h2>Iniciar Sesión</h2>
+            <p>Ingresa con tus credenciales en el sistema.</p>
+            @Html.ActionLink("Iniciar Sesión", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "btn btn-warning" })
+            <img src="~/Content/Images/login.png" style="width:150px; height:150px; max-width:100%" />
+
+        </div>
+        <div class="col-md-4">
+            <h2>Resultados</h2>
+            <p>Mira los resultados de las votaciones.</p>
+            @Html.ActionLink("Resultados", "Results", "Votings", new { }, new { @class = "btn btn-info" })&nbsp;
+            <img src="~/Content/Images/resul.png" style="width:150px; height:150px; max-width:100%" />
+
+        </div>
     </div>
-    <div class="col-md-4">
-        <h2>Mis Votaciones</h2>
-        <p>Vota por los candidatos de tu preferencia.</p>
-        @Html.ActionLink("Mis Votaciones", "MyVotings", "Votings", new { }, new { @class = "btn btn-warning" })
-        <img src="~/Content/Images/voto.png" style="width:150px; height:150px; max-width:100%" />
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Mi Configuración</h2>
+            <p>
+                Cambia tu información personal y contraseña.
 
-    </div>
-    <div class="col-md-4">
-        <h2>Resultados</h2>
-        <p>Mira los resultados de las votaciones.</p>
-        @Html.ActionLink("Resultados", "Results", "Votings", new { }, new { @class = "btn btn-info" })
-        <img src="~/Content/Images/resul.png" style="width:150px; height:150px; max-width:100%" />
+            </p>
+            @Html.ActionLink("Configuración", "MySettings", "Users", new { }, new { @class = "btn btn-primary" })
+            <img src="~/Content/Images/config.png" style="width:150px; height:150px; max-width:100%" />
 
+        </div>
+        <div class="col-md-4">
+            <h2>Mis Votaciones</h2>
+            <p>Vota por los candidatos de tu preferencia.</p>
+            @Html.ActionLink("Mis Votaciones", "MyVotings", "Votings", new { }, new { @class = "btn btn-warning" })
+            <img src="~/Content/Images/voto.png" style="width:150px; height:150px; max-width:100%" />
+
+        </div>
+        <div class="col-md-4">
+            <h2>Resultados</h2>
+            <p>Mira los resultados de las votaciones.</p>
+            @Html.ActionLink("Resultados", "Results", "Votings", new { }, new { @class = "btn btn-info" })&nbsp;
+            <img src="~/Content/Images/resul.png" style="width:150px; height:150px; max-width:100%" />
+
+        </div>
     </div>
-</div>
+}

@@ -11,7 +11,7 @@ namespace votaciones.Models
         [Display(Name = "Contraseña")]
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(20, ErrorMessage =
-            "El campo {0} puede contener un maximo de {1} y un minimo de {2} de carcteres."
+            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caracteres."
            , MinimumLength = 8)]
         [DataType(DataType.Password)]
         public string Password { get; set; }
@@ -19,7 +19,7 @@ namespace votaciones.Models
         [Display(Name = "Confirmar Contraseña")]
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(20, ErrorMessage =
-            "El campo {0} puede contener un maximo de {1} y un minimo de {2} de carcteres."
+            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caracteres."
            , MinimumLength = 8)]
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "La contraseña y la confirmación no coinciden")]

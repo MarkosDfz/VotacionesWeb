@@ -4,10 +4,10 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Detalle</h2>
+<h2>Detalle del Grupo</h2>
 
 <div>
-    <h4>Grupo</h4>
+
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -23,7 +23,7 @@
 <p>
     @Html.ActionLink("Editar", "Edit", new { id = Model.GroupId }, new { @class = "btn btn-primary" })
     @Html.ActionLink("Agregar Miembro", "AddMember", new { groupId = Model.GroupId }, new { @class = "btn btn-warning" })
-    @Html.ActionLink("Regresar", "Index", new { }, new { @class = "btn btn-success" })
+    @Html.ActionLink("Volver", "Index", new { }, new { @class = "btn btn-success" })
 </p>
 
 <h3>Miembros</h3>

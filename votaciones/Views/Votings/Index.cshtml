@@ -29,6 +29,7 @@
         <th>
             @Html.DisplayNameFor(model => model.IsForAllUsers)
         </th>
+
         @*<th>
             @Html.DisplayNameFor(model => model.IsEnableBlankVote)
         </th>*@
@@ -67,15 +68,16 @@
         @*<td>
             @Html.DisplayFor(modelItem => item.QuantityBlankVotes)
         </td>*@
+
         <td>
             @Html.DisplayFor(modelItem => item.Winner.FullName)
         </td>
         <td>
-            @Html.ActionLink("Editar", "Edit", new { id = item.VotingId }, new { @class = "btn btn-primary" }) 
-            @Html.ActionLink("Detalles", "Details", new { id = item.VotingId }, new { @class = "btn btn-warning" }) 
-            @Html.ActionLink("Resultados", "ShowResults", new { id = item.VotingId }, new { @class = "btn btn-default", target = "_blank" }) 
-            @Html.ActionLink("Cerrar", "Close", new { id = item.VotingId }, new { @class = "btn btn-info", onclick = "return confirm('¿Está seguro de cerrar esta votación?')" }) 
-            @Html.ActionLink("Eliminar", "Delete", new { id = item.VotingId }, new { @class = "btn btn-danger" })
+            @Html.ActionLink("Editar", "Edit", new { id = item.VotingId }) |
+            @Html.ActionLink("Detalles", "Details", new { id = item.VotingId }) |
+            @Html.ActionLink("Resultados", "ShowResults", new { id = item.VotingId }, new { target = "_blank" }) |
+            @Html.ActionLink("Cerrar", "Close", new { id = item.VotingId }, new { onclick = "return confirm('¿Está seguro de cerrar esta votación?')" }) |
+            @Html.ActionLink("Eliminar", "Delete", new { id = item.VotingId })
         </td>
     </tr>
 }

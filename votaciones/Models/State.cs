@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -10,16 +11,18 @@ namespace votaciones.Models
     public class State
     {
         [Key]
+        [Display(Name = "Estado")]
         public int StateId { get; set; }
 
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(50,ErrorMessage =
-            "El campo {0} puede contener un maximo de {1} y un minimo de {2} de carcteres."
+            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caracteres."
            ,MinimumLength = 3)]
-        [Display(Name = "Estado de la votacion")]
+        [Display(Name = "Estado de la votación")]
         public string Description { get; set; }
 
         //relacion de 1 - * entre voting y estate
+        [JsonIgnore]
         public virtual ICollection<Voting> Votings { get; set; }
 
     }

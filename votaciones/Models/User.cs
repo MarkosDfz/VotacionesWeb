@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,7 +16,7 @@ namespace votaciones.Models
         [Display(Name = "E-Mail")]
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(100, ErrorMessage =
-            "El campo {0} puede contener un maximo de {1} y un minimo de {2} de carcteres."
+            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caacteres."
            , MinimumLength = 7)]
         [DataType(DataType.EmailAddress)]
         [Index("UserNameIndex", IsUnique = true)]
@@ -24,14 +25,14 @@ namespace votaciones.Models
         [Display(Name = "Nombres")]
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(50, ErrorMessage =
-            "El campo {0} puede contener un maximo de {1} y un minimo de {2} de carcteres."
+            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caacteres."
            , MinimumLength = 3)]
         public string FirstName { get; set; }
 
         [Display(Name = "Apellidos")]
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(50, ErrorMessage =
-            "El campo {0} puede contener un maximo de {1} y un minimo de {2} de carcteres."
+            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caacteres."
            , MinimumLength = 3)]
         public string LastName { get; set; }
 
@@ -41,14 +42,14 @@ namespace votaciones.Models
         [Display(Name = "Celular")]
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(10, ErrorMessage =
-            "El campo {0} puede contener un maximo de {1} y un minimo de {2} de carcteres."
+            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caacteres."
            , MinimumLength = 8)]
         public string Phone { get; set; }
 
         [Display(Name = "Dirección")]
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(100, ErrorMessage =
-            "El campo {0} puede contener un maximo de {1} y un minimo de {2} de carcteres."
+            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caacteres."
            , MinimumLength = 5)]
         public string Adress { get; set; }
 
@@ -62,10 +63,13 @@ namespace votaciones.Models
         [DataType(DataType.ImageUrl)]
         public string Photo { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<GroupMember> GroupMembers { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<Candidate> Candidates { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<VotingDetail> VotingDetails { get; set; }
     }
 }

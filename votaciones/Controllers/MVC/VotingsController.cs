@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using votaciones.Classes;
 using votaciones.Models;
 
 namespace votaciones.Controllers
@@ -30,7 +31,7 @@ namespace votaciones.Controllers
 
                 if (candidate != null)
                 {
-                    var state = this.GetState("Cerrada");
+                    var state = Utilities.GetState("Cerrada");
                     voting.StateId = state.StateId;
                     voting.CandidateWinId = candidate.User.UserId;
 
@@ -83,7 +84,7 @@ namespace votaciones.Controllers
 
         public ActionResult Results()
         {
-            var state = this.GetState("Cerrada");
+            var state = Utilities.GetState("Cerrada");
             var votings = db.Votings
                 .Where(v => v.StateId == state.StateId)
                 .Include(v => v.State);
@@ -212,79 +213,8 @@ namespace votaciones.Controllers
                 return View();
             }
 
-            //Obtener del evento de votaciones en el tiempo establecido
-            var state = this.GetState("Abierta");
-
-            var votings = db.Votings
-                .Where(v => v.StateId == state.StateId &&
-                            v.DateTimeStart <= DateTime.Now &&
-                            v.DateTimeEnd >= DateTime.Now)
-                            .Include(v => v.Candidates)
-                            .Include(v => v.VotingGroups)
-                            .Include(v => v.State)
-                            .ToList();
-
-            //Descartar eventos de votacion en el que el usuario ya voto
-            foreach (var voting in votings.ToList())
-            {
-
-                var votingDetail = db.VotingDetails
-                    .Where(vd => vd.VotingId == voting.VotingId &&
-                                 vd.UserId == user.UserId)
-                                 .FirstOrDefault();
-
-                if (votingDetail != null)
-                {
-                    votings.Remove(voting);
-                }
-            }
-
-
-            //descartar los eventos de votacion en los grupos que no pertenese el usuario
-            foreach (var voting in votings.ToList())
-            {
-                if (!voting.IsForAllUsers)
-                {
-                    bool userBelongsToGroup = false;
-
-                    foreach (var votingGroup in voting.VotingGroups)
-                    {
-                        var userGroup = votingGroup.Group.GroupMembers
-                            .Where(gm => gm.UserId == user.UserId)
-                            .FirstOrDefault();
-
-                        if (userGroup != null)
-                        {
-                            userBelongsToGroup = true;
-                            break;
-                        }
-                    }
-
-                    if (!userBelongsToGroup)
-                    {
-                        votings.Remove(voting);
-                    }
-                }
-            }
-
+            var votings = Utilities.MyVotings(user);
             return View(votings);
-        }
-
-        private State GetState(string stateName)
-        {
-            var state = db.States.Where(s => s.Description == stateName).FirstOrDefault();
-            if (state == null)
-            {
-                state = new State
-                {
-                    Description = stateName,
-                };
-
-                db.States.Add(state);
-                db.SaveChanges();
-            }
-
-            return state;
         }
 
         [Authorize(Roles = "Admin")]
@@ -304,11 +234,29 @@ namespace votaciones.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DeleteCandidate(int id)
         {
+            //nota importante, aqui no me muestra el error en la app
             var candidate = db.Candidates.Find(id);
             if (candidate != null)
             {
                 db.Candidates.Remove(candidate);
-                db.SaveChanges();
+
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    if (ex.InnerException != null &&
+                        ex.InnerException.InnerException != null &&
+                        ex.InnerException.InnerException.Message.Contains("REFERENCE"))
+                    {
+                        ModelState.AddModelError(string.Empty, "El registro no puede ser eliminado porque tiene registros relacionados");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.Message);
+                    }
+                }
 
             }
 
@@ -490,6 +438,7 @@ namespace votaciones.Controllers
                 QuantityBlankVotes = voting.QuantityBlankVotes,
                 Remarks = voting.Remarks,
                 StateId = voting.StateId,
+                State = voting.State,
                 VotingGroups = voting.VotingGroups.ToList(),
                 VotingId = voting.VotingId,
 

@@ -4,7 +4,7 @@
     ViewBag.Title = "AddMember";
 }
 
-<h2>Agregar un miembro a un grupo</h2>
+<h2>Añadir miembro a un grupo</h2>
 <h3>@ViewBag.Error </h3>
 
 @using (Html.BeginForm())
@@ -12,7 +12,7 @@
     @Html.AntiForgeryToken()
 
 <div class="form-horizontal">
-    <h4>Añadir Miembro</h4>
+
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     @Html.HiddenFor(model => model.GroupId)
@@ -25,18 +25,17 @@
             @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
         </div>
     </div>
-
+    <br />
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <input type="submit" value="Agregar Miembro" class="btn btn-primary" />
+            @Html.ActionLink("Volver", "Index", new { id = Model.GroupId }, new { @class = "btn btn-success" })
         </div>
     </div>
 </div>
 }
 
-<div>
-    @Html.ActionLink("Volver", "Index", new { id = Model.GroupId } ,new { @class = "btn btn-success"})
-</div>
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

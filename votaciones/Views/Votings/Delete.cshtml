@@ -4,11 +4,10 @@
     ViewBag.Title = "Delete";
 }
 
-<h2>Eliminar</h2>
 
 <h3>¿Está seguro de eliminar este registro?</h3>
 <div>
-    <h4>Votación</h4>
+
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <hr />
     <dl class="dl-horizontal">
@@ -60,13 +59,13 @@
             @Html.DisplayFor(model => model.IsForAllUsers)
         </dd>
 
-        <dt>
+        @*<dt>
             @Html.DisplayNameFor(model => model.IsEnableBlankVote)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.IsEnableBlankVote)
-        </dd>
+        </dd>*@
 
         <dt>
             @Html.DisplayNameFor(model => model.QuantityVotes)
@@ -76,21 +75,21 @@
             @Html.DisplayFor(model => model.QuantityVotes)
         </dd>
 
-        <dt>
+        @*<dt>
             @Html.DisplayNameFor(model => model.QuantityBlankVotes)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.QuantityBlankVotes)
-        </dd>
+        </dd>*@
 
-        <dt>
+        @*<dt>
             @Html.DisplayNameFor(model => model.CandidateWinId)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.CandidateWinId)
-        </dd>
+        </dd>*@
 
     </dl>
 
@@ -100,7 +99,7 @@
 
         <div class="form-actions no-color">
             <input type="submit" value="Eliminar" class="btn btn-danger" />
-            @Html.ActionLink("Volver", "Index")
+            @Html.ActionLink("Volver", "Index", new { }, new { @class="btn btn-success" })
         </div>
     }
 </div>

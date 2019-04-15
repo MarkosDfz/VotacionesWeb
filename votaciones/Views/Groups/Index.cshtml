@@ -4,15 +4,15 @@
     ViewBag.Title = "Index";
 }
 
-    <h2>Grupos de Votacion</h2>
+    <h2>Grupos de Votación</h2>
 
 <p>
-    @Html.ActionLink("Crear Nuevo", "Create")
+    @Html.ActionLink("Crear Grupo", "Create", new { }, new { @class = "btn btn-primary" })
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Description)
+            Descripción
         </th>
         <th>
             Número De Miembros

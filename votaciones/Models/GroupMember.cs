@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -15,8 +16,10 @@ namespace votaciones.Models
 
         public int UserId { get; set; }
 
+        [JsonIgnore]
         public virtual Group Group { get; set; }
 
+        [JsonIgnore]
         public virtual User User { get; set; }
 
     }

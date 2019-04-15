@@ -12,6 +12,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using votaciones.Classes;
 using votaciones.Models;
 
 namespace votaciones.Controllers
@@ -268,7 +269,7 @@ namespace votaciones.Controllers
             try
             {
                 db.SaveChanges();
-                this.CreateASPUser(userView);
+                Utilities.CreateASPUser(userView);
             }
             catch (Exception ex)
             {
@@ -290,40 +291,7 @@ namespace votaciones.Controllers
 
         }
 
-        private void CreateASPUser(UserView userView)
-        {
-            //Gestion de usuarios
-
-            var userContext = new ApplicationDbContext();
-            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(userContext));
-            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(userContext));
-
-            //crear el rol del usuario
-
-            string roleName = "User";
-
-            //comprobar que el rol no existe sino lo creamos
-
-            if (!roleManager.RoleExists(roleName))
-            {
-                roleManager.Create(new IdentityRole(roleName));
-            }
-
-            // creamos el usuario de ASPNET
-
-            var userASP = new ApplicationUser
-            {
-                UserName = userView.UserName,
-                Email = userView.UserName,
-                PhoneNumber = userView.Phone,
-            };
-
-            userManager.Create(userASP, userASP.UserName);
-
-            userASP = userManager.FindByName(userView.UserName);
-            userManager.AddToRole(userASP.Id, "User");
-
-        }
+        
 
         // GET: Users/Edit/5
         [Authorize(Roles = "Admin")]

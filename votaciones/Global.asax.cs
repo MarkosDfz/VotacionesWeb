@@ -72,7 +72,7 @@ namespace votaciones
             }
 
             userManager.AddToRole(userASP.Id, "Admin");
-            userManager.AddToRole(userASP.Id, "User");
+            
         }
 
         private void CheckRole(string roleName, ApplicationDbContext userContext)

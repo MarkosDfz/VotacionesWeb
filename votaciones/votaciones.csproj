@@ -243,12 +243,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Results.rpt</DependentUpon>
       <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Reports\Users.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Users.rpt</DependentUpon>
       <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -280,6 +282,8 @@
     <Content Include="DS.xss">
       <DependentUpon>DS.xsd</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\votacionesapp - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\votacionesapp - Web Deploy1.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -378,14 +382,16 @@
     <EmbeddedResource Include="Migrations\201904031732006_20190403.resx">
       <DependentUpon>201904031732006_20190403.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Results.rpt">
+    <Content Include="Reports\Results.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Results.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Users.rpt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\Users.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Users.cs</LastGenOutput>
-    </EmbeddedResource>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />

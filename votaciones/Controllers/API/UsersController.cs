@@ -111,7 +111,7 @@ namespace votaciones.Controllers.API
 
         // PUT: api/Users/5
         [HttpPut]
-        public IHttpActionResult PutUser(int id, UserChange user)
+        public IHttpActionResult PutUser(int id, User user)
         {
             if (!ModelState.IsValid)
             {
@@ -122,48 +122,23 @@ namespace votaciones.Controllers.API
             {
                 return BadRequest();
             }
-
-            var currentUser = db.Users.Find(id);
-            if (currentUser == null)
-            {
-                return this.BadRequest("Usuario no encontrado");
-            }
-
-            var userContext = new ApplicationDbContext();
-            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(userContext));
-            var userASP = userManager.Find(currentUser.UserName, user.CurrentPassword);
-            if (userASP == null)
-            {
-                return this.BadRequest("Contraseña incorrecta");
-            }
-
-            if (currentUser.UserName != user.UserName)
-            {
-                Utilities.ChangeUserName(currentUser.UserName, user);
-            }
-
-            var userModel = new User
-            {
-                Adress = user.Adress,
-                FirstName = user.FirstName,
-                Grade = user.Grade,
-                Group = user.Group,
-                LastName = user.LastName,
-                Phone = user.Phone,
-                Photo = user.Photo,
-                UserId = user.UserId,
-                UserName = user.UserName,
-            };
-
-            db.Entry(userModel).State = EntityState.Modified;
+            
+            db.Entry(user).State = EntityState.Modified;
 
             try
             {
                 db.SaveChanges();
             }
-            catch (Exception ex)
+            catch (DbUpdateConcurrencyException)
             {
-                return this.BadRequest(ex.Message.ToString());
+                if (!UserExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
 
             return this.Ok(user);
@@ -191,11 +166,43 @@ namespace votaciones.Controllers.API
 
             db.Users.Add(user);
             db.SaveChanges();
-            Utilities.CreateASPUser(userView);
+            this.CreateASPUser(userView);
 
             return CreatedAtRoute("DefaultApi", new { id = user.UserId }, user);
         }
 
+        private ApplicationUser CreateASPUser(RegisterUserView userView)
+        {
+            var userContext = new ApplicationDbContext();
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(userContext));
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(userContext));
+
+            //crear el rol del usuario
+
+            string roleName = "User";
+
+            //comprobar que el rol no existe sino lo creamos
+
+            if (!roleManager.RoleExists(roleName))
+            {
+                roleManager.Create(new IdentityRole(roleName));
+            }
+
+            // creamos el usuario de ASPNET
+
+            var userASP = new ApplicationUser
+            {
+                UserName = userView.UserName,
+                Email = userView.UserName,
+                PhoneNumber = userView.Phone,
+            };
+
+            userManager.Create(userASP, userView.Password);
+
+            userASP = userManager.FindByName(userView.UserName);
+            userManager.AddToRole(userASP.Id, "User");
+            return userASP;
+        }
 
         protected override void Dispose(bool disposing)
         {

@@ -16,7 +16,7 @@ namespace votaciones.Models
         [Display(Name = "E-Mail")]
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(100, ErrorMessage =
-            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caacteres."
+            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caracteres."
            , MinimumLength = 7)]
         [DataType(DataType.EmailAddress)]
         [Index("UserNameIndex", IsUnique = true)]
@@ -25,14 +25,14 @@ namespace votaciones.Models
         [Display(Name = "Nombres")]
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(50, ErrorMessage =
-            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caacteres."
+            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caracteres."
            , MinimumLength = 3)]
         public string FirstName { get; set; }
 
         [Display(Name = "Apellidos")]
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(50, ErrorMessage =
-            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caacteres."
+            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caracteres."
            , MinimumLength = 3)]
         public string LastName { get; set; }
 
@@ -42,14 +42,14 @@ namespace votaciones.Models
         [Display(Name = "Celular")]
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(10, ErrorMessage =
-            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caacteres."
+            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caracteres."
            , MinimumLength = 8)]
         public string Phone { get; set; }
 
         [Display(Name = "Dirección")]
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(100, ErrorMessage =
-            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caacteres."
+            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caracteres."
            , MinimumLength = 5)]
         public string Adress { get; set; }
 

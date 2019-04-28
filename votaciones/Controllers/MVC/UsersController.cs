@@ -249,7 +249,7 @@ namespace votaciones.Controllers
                     byte[] array = ms.GetBuffer();
                 }
             }
-
+            
             //Guardar registro
 
             var user = new User
@@ -260,7 +260,7 @@ namespace votaciones.Controllers
                 Group = userView.Group,
                 LastName = userView.LastName,
                 Phone = userView.Phone,
-                Photo = pic == string.Empty ? string.Empty : string.Format("~/Content/Photos/{0}",pic),
+                Photo = pic == string.Empty ? string.Format("~/Content/Photos/noimage.png") : string.Format("~/Content/Photos/{0}",pic),
                 UserName = userView.UserName,
             };
 
@@ -393,10 +393,12 @@ namespace votaciones.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             User user = db.Users.Find(id);
+            var userAsp = db.Users.Find(id).UserName;
             db.Users.Remove(user);
             try
             {
                 db.SaveChanges();
+                Utilities.DeleteASPUser(userAsp);
             }
             catch (Exception ex)
             {

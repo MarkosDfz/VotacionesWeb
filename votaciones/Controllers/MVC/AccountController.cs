@@ -180,7 +180,7 @@ namespace votaciones.Controllers
                     Group = userView.Group,
                     LastName = userView.LastName,
                     Phone = userView.Phone,
-                    Photo = string.IsNullOrEmpty(pic) ? string.Empty : string.Format("~/Content/Photos/{0}", pic),
+                    Photo = string.IsNullOrEmpty(pic) ? string.Format("~/Content/Photos/noimage.png") : string.Format("~/Content/Photos/{0}", pic),
                     UserName = userView.UserName,
                 };
 

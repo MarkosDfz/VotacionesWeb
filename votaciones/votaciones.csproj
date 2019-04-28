@@ -265,6 +265,7 @@
     <Content Include="Content\Images\register.png" />
     <Content Include="Content\Images\resul.png" />
     <Content Include="Content\Images\voto.png" />
+    <Content Include="Content\Photos\noimage.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -356,10 +357,13 @@
     <Content Include="Views\Votings\MyVotings.cshtml" />
     <Content Include="Views\Votings\Vote.cshtml" />
     <Content Include="Views\Votings\Results.cshtml" />
+    <None Include="startup\CRRuntime_64bit_13_0_12.msi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Content Include="startup\installservice.cmd" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\Photos\" />
     <Folder Include="Other\" />
   </ItemGroup>
   <ItemGroup>

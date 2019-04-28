@@ -338,3 +338,5 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/votaciones/startup/CRRuntime_64bit_13_0_12.msi
+/votaciones/startup

@@ -71,6 +71,19 @@ namespace votaciones.Classes
 
         }
 
+        public static void DeleteASPUser(string id)
+        {
+            var userContext = new ApplicationDbContext();
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(userContext));
+
+            var user = (from p in userContext.Users
+                           where p.Email == id
+                           select p).FirstOrDefault();
+
+            userManager.Delete(user);
+
+        }
+
         public static void ChangeUserName(string currentUserName, UserChange user)
         {
             var userContext = new ApplicationDbContext();

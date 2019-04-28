@@ -51,6 +51,7 @@ namespace votaciones.Controllers.API
                     DateTimeEnd = voting.DateTimeEnd,
                     DateTimeStart = voting.DateTimeStart,
                     Description = voting.Description,
+                    Remarks = voting.Remarks,
                     IsEnableBlankVote = voting.IsEnableBlankVote,
                     IsForAllUsers = voting.IsForAllUsers,
                     Candidates = candidates,

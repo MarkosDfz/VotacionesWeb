@@ -234,7 +234,7 @@ namespace votaciones.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DeleteCandidate(int id)
         {
-            //nota importante, aqui no me muestra el error en la app
+            //nota importante, aqui no me muestra el error en la app cuando ya se ha votado
             var candidate = db.Candidates.Find(id);
             if (candidate != null)
             {

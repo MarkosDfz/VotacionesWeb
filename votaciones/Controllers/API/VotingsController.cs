@@ -90,7 +90,6 @@ namespace votaciones.Controllers.API
             {
                 return this.BadRequest("Usuario no encontrado");
             }
-
             
                 var votingDetail = new VotingDetail
                 {

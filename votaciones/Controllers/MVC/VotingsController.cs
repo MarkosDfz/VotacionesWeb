@@ -250,14 +250,15 @@ namespace votaciones.Controllers
                         ex.InnerException.InnerException != null &&
                         ex.InnerException.InnerException.Message.Contains("REFERENCE"))
                     {
+
                         ModelState.AddModelError(string.Empty, "El registro no puede ser eliminado porque tiene registros relacionados");
                     }
                     else
                     {
                         ModelState.AddModelError(string.Empty, ex.Message);
                     }
-                }
 
+                }
             }
 
             return RedirectToAction(string.Format("Details/{0}", candidate.VotingId));

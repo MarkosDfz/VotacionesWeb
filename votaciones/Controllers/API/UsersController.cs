@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -111,18 +112,34 @@ namespace votaciones.Controllers.API
 
         // PUT: api/Users/5
         [HttpPut]
-        public IHttpActionResult PutUser(int id, User user)
+        public IHttpActionResult PutUser(int id, UserRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != user.UserId)
+            if (id != request.UserId)
             {
                 return BadRequest();
             }
-            
+
+            if (request.ImageArray != null && request.ImageArray.Length > 0)
+            {
+                var stream = new MemoryStream(request.ImageArray);
+                var guid = Guid.NewGuid().ToString();
+                var file = string.Format("{0}.jpg", guid);
+                var folder = "~/Content/Photos";
+                var fullPath = string.Format("{0}/{1}", folder, file);
+                var response = FilesHelper.UploadPhoto(stream, folder, file);
+
+                if (response)
+                {
+                    request.Photo = fullPath;
+                }
+            }
+
+            var user = ToUser(request);
             db.Entry(user).State = EntityState.Modified;
 
             try
@@ -142,6 +159,21 @@ namespace votaciones.Controllers.API
             }
 
             return this.Ok(user);
+        }
+
+        private User ToUser(UserRequest request)
+        {
+            return new User
+            {
+                Adress = request.Adress,
+                FirstName = request.FirstName,
+                Grade = request.Grade,
+                LastName = request.LastName,
+                Photo = request.Photo,
+                Phone = request.Phone,
+                UserId = request.UserId,
+                UserName = request.UserName,
+            };
         }
 
         // POST: api/Users

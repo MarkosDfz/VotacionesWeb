@@ -183,6 +183,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Classes\FilesHelper.cs" />
     <Compile Include="Classes\Utilities.cs" />
     <Compile Include="Controllers\API\UsersController.cs" />
     <Compile Include="Controllers\API\VotingsController.cs" />
@@ -228,6 +229,7 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserChange.cs" />
     <Compile Include="Models\UserIndexView.cs" />
+    <Compile Include="Models\UserRequest.cs" />
     <Compile Include="Models\UserSettingsView.cs" />
     <Compile Include="Models\UserView.cs" />
     <Compile Include="Models\Voting.cs" />

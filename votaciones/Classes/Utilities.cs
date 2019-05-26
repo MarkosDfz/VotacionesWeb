@@ -5,7 +5,11 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Threading.Tasks;
 using System.Web;
+using System.Web.Configuration;
 using votaciones.Models;
 
 namespace votaciones.Classes
@@ -182,6 +186,64 @@ namespace votaciones.Classes
             }
 
             return state;
+        }
+
+        public static async Task SendMail(string to, string subject, string body)
+        {
+            var message = new MailMessage();
+            message.To.Add(new MailAddress(to));
+            message.From = new MailAddress(WebConfigurationManager.AppSettings["AdminUser"]);
+            message.Subject = subject;
+            message.Body = body;
+            message.IsBodyHtml = true;
+
+            using (var smtp = new SmtpClient())
+            {
+                var credential = new NetworkCredential
+                {
+                    UserName = WebConfigurationManager.AppSettings["AdminUser"],
+                    Password = WebConfigurationManager.AppSettings["AdminPassWord"]
+                };
+
+                smtp.Credentials = credential;
+                smtp.Host = WebConfigurationManager.AppSettings["SMTPName"];
+                smtp.Port = int.Parse(WebConfigurationManager.AppSettings["SMTPPort"]);
+                smtp.EnableSsl = true;
+                await smtp.SendMailAsync(message);
+            }
+        }
+
+
+        public static async Task PasswordRecovery(string email)
+        {
+            var userContext = new ApplicationDbContext();
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(userContext));
+            var userASP = userManager.FindByEmail(email);
+            if (userASP == null)
+            {
+                return;
+            }
+
+            var user = db.Users.Where(tp => tp.UserName == email).FirstOrDefault();
+            if (user == null)
+            {
+                return;
+            }
+
+            var random = new Random();
+            var newPassword = string.Format("{0}{1}{2:04}*", user.FirstName.ToUpper().Substring(0, 1), user.LastName.ToLower(), random.Next(9999));
+
+            userManager.RemovePassword(userASP.Id);
+            userManager.AddPassword(userASP.Id, newPassword);
+
+            var subject = "Votaciones Utc Recuperar contraseña";
+            var body = string.Format(@"
+            <h1>Votaciones UTC Recuperar Contraseña</h1>
+            <p>Su nueva contraseña es: <strong>{0}</strong></p>
+            <p>Puede cambiar esta contraseña por una nueva que recuerde facilmente.",
+                    newPassword);
+
+            await SendMail(email, subject, body);
         }
 
         public void Dispose()

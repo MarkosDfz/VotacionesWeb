@@ -52,6 +52,12 @@
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -184,6 +190,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Classes\FilesHelper.cs" />
+    <Compile Include="Classes\MailHelper.cs" />
     <Compile Include="Classes\Utilities.cs" />
     <Compile Include="Controllers\API\UsersController.cs" />
     <Compile Include="Controllers\API\VotingsController.cs" />
@@ -267,6 +274,7 @@
     <Content Include="Content\Images\register.png" />
     <Content Include="Content\Images\resul.png" />
     <Content Include="Content\Images\voto.png" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="Content\Photos\noimage.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -285,9 +293,11 @@
     <Content Include="DS.xss">
       <DependentUpon>DS.xsd</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\votacionesapp - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\votacionesapp - Web Deploy1.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\datatables.min.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
@@ -359,10 +369,6 @@
     <Content Include="Views\Votings\MyVotings.cshtml" />
     <Content Include="Views\Votings\Vote.cshtml" />
     <Content Include="Views\Votings\Results.cshtml" />
-    <None Include="startup\CRRuntime_64bit_13_0_12.msi">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <Content Include="startup\installservice.cmd" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

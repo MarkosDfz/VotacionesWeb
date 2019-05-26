@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -53,6 +54,9 @@ namespace votaciones.Models
 
         [Display(Name = "Ganador")]
         public int CandidateWinId { get; set; }
+
+        [NotMapped]
+        public User Nombre { get; set; }
 
         //relacion de 1 - * entre voting y estate
         public State State { get; set; }

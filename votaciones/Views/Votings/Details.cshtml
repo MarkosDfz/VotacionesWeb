@@ -58,14 +58,6 @@
             @Html.DisplayFor(model => model.IsForAllUsers)
         </dd>
 
-        @*<dt>
-                @Html.DisplayNameFor(model => model.IsEnableBlankVote)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.IsEnableBlankVote)
-            </dd>*@
-
         <dt>
             @Html.DisplayNameFor(model => model.QuantityVotes)
         </dt>
@@ -74,21 +66,13 @@
             @Html.DisplayFor(model => model.QuantityVotes)
         </dd>
 
-        @*<dt>
-                @Html.DisplayNameFor(model => model.QuantityBlankVotes)
-            </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.CandidateWinId)
+        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.QuantityBlankVotes)
-            </dd>*@
-
-        @*<dt>
-                @Html.DisplayNameFor(model => model.CandidateWinId)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.CandidateWinId)
-            </dd>*@
+        <dd>
+            @Html.DisplayFor(model => model.Nombre.FullName)
+        </dd>
 
     </dl>
 </div>

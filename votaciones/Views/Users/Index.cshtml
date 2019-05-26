@@ -1,88 +1,121 @@
 ﻿@model IEnumerable<votaciones.Models.UserIndexView>
-
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Usuarios</h2>
+<div >
+    <div class="row">
+        <div class="col-sm-4"><h2><b>Usuarios</b></h2></div>
+        <div class="col-sm-4" ></div>
+        <div class="col-sm-4" style="text-align:right">
+            <br />
+            <p>
+                @Html.ActionLink("Pdf", "PDF", new { }, new { @class = "btn btn-default", target = "_blank" })
+                @Html.ActionLink("Excel", "XLS", new { }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Doc", "DOC", new { }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Nuevo Usuario", "Create", new { }, new { @class = "btn btn-primary" })
+            </p>    
+        </div>
+    </div>
+</div>
 
-<p>
-    @Html.ActionLink("Nuevo Usuario", "Create", new { }, new { @class = "btn btn-primary" })
-    @Html.ActionLink("Pdf", "PDF", new { }, new { @class = "btn btn-default", target = "_blank" })
-    @Html.ActionLink("Excel", "XLS", new { }, new { @class = "btn btn-default" })
-    @Html.ActionLink("Doc", "DOC", new { }, new { @class = "btn btn-default" })
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.UserName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LastName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Phone)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Adress)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Grade)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Group)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Photo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsAdmin)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.UserName)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.FirstName)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.LastName)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Phone)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Adress)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Grade)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Group)
-    </td>
-    <td>
-        @if (!string.IsNullOrEmpty(item.Photo))
+
+<br />
+
+<table class="table" id="users">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Adress)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Grade)
+                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.Group)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Photo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsAdmin)
+            </th>
+            <th>
+                Acciones
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
         {
-            <img src="@Url.Content(item.Photo)" alt="Image" style="width:100px;height:100px;max-width:100%; height:auto;" />
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Adress)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Grade)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.Group)
+                </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.Photo))
+                    {
+                        <img src="@Url.Content(item.Photo)" alt="Image" style="width:100px;height:100px;max-width:100%; height:auto;" />
+                    }
+                </td>
+                <td align="center">
+                    @Html.DisplayFor(modelItem => item.IsAdmin)
+                </td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = item.UserId }) |
+                    @Html.ActionLink("Detalles", "Details", new { id = item.UserId }) |
+                    @Html.ActionLink("Cambiar Rol", "OnOffAdmin", new { id = item.UserId }) |
+                    @Html.ActionLink("Eliminar", "Delete", new { id = item.UserId })
+                </td>
+            </tr>
         }
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.IsAdmin)
-    </td>
-    <td>
-        @Html.ActionLink("Editar", "Edit", new { id = item.UserId }) |
-        @Html.ActionLink("Detalles", "Details", new { id = item.UserId }) |
-        @Html.ActionLink("Cambiar Rol", "OnOffAdmin", new { id = item.UserId }) |
-        @Html.ActionLink("Eliminar", "Delete", new { id = item.UserId })
-    </td>
-</tr>
+    </tbody>
+</table>
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.18/datatables.min.css" />
+
 }
 
-</table>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript" src="~/Scripts/datatables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#users").DataTable({
+            "dom": '<"pull-left"f><"pull-right"l>tip'
+            });
+        });
+    </script>
+}

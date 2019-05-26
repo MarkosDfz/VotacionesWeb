@@ -106,7 +106,7 @@ namespace votaciones.Controllers
                     Description = voting.Description,
                     IsEnableBlankVote = voting.IsEnableBlankVote,
                     IsForAllUsers = voting.IsForAllUsers,
-                    QuantityBlankVotes = voting.QuantityBlankVotes,
+                    QuantityVotes = voting.QuantityVotes,
                     Remarks = voting.Remarks,
                     StateId = voting.StateId,
                     State = voting.State,
@@ -401,7 +401,7 @@ namespace votaciones.Controllers
                     Description = voting.Description,
                     IsEnableBlankVote = voting.IsEnableBlankVote,
                     IsForAllUsers = voting.IsForAllUsers,
-                    QuantityBlankVotes = voting.QuantityBlankVotes,
+                    QuantityVotes = voting.QuantityVotes,
                     Remarks = voting.Remarks,
                     StateId = voting.StateId,
                     State = voting.State,
@@ -421,15 +421,21 @@ namespace votaciones.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Voting voting = db.Votings.Find(id);
+            var db2 = new DemocracyContext();
             if (voting == null)
             {
                 return HttpNotFound();
             }
-
+            User user = null;
+            if (voting.CandidateWinId != 0)
+            {
+                user = db2.Users.Find(voting.CandidateWinId);
+            }
             var view = new DetailsVotingView
             {
                 Candidates = voting.Candidates.ToList(),
                 CandidateWinId = voting.CandidateWinId,
+                Nombre = user,
                 DateTimeStart = voting.DateTimeStart,
                 DateTimeEnd = voting.DateTimeEnd,
                 Description = voting.Description,

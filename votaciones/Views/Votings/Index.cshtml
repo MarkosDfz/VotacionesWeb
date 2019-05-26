@@ -29,13 +29,9 @@
         <th>
             @Html.DisplayNameFor(model => model.IsForAllUsers)
         </th>
-
-        @*<th>
-            @Html.DisplayNameFor(model => model.IsEnableBlankVote)
-        </th>*@
-        @*<th>
-            @Html.DisplayNameFor(model => model.QuantityBlankVotes)
-        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.QuantityVotes)
+        </th>
         <th>
             Ganador
         </th>
@@ -59,15 +55,13 @@
         <td>
             @Html.DisplayFor(modelItem => item.DateTimeEnd)
         </td>
-        <td>
+        <td align="center">
             @Html.DisplayFor(modelItem => item.IsForAllUsers)
         </td>
-        @*<td>
-            @Html.DisplayFor(modelItem => item.IsEnableBlankVote)
-        </td>*@
-        @*<td>
-            @Html.DisplayFor(modelItem => item.QuantityBlankVotes)
-        </td>*@
+
+        <td align="center">
+            @Html.DisplayFor(modelItem => item.QuantityVotes)
+        </td>
 
         <td>
             @Html.DisplayFor(modelItem => item.Winner.FullName)
@@ -75,8 +69,8 @@
         <td>
             @Html.ActionLink("Editar", "Edit", new { id = item.VotingId }) |
             @Html.ActionLink("Detalles", "Details", new { id = item.VotingId }) |
-            @Html.ActionLink("Resultados", "ShowResults", new { id = item.VotingId }, new { target = "_blank" }) |
             @Html.ActionLink("Cerrar", "Close", new { id = item.VotingId }, new { onclick = "return confirm('¿Está seguro de cerrar esta votación?')" }) |
+            @Html.ActionLink("Resultados", "ShowResults", new { id = item.VotingId }, new { target = "_blank" }) |
             @Html.ActionLink("Eliminar", "Delete", new { id = item.VotingId })
         </td>
     </tr>

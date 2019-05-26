@@ -14,6 +14,7 @@ using System.Web;
 using System.Web.Mvc;
 using votaciones.Classes;
 using votaciones.Models;
+using PagedList;
 
 namespace votaciones.Controllers
 {
@@ -195,7 +196,7 @@ namespace votaciones.Controllers
                     UserName = user.UserName,
                 });
             }
-
+          
             return View(usersView);
         }
 

@@ -292,6 +292,10 @@ namespace votaciones.Controllers
                         await Utilities.PasswordRecovery(model.Email);
                         return RedirectToAction("ForgotPasswordConfirmation", "Account");
                     }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "No encontramos tu email en el sistema, verifica el correo o contacta con soporte.");
+                    }
                 }
 
                 return View(model);

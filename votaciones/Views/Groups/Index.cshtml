@@ -1,20 +1,27 @@
 ﻿@model IEnumerable<votaciones.Models.Group>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Grupos";
 }
+<div>
+    <div class="row">
+        <div class="col-sm-4"><h2>Grupos de Votación</h2></div>
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4" style="text-align:right">
+            <br />
+            <p>
+                @Html.ActionLink("Crear Grupo", "Create", new { }, new { @class = "btn btn-primary" })
+            </p>
+        </div>
+    </div>
+</div>
 
-    <h2>Grupos de Votación</h2>
-
-<p>
-    @Html.ActionLink("Crear Grupo", "Create", new { }, new { @class = "btn btn-primary" })
-</p>
 <table class="table">
     <tr>
         <th>
             Descripción
         </th>
-        <th>
+        <th style="text-align:center">
             Número De Miembros
         </th>
         <th></th>
@@ -25,7 +32,7 @@
     <td>
         @Html.DisplayFor(modelItem => item.Description)
     </td>
-    <td>
+    <td style="text-align:center">
         @Html.DisplayFor(modelItem => item.GroupMembers.Count)
     </td>
     <td>

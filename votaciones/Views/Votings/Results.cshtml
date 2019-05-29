@@ -1,16 +1,13 @@
 ﻿@model IEnumerable<votaciones.Models.VotingIndexView>
 
 @{
-    ViewBag.Title = "Results";
+    ViewBag.Title = "Resultados";
 }
 
 <h2>Resultados</h2>
 
 <table class="table">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.State.Description)
-        </th>
         <th>
             @Html.DisplayNameFor(model => model.Description)
         </th>
@@ -24,61 +21,48 @@
             @Html.DisplayNameFor(model => model.DateTimeEnd)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.IsForAllUsers)
-        </th>
-        @*<th>
-            @Html.DisplayNameFor(model => model.IsEnableBlankVote)
+            @Html.DisplayNameFor(model => model.State.Description)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.QuantityVotes)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.QuantityBlankVotes)
-        </th>*@
-        <th>
             Candidato Ganador
         </th>
-        <th></th>
+        <th>
+            Reporte
+        </th>
     </tr>
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.State.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Remarks)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateTimeStart)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateTimeEnd)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsForAllUsers)
-            </td>
-            @*<td>
-                @Html.DisplayFor(modelItem => item.IsEnableBlankVote)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.QuantityVotes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.QuantityBlankVotes)
-            </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.Winner.FullName)
-            </td>
-            <td>
-                @Html.ActionLink("Resultados", "ShowResults", 
-               new { id = item.VotingId }, new { @class = "btn btn-primary", target = "_blank"} )
-            </td>
-        </tr>
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Remarks)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateTimeStart)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateTimeEnd)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.State.Description)
+        </td>
+        <td align="center">
+            @Html.DisplayFor(modelItem => item.QuantityVotes)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Winner.FullName)
+        </td>
+        <td>
+            @Html.ActionLink("Resultados", "ShowResults",
+           new { id = item.VotingId }, new { @class = "btn btn-primary", target = "_blank"} )
+        </td>
+    </tr>
     }
 
 </table>

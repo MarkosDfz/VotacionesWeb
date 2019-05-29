@@ -268,9 +268,14 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\conf.png" />
     <Content Include="Content\Images\config.png" />
+    <Content Include="Content\Images\email.png" />
     <Content Include="Content\Images\login.png" />
     <Content Include="Content\Images\logo.png" />
+    <Content Include="Content\Images\message.png" />
+    <Content Include="Content\Images\question.png" />
+    <Content Include="Content\Images\regis.png" />
     <Content Include="Content\Images\register.png" />
     <Content Include="Content\Images\resul.png" />
     <Content Include="Content\Images\voto.png" />
@@ -390,9 +395,11 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201904030322581_InitialCreate.resx">
       <DependentUpon>201904030322581_InitialCreate.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904031732006_20190403.resx">
       <DependentUpon>201904031732006_20190403.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="Reports\Results.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

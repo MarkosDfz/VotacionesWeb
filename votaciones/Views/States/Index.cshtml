@@ -1,20 +1,29 @@
 ﻿@model IEnumerable<votaciones.Models.State>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Estados";
 }
+<div>
+    <div class="row">
+        <div class="col-sm-4"><h2>Estados de la Votacion</h2></div>
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4" style="text-align:right">
+            <br />
+            <p>
+                @Html.ActionLink("Crear Estado", "Create", new { }, new { @class = "btn btn-primary" })
+            </p>
+        </div>
+    </div>
+</div>
 
-    <h2>Estados de la votacion</h2>
-
-    <p>
-        @Html.ActionLink("Crear Estado", "Create", new { }, new { @class = "btn btn-primary" })
-    </p>
 <table class="table">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Description)
         </th>
-        <th></th>
+        <th>
+            Acciones
+        </th>
     </tr>
 
 @foreach (var item in Model) {
@@ -24,7 +33,6 @@
         </td>
         <td>
             @Html.ActionLink("Editar", "Edit", new { id = item.StateId }) |
-            @Html.ActionLink("Detalles", "Details", new { id = item.StateId }) |
             @Html.ActionLink("Eliminar", "Delete", new { id = item.StateId })
         </td>
     </tr>

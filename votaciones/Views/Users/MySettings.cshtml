@@ -4,7 +4,7 @@
     ViewBag.Title = "MySettings";
 }
 
-<h2>Mis Configuraciones</h2>
+<h2 >Mis Configuraciones</h2>
 
 
 @using (Html.BeginForm("MySettings", "Users", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -12,7 +12,6 @@
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Usuario</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.UserId)

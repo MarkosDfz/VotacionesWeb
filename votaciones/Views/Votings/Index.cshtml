@@ -1,14 +1,22 @@
 ﻿@model IEnumerable<votaciones.Models.VotingIndexView>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Votaciones";
 }
+<div>
+    <div class="row">
+        <div class="col-sm-4"><h2>Votaciones</h2></div>
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4" style="text-align:right">
+            <br />
+            <p>
+                @Html.ActionLink("Nueva Votación", "Create", new { }, new { @class = "btn btn-primary" })
+            </p>
+        </div>
+    </div>
+</div>
 
-    <h2>Votaciones</h2>
 
-<p>
-    @Html.ActionLink("Nueva Votación", "Create", new { }, new { @class = "btn btn-primary"})
-</p>
 <table class="table">
     <tr>
         <th>
@@ -35,7 +43,9 @@
         <th>
             Ganador
         </th>
-        <th></th>
+        <th>
+            Acciones
+        </th>
     </tr>
 
 @foreach (var item in Model) {

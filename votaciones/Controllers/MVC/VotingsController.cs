@@ -644,13 +644,14 @@ namespace votaciones.Controllers
                 DateEnd = voting.DateTimeEnd,
                 DateStart = voting.DateTimeStart,
                 Description = voting.Description,
+                QuantityVotes = voting.QuantityVotes,
                 IsForAllUsers = voting.IsForAllUsers,
                 Remarks = voting.Remarks,
                 StateId = voting.StateId,
                 TimeEnd = voting.DateTimeEnd,
                 TimeStart = voting.DateTimeStart,
                 VotingId = voting.VotingId,
-
+                CandidateWinId = voting.CandidateWinId,
             };
 
             ViewBag.StateId = new SelectList(db.States, "StateId", "Description", voting.StateId);
@@ -681,7 +682,11 @@ namespace votaciones.Controllers
 
                     StateId = view.StateId,
 
+                    QuantityVotes = view.QuantityVotes,
+
                     VotingId = view.VotingId,
+
+                    CandidateWinId = view.CandidateWinId,
                 };
 
                 db.Entry(voting).State = EntityState.Modified;

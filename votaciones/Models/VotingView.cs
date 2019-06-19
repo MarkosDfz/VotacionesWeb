@@ -50,5 +50,9 @@ namespace votaciones.Models
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [Display(Name = "¿Para todos los usuarios?")]
         public bool IsForAllUsers { get; set; }
+
+        public int QuantityVotes { get; set; }
+
+        public int CandidateWinId { get; set; }
     }
 }

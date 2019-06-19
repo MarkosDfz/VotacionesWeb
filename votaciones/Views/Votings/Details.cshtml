@@ -1,13 +1,14 @@
 ﻿@model votaciones.Models.DetailsVotingView
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Detalles de la Votación";
 }
 
 
-@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
 <div>
     <h2>Detalle de la Votación</h2>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -89,7 +90,7 @@
 
 <div class="row">
     <div class="col-md-4">
-        <section id="gropus">
+        <section id="groups">
             <h4>Grupos</h4>
             @if (Model.VotingGroups.Count > 0)
             {
@@ -154,7 +155,7 @@
                             <td>
                                 @if (!string.IsNullOrEmpty(Model.Candidates[i].User.Photo))
                                 {
-                                    <img src="@Url.Content(Model.Candidates[i].User.Photo)" alt="Image" style="width:100px;height:100px;max-width:100%; height:auto;" />
+                                    <img src="@Url.Content(Model.Candidates[i].User.Photo)" alt="Image" style="width:100px;height:100px;max-width:100%;" />
                                 }
                             </td>
                             <td>

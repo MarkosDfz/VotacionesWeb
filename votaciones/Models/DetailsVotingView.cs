@@ -42,15 +42,8 @@ namespace votaciones.Models
         [Display(Name = "¿Para todos los usuarios?")]
         public bool IsForAllUsers { get; set; }
 
-        [Required(ErrorMessage = "El campo {0} es requerido")]
-        [Display(Name = "Está habilitado los votos en blanco?")]
-        public bool IsEnableBlankVote { get; set; }
-
         [Display(Name = "Cantidad de votos")]
         public int QuantityVotes { get; set; }
-
-        [Display(Name = "Cantidad de votos en blanco")]
-        public int QuantityBlankVotes { get; set; }
 
         [Display(Name = "Ganador")]
         public int CandidateWinId { get; set; }

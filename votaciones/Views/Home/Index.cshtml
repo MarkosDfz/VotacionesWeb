@@ -1,5 +1,7 @@
 ﻿@{
-    ViewBag.Title = "Inicio";
+                /**/
+
+                ViewBag.Title = "Inicio";
 }
 
 <div class="jumbotron">
@@ -9,14 +11,12 @@
             <p class="lead">Sistema de votaciones de la Universidad Técnica de Cotopaxi.</p>
             @if (!this.User.IsInRole("Admin") && !this.User.IsInRole("User"))
             {
-                <p class="text-danger",  style="text-align:justify">Para usar el sistema por favor Inicia Sesión, si ingresas por primera vez por favor registrate en el sistema. </p>
+                <p class="text-danger" , style="text-align:justify">Para usar el sistema por favor Inicia Sesión, si ingresas por primera vez por favor registrate en el sistema. </p>
 
             }
-            @*<p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>*@
         </div>
         <div class="col-md-6">
-            <br />
-            <img src="~/Content/Images/logo.png" class="img-responsive"/>
+            <img src="~/Content/Images/logo1.png" class="img-responsive" />
         </div>
     </div>
 </div>
@@ -49,30 +49,56 @@
 }
 else
 {
-    <div class="row">
-        <div class="col-md-4">
-            <h2>Mi Configuración</h2>
-            <p>
-                Cambia tu información personal y contraseña.
+    if (this.User.IsInRole("Admin"))
+    {
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Grupos de Votación</h2>
+                <p>Gestiona los grupos de Votación del sistema.</p>
+                @Html.ActionLink("Grupos", "Index", "Groups", new { }, new { @class = "btn btn-primary" })&nbsp;&nbsp;&nbsp;
+                <img src="~/Content/Images/network.png" style="width:150px; height:150px; max-width:100%" />
 
-            </p>
-            @Html.ActionLink("Configuración", "MySettings", "Users", new { }, new { @class = "btn btn-primary" })
-            <img src="~/Content/Images/config.png" style="width:150px; height:150px; max-width:100%" />
+            </div>
+            <div class="col-md-4">
+                <h2>Usuarios del Sistema</h2>
+                <p>Gestiona todos los usuarios en el sistema.</p>
+                @Html.ActionLink("Usuarios", "Index", "Users", new { }, new { @class = "btn btn-warning" })&nbsp;&nbsp;&nbsp;
+                <img src="~/Content/Images/userv.png" style="width:150px; height:150px; max-width:100%" />
 
+            </div>
+            <div class="col-md-4">
+                <h2>Votaciones Electorales</h2>
+                <p>Gestiona las votaciones del sistema.</p>
+                @Html.ActionLink("Votaciones ", "Index", "Votings", new { }, new { @class = "btn btn-info" })&nbsp;&nbsp;&nbsp;
+                <img src="~/Content/Images/newvote.png" style="width:150px; height:150px; max-width:100%" />
+
+            </div>
         </div>
-        <div class="col-md-4">
-            <h2>Mis Votaciones</h2>
-            <p>Vota por los candidatos de tu preferencia.</p>
-            @Html.ActionLink("Mis Votaciones", "MyVotings", "Votings", new { }, new { @class = "btn btn-warning" })
-            <img src="~/Content/Images/voto.png" style="width:150px; height:150px; max-width:100%" />
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Mis Certificados</h2>
+                <p>Encuentra aquí tus certificados de votación.</p>
+                @Html.ActionLink("Certificados", "MyCertificates", "Votings", new { }, new { @class = "btn btn-primary" })&nbsp;&nbsp;
+                <img src="~/Content/Images/certificate.png" style="width:150px; height:150px; max-width:100%" />
 
-        </div>
-        <div class="col-md-4">
-            <h2>Resultados</h2>
-            <p>Mira los resultados de las votaciones.</p>
-            @Html.ActionLink("Resultados", "Results", "Votings", new { }, new { @class = "btn btn-info" })&nbsp;
-            <img src="~/Content/Images/resul.png" style="width:150px; height:150px; max-width:100%" />
+            </div>
+            <div class="col-md-4">
+                <h2>Mis Votaciones</h2>
+                <p>Vota por los candidatos de tu preferencia.</p>
+                @Html.ActionLink("Mis Votaciones", "MyVotings", "Votings", new { }, new { @class = "btn btn-warning" })
+                <img src="~/Content/Images/voto.png" style="width:150px; height:150px; max-width:100%" />
 
+            </div>
+            <div class="col-md-4">
+                <h2>Resultados</h2>
+                <p>Mira los resultados de las votaciones.</p>
+                @Html.ActionLink("Resultados", "Results", "Votings", new { }, new { @class = "btn btn-info" })&nbsp;
+                <img src="~/Content/Images/resul.png" style="width:150px; height:150px; max-width:100%" />
+
+            </div>
         </div>
-    </div>
+    }
 }

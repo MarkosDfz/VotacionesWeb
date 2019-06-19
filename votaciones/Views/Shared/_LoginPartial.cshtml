@@ -7,11 +7,18 @@
 
     <ul class="nav navbar-nav navbar-right">
         <li>
-            @Html.ActionLink("Hola " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            @if (this.User.IsInRole("Admin"))
+            {
+                @Html.ActionLink("Hola " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Configuraciones" })
+            }
+            else
+            {
+                @Html.ActionLink("Hola " + User.Identity.GetUserName() + "!", "MySettings", "Users", routeValues: null, htmlAttributes: new { title = "Configuraciones" })
+            }
         </li>
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Cerrar sesión</a></li>
     </ul>
-    }
+            }
 }
 else
 {

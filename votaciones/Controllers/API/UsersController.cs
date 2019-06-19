@@ -168,10 +168,9 @@ namespace votaciones.Controllers.API
             {
                 Adress = request.Adress,
                 FirstName = request.FirstName,
-                Grade = request.Grade,
                 LastName = request.LastName,
                 Photo = request.Photo,
-                Phone = request.Phone,
+                Cedula = request.Cedula,
                 UserId = request.UserId,
                 UserName = request.UserName,
             };
@@ -190,10 +189,9 @@ namespace votaciones.Controllers.API
             {
                 Adress = userView.Adress,
                 FirstName = userView.FirstName,
-                Grade = userView.Grade,
                 Group = userView.Group,
                 LastName = userView.LastName,
-                Phone = userView.Phone,
+                Cedula = userView.Cedula,
                 UserName = userView.UserName,
             };
 
@@ -227,7 +225,6 @@ namespace votaciones.Controllers.API
             {
                 UserName = userView.UserName,
                 Email = userView.UserName,
-                PhoneNumber = userView.Phone,
             };
 
             userManager.Create(userASP, userView.Password);

@@ -1,7 +1,7 @@
 ﻿@model votaciones.Models.User
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Eliminar Usuario";
 }
 
 
@@ -11,82 +11,67 @@
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.UserName)
-        </dt>
+    <div class="row">
+        <div class="col-md-6">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.LastName)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.UserName)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.LastName)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.FirstName)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.FirstName)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Cedula)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.Cedula)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Phone)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.UserName)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Phone)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.UserName)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Adress)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Adress)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Adress)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.Adress)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Grade)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Group)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Grade)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Group)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Group)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Photo)
-        </dt>
-
-        <dd>
-            @if (!string.IsNullOrEmpty(Model.Photo))
-            {
-                <img src="@Url.Content(Model.Photo)" alt="Image" style="width:200px;height:200px;max-width:100%; height:auto;" />
-            }
-        </dd>
-
-    </dl>
-    <br />
+                <dd>
+                    @Html.DisplayFor(model => model.Group)
+                </dd>
+            </dl>
+        </div>
+        <div class="col-md-6">
+            <img src="@Url.Content(Model.Photo)" alt="Image" style="width:200px;height:200px;max-width:100%; height:auto;" />
+        </div>
+    </div>
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-
         <div class="form-actions no-color">
-            <input type="submit" value="Eliminar" class="btn btn-danger" /> 
+            <input type="submit" value="Eliminar" class="btn btn-danger" />
             @Html.ActionLink("Volver", "Index", new { }, new { @class = "btn btn-success" })
         </div>
     }

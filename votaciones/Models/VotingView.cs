@@ -27,7 +27,6 @@ namespace votaciones.Models
 
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [Display(Name = "Fecha de Inicio")]
-        [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
         public DateTime DateStart { get; set; }
 
@@ -39,7 +38,6 @@ namespace votaciones.Models
 
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [Display(Name = "Fecha de Finalización")]
-        [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
         public DateTime DateEnd { get; set; }
 
@@ -52,9 +50,5 @@ namespace votaciones.Models
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [Display(Name = "¿Para todos los usuarios?")]
         public bool IsForAllUsers { get; set; }
-
-        //[Required(ErrorMessage = "El campo {0} es requerido")]
-        [Display(Name = "¿Están habilitados los votos en blanco?")]
-        public bool IsEnableBlankVote { get; set; }
     }
 }

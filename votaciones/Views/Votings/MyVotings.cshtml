@@ -1,51 +1,54 @@
 ﻿@model IEnumerable<votaciones.Models.Voting>
 
 @{
-    ViewBag.Title = "MyVotings";
+    ViewBag.Title = "Mis Votaciones";
 }
 
 <h2>Mis Votaciones</h2>
-
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Remarks)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DateTimeStart)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DateTimeEnd)
-        </th>
-        <th>
-            Acciones
-        </th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
+@using (Html.BeginForm("Vote", "Votings", FormMethod.Post))
+{
+    <table class="table">
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Remarks)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateTimeStart)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateTimeEnd)
-            </td>
-            <td>
-                @Html.ActionLink("Votar", "Vote", new { votingId = item.VotingId }, new { @class = "btn btn-primary" })
-            </td>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Remarks)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateTimeStart)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateTimeEnd)
+            </th>
+            <th>
+                Acciones
+            </th>
         </tr>
-    }
 
-</table>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Remarks)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateTimeStart)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateTimeEnd)
+                </td>
+                <td>
+                   <input type="hidden" id="votingId"  name="votingId" value="@item.VotingId" />
+                   <input type="submit" value="Votar" class="btn btn-primary"/>
+                </td>
+            </tr>
+        }
+
+    </table>
 
 
+}

@@ -29,29 +29,20 @@ namespace votaciones.Models
 
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [Display(Name = "Fecha de Inicio")]
-        [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd HH:mm }", ApplyFormatInEditMode = true)]
         public DateTime DateTimeStart { get; set; }
 
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [Display(Name = "Fecha de Finalización")]
-        [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd HH:mm }", ApplyFormatInEditMode = true)]
         public DateTime DateTimeEnd { get; set; }
 
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [Display(Name = "¿Para todos los usuarios?")]
         public bool IsForAllUsers { get; set; }
-
-        //[Required(ErrorMessage = "El campo {0} es requerido")]
-        [Display(Name = "¿Están habilitados los votos en blanco?")]
-        public bool IsEnableBlankVote { get; set; }
-
+        
         [Display(Name = "Cantidad de votos")]
         public int QuantityVotes { get; set; }
-
-        [Display(Name = "Cantidad de votos en blanco")]
-        public int QuantityBlankVotes { get; set; }
 
         [Display(Name = "Ganador")]
         public int CandidateWinId { get; set; }

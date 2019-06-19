@@ -1,0 +1,49 @@
+﻿@model List<votaciones.Models.VotingDetail>
+
+@{
+    ViewBag.Title = "MyCertificates";
+}
+
+<h2>Mis Certificados</h2>
+
+    <table class="table">
+        <tr>
+            <th>
+                Votación
+            </th>
+            <th>
+                Fecha Inicio
+            </th>
+            <th>
+                Fecha Fin
+            </th>
+            <th>
+                Acción
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Voting.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Voting.DateTimeStart)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Voting.DateTimeEnd)
+                </td>
+                <td>
+                    @using (Html.BeginForm("ShowCertificate", "Votings", FormMethod.Post))
+                    {
+                        <input type="hidden" id="id" name="id" value="@item.VotingId" />
+                        <input type="hidden" id="id2" name="id2" value="@item.UserId" />
+                        <input type="submit" value="Certificado" class="btn btn-primary" />
+
+                    }      
+                </td>
+            </tr>
+        }
+
+    </table>

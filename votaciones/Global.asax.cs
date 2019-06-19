@@ -48,7 +48,7 @@ namespace votaciones
                     Adress = "Latacunga",
                     FirstName = "Marcos",
                     LastName = "Banda",
-                    Phone = "0983430874",
+                    Cedula = "0503962169",
                     UserName = "markosdefaz@gmail.com",
                     Photo = "~/Content/Photos/admin.jpg",
                 };
@@ -65,7 +65,6 @@ namespace votaciones
                 {
                     UserName = user.UserName,
                     Email = user.UserName,
-                    PhoneNumber = user.Phone,
                 };
 
                 userManager.Create(userASP, "Dfz666**");

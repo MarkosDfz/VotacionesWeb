@@ -12,6 +12,8 @@ namespace votaciones.Models
         [Key]
         public int VotingDetailId { get; set; }
 
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd HH:mm }", ApplyFormatInEditMode = true)]
         public DateTime DateTime { get; set; }
 
         public int VotingId { get; set; }

@@ -13,7 +13,7 @@ namespace votaciones.Models
         [Display(Name = "E-Mail")]
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(100, ErrorMessage =
-            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caacteres."
+            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caracteres."
            , MinimumLength = 7)]
         [DataType(DataType.EmailAddress)]
         public string UserName { get; set; }
@@ -21,33 +21,30 @@ namespace votaciones.Models
         [Display(Name = "Nombres")]
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(50, ErrorMessage =
-            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caacteres."
+            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caracteres."
            , MinimumLength = 3)]
         public string FirstName { get; set; }
 
         [Display(Name = "Apellidos")]
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(50, ErrorMessage =
-            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caacteres."
+            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caracteres."
            , MinimumLength = 3)]
         public string LastName { get; set; }
 
-        [Display(Name = "Celular")]
+        [Display(Name = "Cédula")]
         [Required(ErrorMessage = "El campo {0} es requerido")]
-        [StringLength(10, ErrorMessage =
-            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caacteres."
-           , MinimumLength = 8)]
-        public string Phone { get; set; }
+        [StringLength(13, ErrorMessage =
+            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caracteres."
+           , MinimumLength = 10)]
+        public string Cedula { get; set; }
 
         [Display(Name = "Dirección")]
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(100, ErrorMessage =
-            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caacteres."
+            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caracteres."
            , MinimumLength = 5)]
         public string Adress { get; set; }
-
-        [Display(Name = "Curso")]
-        public string Grade { get; set; }
 
         [Display(Name = "Grupo")]
         public string Group { get; set; }

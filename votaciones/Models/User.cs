@@ -39,12 +39,12 @@ namespace votaciones.Models
         [Display(Name = "Usuario")]
         public string FullName { get { return string.Format ("{0} {1}", this.FirstName, this.LastName) ; } }
 
-        [Display(Name = "Celular")]
+        [Display(Name = "Cédula")]
         [Required(ErrorMessage = "El campo {0} es requerido")]
-        [StringLength(10, ErrorMessage =
+        [StringLength(13, ErrorMessage =
             "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caracteres."
-           , MinimumLength = 8)]
-        public string Phone { get; set; }
+           , MinimumLength = 10)]
+        public string Cedula { get; set; }
 
         [Display(Name = "Dirección")]
         [Required(ErrorMessage = "El campo {0} es requerido")]
@@ -52,9 +52,6 @@ namespace votaciones.Models
             "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caracteres."
            , MinimumLength = 5)]
         public string Adress { get; set; }
-
-        [Display(Name = "Curso")]
-        public string Grade { get; set; }
 
         [Display(Name = "Grupo")]
         public string Group { get; set; }

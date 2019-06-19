@@ -14,6 +14,7 @@ namespace votaciones.Controllers.API
     public class VotingsController : ApiController
     {
         private DemocracyContext db = new DemocracyContext();
+        private DemocracyContext db2 = new DemocracyContext();
 
         [HttpGet]
         [Route("{userId}")]
@@ -25,7 +26,59 @@ namespace votaciones.Controllers.API
                 return this.BadRequest("Usuario no encontrado");
             }
 
-            var votings = Utilities.MyVotings(user);
+            var state = Utilities.GetState("Abierta");
+
+            var votings = db.Votings
+                .Where(v => v.StateId == state.StateId &&
+                            v.DateTimeStart <= DateTime.Now &&
+                            v.DateTimeEnd >= DateTime.Now)
+                            .Include(v => v.Candidates)
+                            .Include(v => v.VotingGroups)
+                            .Include(v => v.State)
+                            .ToList();
+
+            //Descartar eventos de votacion en el que el usuario ya voto
+            foreach (var voting in votings.ToList())
+            {
+
+                var votingDetail = db.VotingDetails
+                    .Where(vd => vd.VotingId == voting.VotingId &&
+                                 vd.UserId == user.UserId)
+                                 .FirstOrDefault();
+
+                if (votingDetail != null)
+                {
+                    votings.Remove(voting);
+                }
+            }
+
+
+            //descartar los eventos de votacion en los grupos que no pertenese el usuario
+            foreach (var voting in votings.ToList())
+            {
+                if (!voting.IsForAllUsers)
+                {
+                    bool userBelongsToGroup = false;
+
+                    foreach (var votingGroup in voting.VotingGroups)
+                    {
+                        var userGroup = votingGroup.Group.GroupMembers
+                            .Where(gm => gm.UserId == user.UserId)
+                            .FirstOrDefault();
+
+                        if (userGroup != null)
+                        {
+                            userBelongsToGroup = true;
+                            break;
+                        }
+                    }
+
+                    if (!userBelongsToGroup)
+                    {
+                        votings.Remove(voting);
+                    }
+                }
+            }
             var votingResponse = new List<VotingResponse>();
             foreach (var voting in votings)
             {
@@ -52,7 +105,6 @@ namespace votaciones.Controllers.API
                     DateTimeStart = voting.DateTimeStart,
                     Description = voting.Description,
                     Remarks = voting.Remarks,
-                    IsEnableBlankVote = voting.IsEnableBlankVote,
                     IsForAllUsers = voting.IsForAllUsers,
                     Candidates = candidates,
                     State = voting.State,
@@ -121,8 +173,7 @@ namespace votaciones.Controllers.API
                 .Where(v => v.StateId == state.StateId)
                 .Include(v => v.State);
             var votingResponse = new List<VotingResponse>();
-            var db2 = new DemocracyContext();
-
+          
             foreach (var voting in votings)
             {
                 User winner = null;
@@ -149,7 +200,6 @@ namespace votaciones.Controllers.API
                     DateTimeEnd = voting.DateTimeEnd,
                     DateTimeStart = voting.DateTimeStart,
                     Description = voting.Description,
-                    IsEnableBlankVote = voting.IsEnableBlankVote,
                     IsForAllUsers = voting.IsForAllUsers,
                     Candidates = candidates,
                     State = voting.State,
@@ -166,6 +216,7 @@ namespace votaciones.Controllers.API
             if (disposing)
             {
                 db.Dispose();
+                db2.Dispose();
             }
             base.Dispose(disposing);
         }

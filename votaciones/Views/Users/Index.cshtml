@@ -34,14 +34,12 @@
                 @Html.DisplayNameFor(model => model.UserName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Phone)
+                @Html.DisplayNameFor(model => model.Cedula)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Adress)
             </th>
-            @*<th>
-                    @Html.DisplayNameFor(model => model.Grade)
-                </th>*@
+
             <th>
                 @Html.DisplayNameFor(model => model.Group)
             </th>
@@ -70,21 +68,19 @@
                     @Html.DisplayFor(modelItem => item.UserName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Phone)
+                    @Html.DisplayFor(modelItem => item.Cedula)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Adress)
                 </td>
-                @*<td>
-                        @Html.DisplayFor(modelItem => item.Grade)
-                    </td>*@
+
                 <td>
                     @Html.DisplayFor(modelItem => item.Group)
                 </td>
                 <td>
                     @if (!string.IsNullOrEmpty(item.Photo))
                     {
-                        <img src="@Url.Content(item.Photo)" alt="Image" style="width:100px;height:100px;max-width:100%; height:auto;" />
+                        <img src="@Url.Content(item.Photo)" alt="Image" style="width:100px;height:100px;max-width:100%; " />
                     }
                 </td>
                 <td align="center">

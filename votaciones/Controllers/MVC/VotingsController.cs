@@ -17,6 +17,7 @@ namespace votaciones.Controllers
     public class VotingsController : Controller
     {
         private DemocracyContext db = new DemocracyContext();
+        private DemocracyContext db2 = new DemocracyContext();
 
         [Authorize(Roles = "Admin")]
         public ActionResult Close(int id)
@@ -40,6 +41,68 @@ namespace votaciones.Controllers
                 }
             }
             return RedirectToAction("Index");
+        }
+
+        [Authorize(Roles = "User")]
+        public ActionResult MyCertificates()
+        {
+            var user = db.Users.Where(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
+            if (user == null)
+            {
+                ModelState.AddModelError(string.Empty, "Existe un error con el usuario actual, contacte con soporte.");
+                return View();
+            }
+
+            var certificate = db.VotingDetails.Where(v => v.UserId == user.UserId).ToList();
+
+
+            return View(certificate);
+        }
+
+        public ActionResult ShowCertificate1(int id, int id2)
+        {
+            var report = this.GenerateCertificateReport(id, id2);
+            var stream = report.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            return File(stream, "application/pdf", "certificado.pdf");
+        }
+
+        [HttpPost]
+        public ActionResult ShowCertificate(int id, int id2)
+        {
+            var report = this.GenerateCertificateReport(id, id2);
+            var stream = report.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            return File(stream, "application/pdf", "certificado.pdf");
+        }
+
+        private ReportClass GenerateCertificateReport(int id, int id2)
+        {
+            
+            var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            var connection = new SqlConnection(connectionString);
+            var dataTable = new DataTable();
+            var sql = @"SELECT   Votings.VotingId, Votings.Description, Votings.DateTimeStart, Votings.DateTimeEnd, Users.UserId, Users.Cedula, Users.FirstName +' '+ Users.LastName AS Users
+                        FROM     Users INNER JOIN
+                                 VotingDetails ON Users.UserId = VotingDetails.UserId INNER JOIN
+                                 Votings ON VotingDetails.VotingId = Votings.VotingId
+                        WHERE    Votings.VotingId =" + id + "AND Users.UserId =" + id2;
+
+            try
+            {
+                connection.Open();
+                var command = new SqlCommand(sql, connection);
+                var adapter = new SqlDataAdapter(command);
+                adapter.Fill(dataTable);
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+
+            var report = new ReportClass();
+            report.FileName = Server.MapPath("/Reports/Certificate.rpt");
+            report.Load();
+            report.SetDataSource(dataTable);
+            return report;
         }
 
         public ActionResult ShowResults(int id)
@@ -89,7 +152,7 @@ namespace votaciones.Controllers
                 .Where(v => v.StateId == state.StateId)
                 .Include(v => v.State);
             var views = new List<VotingIndexView>();
-            var db2 = new DemocracyContext();
+            
             foreach (var voting in votings)
             {
                 User user = null;
@@ -104,7 +167,6 @@ namespace votaciones.Controllers
                     DateTimeEnd = voting.DateTimeEnd,
                     DateTimeStart = voting.DateTimeStart,
                     Description = voting.Description,
-                    IsEnableBlankVote = voting.IsEnableBlankVote,
                     IsForAllUsers = voting.IsForAllUsers,
                     QuantityVotes = voting.QuantityVotes,
                     Remarks = voting.Remarks,
@@ -118,6 +180,7 @@ namespace votaciones.Controllers
 
         }
 
+        [HttpPost]
         [Authorize(Roles = "User")]
         public ActionResult VoteForCandidate(int candidateId, int votingId)
         {
@@ -127,6 +190,15 @@ namespace votaciones.Controllers
             if (user == null)
             {
                 return RedirectToAction("Index","Home");
+            }
+
+            var successvote = db.VotingDetails
+                .Where(vd => vd.UserId == user.UserId)
+                .FirstOrDefault();
+
+            if (successvote != null)
+            {
+                return View("Error");
             }
 
             var candidate = db.Candidates.Find(candidateId);
@@ -145,7 +217,7 @@ namespace votaciones.Controllers
             {
                 return RedirectToAction("MyVotings");
             }
-
+            
             return RedirectToAction("Index", "Home");
         }
 
@@ -180,10 +252,11 @@ namespace votaciones.Controllers
                     transaction.Rollback();
                 }
             }
-
+            
             return false;
         }
 
+        [HttpPost]
         [Authorize(Roles = "User")]
         public ActionResult Vote(int votingId)
         {
@@ -193,7 +266,6 @@ namespace votaciones.Controllers
                 DateTimeEnd = voting.DateTimeEnd,
                 DateTimeStart = voting.DateTimeStart,
                 Description = voting.Description,
-                IsEnableBlankVote = voting.IsEnableBlankVote,
                 IsForAllUsers = voting.IsForAllUsers,
                 MyCandidates = voting.Candidates.ToList(),
                 Remarks = voting.Remarks,
@@ -213,7 +285,60 @@ namespace votaciones.Controllers
                 return View();
             }
 
-            var votings = Utilities.MyVotings(user);
+            var state = Utilities.GetState("Abierta");
+
+            var votings = db.Votings
+                .Where(v => v.StateId == state.StateId &&
+                            v.DateTimeStart <= DateTime.Now &&
+                            v.DateTimeEnd >= DateTime.Now)
+                            .Include(v => v.Candidates)
+                            .Include(v => v.VotingGroups)
+                            .Include(v => v.State)
+                            .ToList();
+
+            //Descartar eventos de votacion en el que el usuario ya voto
+            foreach (var voting in votings.ToList())
+            {
+
+                var votingDetail = db.VotingDetails
+                    .Where(vd => vd.VotingId == voting.VotingId &&
+                                 vd.UserId == user.UserId)
+                                 .FirstOrDefault();
+
+                if (votingDetail != null)
+                {
+                    votings.Remove(voting);
+                }
+            }
+
+
+            //descartar los eventos de votacion en los grupos que no pertenese el usuario
+            foreach (var voting in votings.ToList())
+            {
+                if (!voting.IsForAllUsers)
+                {
+                    bool userBelongsToGroup = false;
+
+                    foreach (var votingGroup in voting.VotingGroups)
+                    {
+                        var userGroup = votingGroup.Group.GroupMembers
+                            .Where(gm => gm.UserId == user.UserId)
+                            .FirstOrDefault();
+
+                        if (userGroup != null)
+                        {
+                            userBelongsToGroup = true;
+                            break;
+                        }
+                    }
+
+                    if (!userBelongsToGroup)
+                    {
+                        votings.Remove(voting);
+                    }
+                }
+            }
+            
             return View(votings);
         }
 
@@ -234,7 +359,6 @@ namespace votaciones.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DeleteCandidate(int id)
         {
-            //nota importante, aqui no me muestra el error en la app cuando ya se ha votado
             var candidate = db.Candidates.Find(id);
             if (candidate != null)
             {
@@ -399,7 +523,6 @@ namespace votaciones.Controllers
                     DateTimeEnd = voting.DateTimeEnd,
                     DateTimeStart = voting.DateTimeStart,
                     Description = voting.Description,
-                    IsEnableBlankVote = voting.IsEnableBlankVote,
                     IsForAllUsers = voting.IsForAllUsers,
                     QuantityVotes = voting.QuantityVotes,
                     Remarks = voting.Remarks,
@@ -439,10 +562,8 @@ namespace votaciones.Controllers
                 DateTimeStart = voting.DateTimeStart,
                 DateTimeEnd = voting.DateTimeEnd,
                 Description = voting.Description,
-                IsEnableBlankVote = voting.IsEnableBlankVote,
                 IsForAllUsers = voting.IsForAllUsers,
                 QuantityVotes = voting.QuantityVotes,
-                QuantityBlankVotes = voting.QuantityBlankVotes,
                 Remarks = voting.Remarks,
                 StateId = voting.StateId,
                 State = voting.State,
@@ -485,15 +606,12 @@ namespace votaciones.Controllers
                                       .AddHours(view.TimeStart.Hour)
                                       .AddMinutes(view.TimeStart.Minute),
                     Description = view.Description,
-
-                    IsEnableBlankVote = view.IsEnableBlankVote,
-
+                    
                     IsForAllUsers = view.IsForAllUsers,
 
                     Remarks = view.Remarks,
 
                     StateId = view.StateId,
-
                 };
 
                 db.Votings.Add(voting);
@@ -526,7 +644,6 @@ namespace votaciones.Controllers
                 DateEnd = voting.DateTimeEnd,
                 DateStart = voting.DateTimeStart,
                 Description = voting.Description,
-                IsEnableBlankVote = voting.IsEnableBlankVote,
                 IsForAllUsers = voting.IsForAllUsers,
                 Remarks = voting.Remarks,
                 StateId = voting.StateId,
@@ -557,9 +674,7 @@ namespace votaciones.Controllers
                                       .AddHours(view.TimeStart.Hour)
                                       .AddMinutes(view.TimeStart.Minute),
                     Description = view.Description,
-
-                    IsEnableBlankVote = view.IsEnableBlankVote,
-
+                   
                     IsForAllUsers = view.IsForAllUsers,
 
                     Remarks = view.Remarks,
@@ -567,7 +682,6 @@ namespace votaciones.Controllers
                     StateId = view.StateId,
 
                     VotingId = view.VotingId,
-
                 };
 
                 db.Entry(voting).State = EntityState.Modified;
@@ -628,6 +742,7 @@ namespace votaciones.Controllers
             if (disposing)
             {
                 db.Dispose();
+                db2.Dispose();
             }
             base.Dispose(disposing);
         }

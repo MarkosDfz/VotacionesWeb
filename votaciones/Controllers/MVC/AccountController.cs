@@ -177,10 +177,9 @@ namespace votaciones.Controllers
                 {
                     Adress = userView.Adress,
                     FirstName = userView.FirstName,
-                    Grade = userView.Grade,
                     Group = userView.Group,
                     LastName = userView.LastName,
-                    Phone = userView.Phone,
+                    Cedula = userView.Cedula,
                     Photo = string.IsNullOrEmpty(pic) ? string.Format("~/Content/Photos/noimage.png") : string.Format("~/Content/Photos/{0}", pic),
                     UserName = userView.UserName,
                 };
@@ -244,7 +243,6 @@ namespace votaciones.Controllers
             {
                 UserName = userView.UserName,
                 Email = userView.UserName,
-                PhoneNumber = userView.Phone,
             };
 
             userManager.Create(userASP, userView.Password);

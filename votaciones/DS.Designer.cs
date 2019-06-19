@@ -28,6 +28,8 @@ namespace votaciones {
         
         private ResultsReportDataTable tableResultsReport;
         
+        private CertificateReportDataTable tableCertificateReport;
+        
         private global::System.Data.SchemaSerializationMode _schemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -61,6 +63,9 @@ namespace votaciones {
                 }
                 if ((ds.Tables["ResultsReport"] != null)) {
                     base.Tables.Add(new ResultsReportDataTable(ds.Tables["ResultsReport"]));
+                }
+                if ((ds.Tables["CertificateReport"] != null)) {
+                    base.Tables.Add(new CertificateReportDataTable(ds.Tables["CertificateReport"]));
                 }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
@@ -97,6 +102,16 @@ namespace votaciones {
         public ResultsReportDataTable ResultsReport {
             get {
                 return this.tableResultsReport;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        [global::System.ComponentModel.Browsable(false)]
+        [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
+        public CertificateReportDataTable CertificateReport {
+            get {
+                return this.tableCertificateReport;
             }
         }
         
@@ -173,6 +188,9 @@ namespace votaciones {
                 if ((ds.Tables["ResultsReport"] != null)) {
                     base.Tables.Add(new ResultsReportDataTable(ds.Tables["ResultsReport"]));
                 }
+                if ((ds.Tables["CertificateReport"] != null)) {
+                    base.Tables.Add(new CertificateReportDataTable(ds.Tables["CertificateReport"]));
+                }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
                 this.Namespace = ds.Namespace;
@@ -218,6 +236,12 @@ namespace votaciones {
                     this.tableResultsReport.InitVars();
                 }
             }
+            this.tableCertificateReport = ((CertificateReportDataTable)(base.Tables["CertificateReport"]));
+            if ((initTable == true)) {
+                if ((this.tableCertificateReport != null)) {
+                    this.tableCertificateReport.InitVars();
+                }
+            }
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -232,6 +256,8 @@ namespace votaciones {
             base.Tables.Add(this.tableUsers);
             this.tableResultsReport = new ResultsReportDataTable();
             base.Tables.Add(this.tableResultsReport);
+            this.tableCertificateReport = new CertificateReportDataTable();
+            base.Tables.Add(this.tableCertificateReport);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -243,6 +269,12 @@ namespace votaciones {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
         private bool ShouldSerializeResultsReport() {
+            return false;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        private bool ShouldSerializeCertificateReport() {
             return false;
         }
         
@@ -307,6 +339,9 @@ namespace votaciones {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
         public delegate void ResultsReportRowChangeEventHandler(object sender, ResultsReportRowChangeEvent e);
         
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        public delegate void CertificateReportRowChangeEventHandler(object sender, CertificateReportRowChangeEvent e);
+        
         /// <summary>
         ///Represents the strongly named DataTable class.
         ///</summary>
@@ -322,15 +357,13 @@ namespace votaciones {
             
             private global::System.Data.DataColumn columnLastName;
             
-            private global::System.Data.DataColumn columnPhone;
-            
             private global::System.Data.DataColumn columnAdress;
-            
-            private global::System.Data.DataColumn columnGrade;
             
             private global::System.Data.DataColumn columnGroup;
             
             private global::System.Data.DataColumn columnPhoto;
+            
+            private global::System.Data.DataColumn columnCedula;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
@@ -399,25 +432,9 @@ namespace votaciones {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public global::System.Data.DataColumn PhoneColumn {
-                get {
-                    return this.columnPhone;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public global::System.Data.DataColumn AdressColumn {
                 get {
                     return this.columnAdress;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public global::System.Data.DataColumn GradeColumn {
-                get {
-                    return this.columnGrade;
                 }
             }
             
@@ -434,6 +451,14 @@ namespace votaciones {
             public global::System.Data.DataColumn PhotoColumn {
                 get {
                     return this.columnPhoto;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn CedulaColumn {
+                get {
+                    return this.columnCedula;
                 }
             }
             
@@ -474,18 +499,17 @@ namespace votaciones {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public UsersRow AddUsersRow(string UserName, string FirstName, string LastName, string Phone, string Adress, string Grade, string Group, string Photo) {
+            public UsersRow AddUsersRow(string UserName, string FirstName, string LastName, string Adress, string Group, string Photo, string Cedula) {
                 UsersRow rowUsersRow = ((UsersRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
                         UserName,
                         FirstName,
                         LastName,
-                        Phone,
                         Adress,
-                        Grade,
                         Group,
-                        Photo};
+                        Photo,
+                        Cedula};
                 rowUsersRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowUsersRow);
                 return rowUsersRow;
@@ -519,11 +543,10 @@ namespace votaciones {
                 this.columnUserName = base.Columns["UserName"];
                 this.columnFirstName = base.Columns["FirstName"];
                 this.columnLastName = base.Columns["LastName"];
-                this.columnPhone = base.Columns["Phone"];
                 this.columnAdress = base.Columns["Adress"];
-                this.columnGrade = base.Columns["Grade"];
                 this.columnGroup = base.Columns["Group"];
                 this.columnPhoto = base.Columns["Photo"];
+                this.columnCedula = base.Columns["Cedula"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -537,16 +560,14 @@ namespace votaciones {
                 base.Columns.Add(this.columnFirstName);
                 this.columnLastName = new global::System.Data.DataColumn("LastName", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnLastName);
-                this.columnPhone = new global::System.Data.DataColumn("Phone", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnPhone);
                 this.columnAdress = new global::System.Data.DataColumn("Adress", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnAdress);
-                this.columnGrade = new global::System.Data.DataColumn("Grade", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnGrade);
                 this.columnGroup = new global::System.Data.DataColumn("Group", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnGroup);
                 this.columnPhoto = new global::System.Data.DataColumn("Photo", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnPhoto);
+                this.columnCedula = new global::System.Data.DataColumn("Cedula", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCedula);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnUserId}, true));
                 this.columnUserId.AutoIncrement = true;
@@ -561,13 +582,12 @@ namespace votaciones {
                 this.columnFirstName.MaxLength = 50;
                 this.columnLastName.AllowDBNull = false;
                 this.columnLastName.MaxLength = 50;
-                this.columnPhone.AllowDBNull = false;
-                this.columnPhone.MaxLength = 10;
                 this.columnAdress.AllowDBNull = false;
                 this.columnAdress.MaxLength = 100;
-                this.columnGrade.MaxLength = 2147483647;
                 this.columnGroup.MaxLength = 2147483647;
                 this.columnPhoto.MaxLength = 200;
+                this.columnCedula.AllowDBNull = false;
+                this.columnCedula.MaxLength = 13;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1020,6 +1040,355 @@ namespace votaciones {
         }
         
         /// <summary>
+        ///Represents the strongly named DataTable class.
+        ///</summary>
+        [global::System.Serializable()]
+        [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
+        public partial class CertificateReportDataTable : global::System.Data.TypedTableBase<CertificateReportRow> {
+            
+            private global::System.Data.DataColumn columnVotingId;
+            
+            private global::System.Data.DataColumn columnDescription;
+            
+            private global::System.Data.DataColumn columnDateTimeStart;
+            
+            private global::System.Data.DataColumn columnDateTimeEnd;
+            
+            private global::System.Data.DataColumn columnUserId;
+            
+            private global::System.Data.DataColumn columnCedula;
+            
+            private global::System.Data.DataColumn columnUsers;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public CertificateReportDataTable() {
+                this.TableName = "CertificateReport";
+                this.BeginInit();
+                this.InitClass();
+                this.EndInit();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            internal CertificateReportDataTable(global::System.Data.DataTable table) {
+                this.TableName = table.TableName;
+                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
+                    this.CaseSensitive = table.CaseSensitive;
+                }
+                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
+                    this.Locale = table.Locale;
+                }
+                if ((table.Namespace != table.DataSet.Namespace)) {
+                    this.Namespace = table.Namespace;
+                }
+                this.Prefix = table.Prefix;
+                this.MinimumCapacity = table.MinimumCapacity;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            protected CertificateReportDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+                    base(info, context) {
+                this.InitVars();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn VotingIdColumn {
+                get {
+                    return this.columnVotingId;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn DescriptionColumn {
+                get {
+                    return this.columnDescription;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn DateTimeStartColumn {
+                get {
+                    return this.columnDateTimeStart;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn DateTimeEndColumn {
+                get {
+                    return this.columnDateTimeEnd;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn UserIdColumn {
+                get {
+                    return this.columnUserId;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn CedulaColumn {
+                get {
+                    return this.columnCedula;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn UsersColumn {
+                get {
+                    return this.columnUsers;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            [global::System.ComponentModel.Browsable(false)]
+            public int Count {
+                get {
+                    return this.Rows.Count;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public CertificateReportRow this[int index] {
+                get {
+                    return ((CertificateReportRow)(this.Rows[index]));
+                }
+            }
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public event CertificateReportRowChangeEventHandler CertificateReportRowChanging;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public event CertificateReportRowChangeEventHandler CertificateReportRowChanged;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public event CertificateReportRowChangeEventHandler CertificateReportRowDeleting;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public event CertificateReportRowChangeEventHandler CertificateReportRowDeleted;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void AddCertificateReportRow(CertificateReportRow row) {
+                this.Rows.Add(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public CertificateReportRow AddCertificateReportRow(string Description, System.DateTime DateTimeStart, System.DateTime DateTimeEnd, string Cedula, string Users) {
+                CertificateReportRow rowCertificateReportRow = ((CertificateReportRow)(this.NewRow()));
+                object[] columnValuesArray = new object[] {
+                        null,
+                        Description,
+                        DateTimeStart,
+                        DateTimeEnd,
+                        null,
+                        Cedula,
+                        Users};
+                rowCertificateReportRow.ItemArray = columnValuesArray;
+                this.Rows.Add(rowCertificateReportRow);
+                return rowCertificateReportRow;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public override global::System.Data.DataTable Clone() {
+                CertificateReportDataTable cln = ((CertificateReportDataTable)(base.Clone()));
+                cln.InitVars();
+                return cln;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            protected override global::System.Data.DataTable CreateInstance() {
+                return new CertificateReportDataTable();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            internal void InitVars() {
+                this.columnVotingId = base.Columns["VotingId"];
+                this.columnDescription = base.Columns["Description"];
+                this.columnDateTimeStart = base.Columns["DateTimeStart"];
+                this.columnDateTimeEnd = base.Columns["DateTimeEnd"];
+                this.columnUserId = base.Columns["UserId"];
+                this.columnCedula = base.Columns["Cedula"];
+                this.columnUsers = base.Columns["Users"];
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            private void InitClass() {
+                this.columnVotingId = new global::System.Data.DataColumn("VotingId", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnVotingId);
+                this.columnDescription = new global::System.Data.DataColumn("Description", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDescription);
+                this.columnDateTimeStart = new global::System.Data.DataColumn("DateTimeStart", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDateTimeStart);
+                this.columnDateTimeEnd = new global::System.Data.DataColumn("DateTimeEnd", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDateTimeEnd);
+                this.columnUserId = new global::System.Data.DataColumn("UserId", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnUserId);
+                this.columnCedula = new global::System.Data.DataColumn("Cedula", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCedula);
+                this.columnUsers = new global::System.Data.DataColumn("Users", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnUsers);
+                this.columnVotingId.AutoIncrement = true;
+                this.columnVotingId.AutoIncrementSeed = -1;
+                this.columnVotingId.AutoIncrementStep = -1;
+                this.columnVotingId.AllowDBNull = false;
+                this.columnVotingId.ReadOnly = true;
+                this.columnDescription.AllowDBNull = false;
+                this.columnDescription.MaxLength = 50;
+                this.columnDateTimeStart.AllowDBNull = false;
+                this.columnDateTimeEnd.AllowDBNull = false;
+                this.columnUserId.AutoIncrement = true;
+                this.columnUserId.AutoIncrementSeed = -1;
+                this.columnUserId.AutoIncrementStep = -1;
+                this.columnUserId.AllowDBNull = false;
+                this.columnUserId.ReadOnly = true;
+                this.columnCedula.AllowDBNull = false;
+                this.columnCedula.MaxLength = 13;
+                this.columnUsers.ReadOnly = true;
+                this.columnUsers.MaxLength = 101;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public CertificateReportRow NewCertificateReportRow() {
+                return ((CertificateReportRow)(this.NewRow()));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
+                return new CertificateReportRow(builder);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            protected override global::System.Type GetRowType() {
+                return typeof(CertificateReportRow);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanged(e);
+                if ((this.CertificateReportRowChanged != null)) {
+                    this.CertificateReportRowChanged(this, new CertificateReportRowChangeEvent(((CertificateReportRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanging(e);
+                if ((this.CertificateReportRowChanging != null)) {
+                    this.CertificateReportRowChanging(this, new CertificateReportRowChangeEvent(((CertificateReportRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleted(e);
+                if ((this.CertificateReportRowDeleted != null)) {
+                    this.CertificateReportRowDeleted(this, new CertificateReportRowChangeEvent(((CertificateReportRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleting(e);
+                if ((this.CertificateReportRowDeleting != null)) {
+                    this.CertificateReportRowDeleting(this, new CertificateReportRowChangeEvent(((CertificateReportRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void RemoveCertificateReportRow(CertificateReportRow row) {
+                this.Rows.Remove(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
+                global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
+                global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
+                DS ds = new DS();
+                global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
+                any1.MinOccurs = new decimal(0);
+                any1.MaxOccurs = decimal.MaxValue;
+                any1.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any1);
+                global::System.Xml.Schema.XmlSchemaAny any2 = new global::System.Xml.Schema.XmlSchemaAny();
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
+                any2.MinOccurs = new decimal(1);
+                any2.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any2);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute1 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute1.Name = "namespace";
+                attribute1.FixedValue = ds.Namespace;
+                type.Attributes.Add(attribute1);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute2.Name = "tableTypeName";
+                attribute2.FixedValue = "CertificateReportDataTable";
+                type.Attributes.Add(attribute2);
+                type.Particle = sequence;
+                global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
+                if (xs.Contains(dsSchema.TargetNamespace)) {
+                    global::System.IO.MemoryStream s1 = new global::System.IO.MemoryStream();
+                    global::System.IO.MemoryStream s2 = new global::System.IO.MemoryStream();
+                    try {
+                        global::System.Xml.Schema.XmlSchema schema = null;
+                        dsSchema.Write(s1);
+                        for (global::System.Collections.IEnumerator schemas = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator(); schemas.MoveNext(); ) {
+                            schema = ((global::System.Xml.Schema.XmlSchema)(schemas.Current));
+                            s2.SetLength(0);
+                            schema.Write(s2);
+                            if ((s1.Length == s2.Length)) {
+                                s1.Position = 0;
+                                s2.Position = 0;
+                                for (; ((s1.Position != s1.Length) 
+                                            && (s1.ReadByte() == s2.ReadByte())); ) {
+                                    ;
+                                }
+                                if ((s1.Position == s1.Length)) {
+                                    return type;
+                                }
+                            }
+                        }
+                    }
+                    finally {
+                        if ((s1 != null)) {
+                            s1.Close();
+                        }
+                        if ((s2 != null)) {
+                            s2.Close();
+                        }
+                    }
+                }
+                xs.Add(dsSchema);
+                return type;
+            }
+        }
+        
+        /// <summary>
         ///Represents strongly named DataRow class.
         ///</summary>
         public partial class UsersRow : global::System.Data.DataRow {
@@ -1079,39 +1448,12 @@ namespace votaciones {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public string Phone {
-                get {
-                    return ((string)(this[this.tableUsers.PhoneColumn]));
-                }
-                set {
-                    this[this.tableUsers.PhoneColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public string Adress {
                 get {
                     return ((string)(this[this.tableUsers.AdressColumn]));
                 }
                 set {
                     this[this.tableUsers.AdressColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public string Grade {
-                get {
-                    try {
-                        return ((string)(this[this.tableUsers.GradeColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Grade\' de la tabla \'Users\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableUsers.GradeColumn] = value;
                 }
             }
             
@@ -1149,14 +1491,13 @@ namespace votaciones {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public bool IsGradeNull() {
-                return this.IsNull(this.tableUsers.GradeColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public void SetGradeNull() {
-                this[this.tableUsers.GradeColumn] = global::System.Convert.DBNull;
+            public string Cedula {
+                get {
+                    return ((string)(this[this.tableUsers.CedulaColumn]));
+                }
+                set {
+                    this[this.tableUsers.CedulaColumn] = value;
+                }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1272,6 +1613,115 @@ namespace votaciones {
         }
         
         /// <summary>
+        ///Represents strongly named DataRow class.
+        ///</summary>
+        public partial class CertificateReportRow : global::System.Data.DataRow {
+            
+            private CertificateReportDataTable tableCertificateReport;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            internal CertificateReportRow(global::System.Data.DataRowBuilder rb) : 
+                    base(rb) {
+                this.tableCertificateReport = ((CertificateReportDataTable)(this.Table));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public int VotingId {
+                get {
+                    return ((int)(this[this.tableCertificateReport.VotingIdColumn]));
+                }
+                set {
+                    this[this.tableCertificateReport.VotingIdColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string Description {
+                get {
+                    return ((string)(this[this.tableCertificateReport.DescriptionColumn]));
+                }
+                set {
+                    this[this.tableCertificateReport.DescriptionColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public System.DateTime DateTimeStart {
+                get {
+                    return ((global::System.DateTime)(this[this.tableCertificateReport.DateTimeStartColumn]));
+                }
+                set {
+                    this[this.tableCertificateReport.DateTimeStartColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public System.DateTime DateTimeEnd {
+                get {
+                    return ((global::System.DateTime)(this[this.tableCertificateReport.DateTimeEndColumn]));
+                }
+                set {
+                    this[this.tableCertificateReport.DateTimeEndColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public int UserId {
+                get {
+                    return ((int)(this[this.tableCertificateReport.UserIdColumn]));
+                }
+                set {
+                    this[this.tableCertificateReport.UserIdColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string Cedula {
+                get {
+                    return ((string)(this[this.tableCertificateReport.CedulaColumn]));
+                }
+                set {
+                    this[this.tableCertificateReport.CedulaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string Users {
+                get {
+                    try {
+                        return ((string)(this[this.tableCertificateReport.UsersColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Users\' de la tabla \'CertificateReport\' es DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableCertificateReport.UsersColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsUsersNull() {
+                return this.IsNull(this.tableCertificateReport.UsersColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetUsersNull() {
+                this[this.tableCertificateReport.UsersColumn] = global::System.Convert.DBNull;
+            }
+        }
+        
+        /// <summary>
         ///Row event argument class
         ///</summary>
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
@@ -1325,6 +1775,40 @@ namespace votaciones {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public ResultsReportRow Row {
+                get {
+                    return this.eventRow;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataRowAction Action {
+                get {
+                    return this.eventAction;
+                }
+            }
+        }
+        
+        /// <summary>
+        ///Row event argument class
+        ///</summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        public class CertificateReportRowChangeEvent : global::System.EventArgs {
+            
+            private CertificateReportRow eventRow;
+            
+            private global::System.Data.DataRowAction eventAction;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public CertificateReportRowChangeEvent(CertificateReportRow row, global::System.Data.DataRowAction action) {
+                this.eventRow = row;
+                this.eventAction = action;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public CertificateReportRow Row {
                 get {
                     return this.eventRow;
                 }
@@ -1468,11 +1952,10 @@ namespace votaciones.DSTableAdapters {
             tableMapping.ColumnMappings.Add("UserName", "UserName");
             tableMapping.ColumnMappings.Add("FirstName", "FirstName");
             tableMapping.ColumnMappings.Add("LastName", "LastName");
-            tableMapping.ColumnMappings.Add("Phone", "Phone");
             tableMapping.ColumnMappings.Add("Adress", "Adress");
-            tableMapping.ColumnMappings.Add("Grade", "Grade");
             tableMapping.ColumnMappings.Add("Group", "Group");
             tableMapping.ColumnMappings.Add("Photo", "Photo");
+            tableMapping.ColumnMappings.Add("Cedula", "Cedula");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
@@ -1481,30 +1964,28 @@ namespace votaciones.DSTableAdapters {
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_UserId", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "UserId", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = "INSERT INTO [dbo].[Users] ([UserName], [FirstName], [LastName], [Phone], [Adress]" +
-                ", [Grade], [Group], [Photo]) VALUES (@UserName, @FirstName, @LastName, @Phone, @" +
-                "Adress, @Grade, @Group, @Photo)";
+            this._adapter.InsertCommand.CommandText = "INSERT INTO [dbo].[Users] ([UserName], [FirstName], [LastName], [Cedula], [Adress" +
+                "], [Group], [Photo]) VALUES (@UserName, @FirstName, @LastName, @Cedula, @Adress," +
+                " @Group, @Photo)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@UserName", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "UserName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@FirstName", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "FirstName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@LastName", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "LastName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Phone", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Phone", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Cedula", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Cedula", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Adress", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Adress", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Grade", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Grade", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Group", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Group", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Photo", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Photo", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
             this._adapter.UpdateCommand.CommandText = "UPDATE [dbo].[Users] SET [UserName] = @UserName, [FirstName] = @FirstName, [LastN" +
-                "ame] = @LastName, [Phone] = @Phone, [Adress] = @Adress, [Grade] = @Grade, [Group" +
-                "] = @Group, [Photo] = @Photo WHERE (([UserId] = @Original_UserId))";
+                "ame] = @LastName, [Cedula] = @Cedula, [Adress] = @Adress, [Group] = @Group, [Pho" +
+                "to] = @Photo WHERE (([UserId] = @Original_UserId))";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@UserName", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "UserName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@FirstName", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "FirstName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@LastName", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "LastName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Phone", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Phone", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Cedula", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Cedula", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Adress", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Adress", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Grade", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Grade", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Group", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Group", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Photo", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Photo", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_UserId", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "UserId", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
@@ -1523,8 +2004,8 @@ namespace votaciones.DSTableAdapters {
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT UserId, UserName, FirstName, LastName, Phone, Adress, Grade, [Group], Phot" +
-                "o FROM dbo.Users";
+            this._commandCollection[0].CommandText = "SELECT UserId, UserName, FirstName, LastName, Cedula, Adress, [Group], Photo FROM" +
+                " dbo.Users";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         
@@ -1607,7 +2088,7 @@ namespace votaciones.DSTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(string UserName, string FirstName, string LastName, string Phone, string Adress, string Grade, string Group, string Photo) {
+        public virtual int Insert(string UserName, string FirstName, string LastName, string Cedula, string Adress, string Group, string Photo) {
             if ((UserName == null)) {
                 throw new global::System.ArgumentNullException("UserName");
             }
@@ -1626,11 +2107,11 @@ namespace votaciones.DSTableAdapters {
             else {
                 this.Adapter.InsertCommand.Parameters[2].Value = ((string)(LastName));
             }
-            if ((Phone == null)) {
-                throw new global::System.ArgumentNullException("Phone");
+            if ((Cedula == null)) {
+                throw new global::System.ArgumentNullException("Cedula");
             }
             else {
-                this.Adapter.InsertCommand.Parameters[3].Value = ((string)(Phone));
+                this.Adapter.InsertCommand.Parameters[3].Value = ((string)(Cedula));
             }
             if ((Adress == null)) {
                 throw new global::System.ArgumentNullException("Adress");
@@ -1638,23 +2119,17 @@ namespace votaciones.DSTableAdapters {
             else {
                 this.Adapter.InsertCommand.Parameters[4].Value = ((string)(Adress));
             }
-            if ((Grade == null)) {
+            if ((Group == null)) {
                 this.Adapter.InsertCommand.Parameters[5].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[5].Value = ((string)(Grade));
+                this.Adapter.InsertCommand.Parameters[5].Value = ((string)(Group));
             }
-            if ((Group == null)) {
+            if ((Photo == null)) {
                 this.Adapter.InsertCommand.Parameters[6].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[6].Value = ((string)(Group));
-            }
-            if ((Photo == null)) {
-                this.Adapter.InsertCommand.Parameters[7].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[7].Value = ((string)(Photo));
+                this.Adapter.InsertCommand.Parameters[6].Value = ((string)(Photo));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -1676,7 +2151,7 @@ namespace votaciones.DSTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(string UserName, string FirstName, string LastName, string Phone, string Adress, string Grade, string Group, string Photo, int Original_UserId) {
+        public virtual int Update(string UserName, string FirstName, string LastName, string Cedula, string Adress, string Group, string Photo, int Original_UserId) {
             if ((UserName == null)) {
                 throw new global::System.ArgumentNullException("UserName");
             }
@@ -1695,11 +2170,11 @@ namespace votaciones.DSTableAdapters {
             else {
                 this.Adapter.UpdateCommand.Parameters[2].Value = ((string)(LastName));
             }
-            if ((Phone == null)) {
-                throw new global::System.ArgumentNullException("Phone");
+            if ((Cedula == null)) {
+                throw new global::System.ArgumentNullException("Cedula");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[3].Value = ((string)(Phone));
+                this.Adapter.UpdateCommand.Parameters[3].Value = ((string)(Cedula));
             }
             if ((Adress == null)) {
                 throw new global::System.ArgumentNullException("Adress");
@@ -1707,25 +2182,19 @@ namespace votaciones.DSTableAdapters {
             else {
                 this.Adapter.UpdateCommand.Parameters[4].Value = ((string)(Adress));
             }
-            if ((Grade == null)) {
+            if ((Group == null)) {
                 this.Adapter.UpdateCommand.Parameters[5].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[5].Value = ((string)(Grade));
+                this.Adapter.UpdateCommand.Parameters[5].Value = ((string)(Group));
             }
-            if ((Group == null)) {
+            if ((Photo == null)) {
                 this.Adapter.UpdateCommand.Parameters[6].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[6].Value = ((string)(Group));
+                this.Adapter.UpdateCommand.Parameters[6].Value = ((string)(Photo));
             }
-            if ((Photo == null)) {
-                this.Adapter.UpdateCommand.Parameters[7].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[7].Value = ((string)(Photo));
-            }
-            this.Adapter.UpdateCommand.Parameters[8].Value = ((int)(Original_UserId));
+            this.Adapter.UpdateCommand.Parameters[7].Value = ((int)(Original_UserId));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -1914,6 +2383,182 @@ FROM Candidates INNER JOIN
         public virtual DS.ResultsReportDataTable GetData() {
             this.Adapter.SelectCommand = this.CommandCollection[0];
             DS.ResultsReportDataTable dataTable = new DS.ResultsReportDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+    }
+    
+    /// <summary>
+    ///Represents the connection and commands used to retrieve and save data.
+    ///</summary>
+    [global::System.ComponentModel.DesignerCategoryAttribute("code")]
+    [global::System.ComponentModel.ToolboxItem(true)]
+    [global::System.ComponentModel.DataObjectAttribute(true)]
+    [global::System.ComponentModel.DesignerAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterDesigner, Microsoft.VSDesigner" +
+        ", Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
+    [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+    public partial class CertificateReportTableAdapter : global::System.ComponentModel.Component {
+        
+        private global::System.Data.SqlClient.SqlDataAdapter _adapter;
+        
+        private global::System.Data.SqlClient.SqlConnection _connection;
+        
+        private global::System.Data.SqlClient.SqlTransaction _transaction;
+        
+        private global::System.Data.SqlClient.SqlCommand[] _commandCollection;
+        
+        private bool _clearBeforeFill;
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        public CertificateReportTableAdapter() {
+            this.ClearBeforeFill = true;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        protected internal global::System.Data.SqlClient.SqlDataAdapter Adapter {
+            get {
+                if ((this._adapter == null)) {
+                    this.InitAdapter();
+                }
+                return this._adapter;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        internal global::System.Data.SqlClient.SqlConnection Connection {
+            get {
+                if ((this._connection == null)) {
+                    this.InitConnection();
+                }
+                return this._connection;
+            }
+            set {
+                this._connection = value;
+                if ((this.Adapter.InsertCommand != null)) {
+                    this.Adapter.InsertCommand.Connection = value;
+                }
+                if ((this.Adapter.DeleteCommand != null)) {
+                    this.Adapter.DeleteCommand.Connection = value;
+                }
+                if ((this.Adapter.UpdateCommand != null)) {
+                    this.Adapter.UpdateCommand.Connection = value;
+                }
+                for (int i = 0; (i < this.CommandCollection.Length); i = (i + 1)) {
+                    if ((this.CommandCollection[i] != null)) {
+                        ((global::System.Data.SqlClient.SqlCommand)(this.CommandCollection[i])).Connection = value;
+                    }
+                }
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        internal global::System.Data.SqlClient.SqlTransaction Transaction {
+            get {
+                return this._transaction;
+            }
+            set {
+                this._transaction = value;
+                for (int i = 0; (i < this.CommandCollection.Length); i = (i + 1)) {
+                    this.CommandCollection[i].Transaction = this._transaction;
+                }
+                if (((this.Adapter != null) 
+                            && (this.Adapter.DeleteCommand != null))) {
+                    this.Adapter.DeleteCommand.Transaction = this._transaction;
+                }
+                if (((this.Adapter != null) 
+                            && (this.Adapter.InsertCommand != null))) {
+                    this.Adapter.InsertCommand.Transaction = this._transaction;
+                }
+                if (((this.Adapter != null) 
+                            && (this.Adapter.UpdateCommand != null))) {
+                    this.Adapter.UpdateCommand.Transaction = this._transaction;
+                }
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        protected global::System.Data.SqlClient.SqlCommand[] CommandCollection {
+            get {
+                if ((this._commandCollection == null)) {
+                    this.InitCommandCollection();
+                }
+                return this._commandCollection;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        public bool ClearBeforeFill {
+            get {
+                return this._clearBeforeFill;
+            }
+            set {
+                this._clearBeforeFill = value;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        private void InitAdapter() {
+            this._adapter = new global::System.Data.SqlClient.SqlDataAdapter();
+            global::System.Data.Common.DataTableMapping tableMapping = new global::System.Data.Common.DataTableMapping();
+            tableMapping.SourceTable = "Table";
+            tableMapping.DataSetTable = "CertificateReport";
+            tableMapping.ColumnMappings.Add("VotingId", "VotingId");
+            tableMapping.ColumnMappings.Add("Description", "Description");
+            tableMapping.ColumnMappings.Add("DateTimeStart", "DateTimeStart");
+            tableMapping.ColumnMappings.Add("DateTimeEnd", "DateTimeEnd");
+            tableMapping.ColumnMappings.Add("UserId", "UserId");
+            tableMapping.ColumnMappings.Add("Cedula", "Cedula");
+            tableMapping.ColumnMappings.Add("Users", "Users");
+            this._adapter.TableMappings.Add(tableMapping);
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        private void InitConnection() {
+            this._connection = new global::System.Data.SqlClient.SqlConnection();
+            this._connection.ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        private void InitCommandCollection() {
+            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
+            this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[0].Connection = this.Connection;
+            this._commandCollection[0].CommandText = @"SELECT Votings.VotingId, Votings.Description, Votings.DateTimeStart, Votings.DateTimeEnd, Users.UserId, Users.Cedula, Users.FirstName +' '+ Users.LastName AS Users
+FROM     Users INNER JOIN
+                  VotingDetails ON Users.UserId = VotingDetails.UserId INNER JOIN
+                  Votings ON VotingDetails.VotingId = Votings.VotingId";
+            this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, true)]
+        public virtual int Fill(DS.CertificateReportDataTable dataTable) {
+            this.Adapter.SelectCommand = this.CommandCollection[0];
+            if ((this.ClearBeforeFill == true)) {
+                dataTable.Clear();
+            }
+            int returnValue = this.Adapter.Fill(dataTable);
+            return returnValue;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
+        public virtual DS.CertificateReportDataTable GetData() {
+            this.Adapter.SelectCommand = this.CommandCollection[0];
+            DS.CertificateReportDataTable dataTable = new DS.CertificateReportDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
         }

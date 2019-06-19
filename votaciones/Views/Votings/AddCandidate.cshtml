@@ -1,7 +1,7 @@
 ﻿@model votaciones.Models.AddCandidateView
 
 @{
-    ViewBag.Title = "AddCandidate";
+    ViewBag.Title = "Añadir Candidato";
 }
 
 <h2>Añadir Candidato a la Votación</h2>
@@ -42,10 +42,14 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/i18n/es.js"></script>
     <script>
 
         $('.select-user').select2({
-            placeholder: "Seleccione un candidato",
+            placeholder: "Buscar candidato",
+            minimumInputLength: 2,
+            language: "es",
+
         });
 
     </script>

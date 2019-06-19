@@ -83,10 +83,9 @@ namespace votaciones.Controllers
             {
                 Adress = user.Adress,
                 FirstName = user.FirstName,
-                Grade = user.Grade,
                 Group = user.Group,
                 LastName = user.LastName,
-                Phone = user.Phone,
+                Cedula = user.Cedula,
                 Photo = user.Photo,
                 UserId = user.UserId,
                 UserName = user.UserName,
@@ -121,10 +120,9 @@ namespace votaciones.Controllers
 
                 user.Adress = view.Adress;
                 user.FirstName = view.FirstName;
-                user.Grade = view.Grade;
                 user.Group = view.Group;
                 user.LastName = view.LastName;
-                user.Phone = view.Phone;
+                user.Cedula = view.Cedula;
 
                 if (!string.IsNullOrEmpty(pic))
                 {
@@ -185,12 +183,11 @@ namespace votaciones.Controllers
                     Adress = user.Adress,
                     Candidates = user.Candidates,
                     FirstName = user.FirstName,
-                    Grade = user.Grade,
                     Group = user.Group,
                     GroupMembers = user.GroupMembers,
                     IsAdmin = userASP != null && userManager.IsInRole(userASP.Id, "Admin"), 
                     LastName = user.LastName,
-                    Phone = user.Phone,
+                    Cedula = user.Cedula,
                     Photo = user.Photo,
                     UserId = user.UserId,
                     UserName = user.UserName,
@@ -257,10 +254,9 @@ namespace votaciones.Controllers
             {
                 Adress = userView.Adress,
                 FirstName = userView.FirstName,
-                Grade = userView.Grade,
                 Group = userView.Group,
                 LastName = userView.LastName,
-                Phone = userView.Phone,
+                Cedula = userView.Cedula,
                 Photo = pic == string.Empty ? string.Format("~/Content/Photos/noimage.png") : string.Format("~/Content/Photos/{0}",pic),
                 UserName = userView.UserName,
             };
@@ -314,10 +310,9 @@ namespace votaciones.Controllers
             {
                 Adress = user.Adress,
                 FirstName = user.FirstName,
-                Grade = user.Grade,
                 Group = user.Group,
                 LastName = user.LastName,
-                Phone = user.Phone,
+                Cedula = user.Cedula,
                 UserId = user.UserId,
                 UserName = user.UserName,
             };
@@ -356,10 +351,9 @@ namespace votaciones.Controllers
 
             user.Adress = userView.Adress;
             user.FirstName = userView.FirstName;
-            user.Grade = userView.Grade;
             user.Group = userView.Group;
             user.LastName = userView.LastName;
-            user.Phone = userView.Phone;
+            user.Cedula = userView.Cedula;
 
             if (!string.IsNullOrEmpty(pic))
             {

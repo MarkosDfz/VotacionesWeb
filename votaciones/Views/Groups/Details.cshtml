@@ -1,7 +1,7 @@
 ﻿@model votaciones.Models.GroupDetailsView
 
 @{
-    ViewBag.Title = "Detalles";
+    ViewBag.Title = "Detalles del Grupo";
 }
 
 <h2>Detalle del Grupo</h2>
@@ -70,7 +70,7 @@ else
             <td>
                 @if (!string.IsNullOrEmpty(Model.Members[i].User.Photo))
                 {
-                    <img src="@Url.Content(Model.Members[i].User.Photo)" alt="Image" style="width:100px;height:100px;max-width:100%; height:auto;" />
+                    <img src="@Url.Content(Model.Members[i].User.Photo)" alt="Image" style="width:100px;height:100px;max-width:100%;" />
                 }
             </td>
             <td>

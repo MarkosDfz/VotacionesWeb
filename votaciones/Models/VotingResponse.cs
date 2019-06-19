@@ -21,11 +21,7 @@ namespace votaciones.Models
 
         public bool IsForAllUsers { get; set; }
 
-        public bool IsEnableBlankVote { get; set; }
-
         public int QuantityVotes { get; set; }
-
-        public int QuantityBlankVotes { get; set; }
 
         public User Winner { get; set; }
 

@@ -56,7 +56,7 @@
                     @Html.LabelFor(model => model.Photo, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         <span class="btn btn-default btn-file">
-                            @Html.TextBoxFor(modelo => modelo.Photo, new { type = "file" })
+                            @Html.TextBoxFor(modelo => modelo.NewPhoto, new { type = "file" })
                         </span>
                     </div>
                 </div>
@@ -73,7 +73,7 @@
             <div class="col-md-5">
                 @if (!string.IsNullOrEmpty(Model.Photo))
                 {
-                    <img src="@Url.Content(Model.Photo)" alt="Image" style="width:300px;height:300px;max-width:100%; height:auto;" />
+                    <img src="@Url.Content(Model.Photo)" alt="Image" style="width:300px;height:300px;max-width:100%; height:auto;border-radius:50%;" />
                 }
             </div>
         </div>

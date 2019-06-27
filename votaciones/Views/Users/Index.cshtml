@@ -25,10 +25,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
+                Usuario
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.UserName)
@@ -59,11 +56,9 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.LastName)
+                    @Html.DisplayFor(modelItem => item.FullName)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FirstName)
-                </td>
+                
                 <td>
                     @Html.DisplayFor(modelItem => item.UserName)
                 </td>
@@ -80,7 +75,7 @@
                 <td>
                     @if (!string.IsNullOrEmpty(item.Photo))
                     {
-                        <img src="@Url.Content(item.Photo)" alt="Image" style="width:100px;height:100px;max-width:100%; " />
+                        <img src="@Url.Content(item.Photo)" alt="Image" style="width:100px;height:100px;max-width:100%;border-radius:50%; " />
                     }
                 </td>
                 <td align="center">

@@ -45,10 +45,10 @@ else
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => Model.Members[0].User.UserName)
+            @Html.DisplayNameFor(model => Model.Members[0].User.FullName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => Model.Members[0].User.FullName)
+            @Html.DisplayNameFor(model => Model.Members[0].User.UserName)
         </th>
         <th>
             @Html.DisplayNameFor(model => Model.Members[0].User.Photo)
@@ -62,15 +62,15 @@ else
      { 
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => Model.Members[i].User.UserName)
+                @Html.DisplayFor(modelItem => Model.Members[i].User.FullName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => Model.Members[i].User.FullName)
+                @Html.DisplayFor(modelItem => Model.Members[i].User.UserName)
             </td>
             <td>
                 @if (!string.IsNullOrEmpty(Model.Members[i].User.Photo))
                 {
-                    <img src="@Url.Content(Model.Members[i].User.Photo)" alt="Image" style="width:100px;height:100px;max-width:100%;" />
+                    <img src="@Url.Content(Model.Members[i].User.Photo)" alt="Image" style="width:100px;height:100px;max-width:100%;border-radius:50%;" />
                 }
             </td>
             <td>

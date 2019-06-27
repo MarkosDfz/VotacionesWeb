@@ -37,7 +37,7 @@ namespace votaciones.Models
         public string LastName { get; set; }
 
         [Display(Name = "Usuario")]
-        public string FullName { get { return string.Format ("{0} {1}", this.FirstName, this.LastName) ; } }
+        public string FullName { get { return string.Format ("{0} {1}", this.LastName, this.FirstName) ; } }
 
         [Display(Name = "Cédula")]
         [Required(ErrorMessage = "El campo {0} es requerido")]

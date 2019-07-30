@@ -3,7 +3,9 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -50,7 +52,7 @@ namespace votaciones
                     LastName = "Banda",
                     Cedula = "0503962169",
                     UserName = "markosdefaz@gmail.com",
-                    Photo = "~/Content/Photos/admin.jpg",
+                    Photo = "~/Security/Content/Photos/admin.jpg",
                 };
 
                 db.Users.Add(user);

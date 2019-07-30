@@ -70,12 +70,13 @@
                     <tr>
                         <td style="vertical-align:middle">
 
-                            @Html.DisplayFor(modelItem => Model.MyCandidates[i].User.FullName)
+                            @Html.DisplayFor(modelItem => Model.MyCandidates[i].User.FullName)<br />
+                            Grupo: @Html.DisplayFor(modelItem => Model.MyCandidates[i].User.Group)
                         </td>
                         <td>
                             @if (!string.IsNullOrEmpty(Model.MyCandidates[i].User.Photo))
                             {
-                                <img src="@Url.Content(Model.MyCandidates[i].User.Photo)" alt="Image" style="width:200px;height:200px;max-width:100%; height:auto;" />
+                                <img src="@Url.Content(Model.MyCandidates[i].User.Photo)" alt="Image" style="width:200px;height:200px;max-width:100%; height:auto; " />
                             }
                         </td>
                         <td style="vertical-align:middle">
@@ -83,7 +84,7 @@
                             {
                                 <input type="hidden" id="candidateId" name="candidateId" value="@Model.MyCandidates[i].CandidateId" />
                                 <input type="hidden" id="votingId" name="votingId" value="@Model.VotingId" />
-                                <input type="submit" value="Votar" class="btn btn-primary" onclick="return confirm('¿Está seguro de votar por este candidato?')" />
+                                <input type="submit" value="Votar" class="btn btn-primary" onclick="@string.Format("return confirm('¿Está seguro de votar por {0}?');", Model.MyCandidates[i].User.FullName)" />
                             }
                         </td>
 

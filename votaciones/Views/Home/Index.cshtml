@@ -11,7 +11,7 @@
             <p class="lead">Sistema de votaciones de la Universidad Técnica de Cotopaxi.</p>
             @if (!this.User.IsInRole("Admin") && !this.User.IsInRole("User"))
             {
-                <p class="text-danger" , style="text-align:justify">Para usar el sistema por favor Inicia Sesión, si ingresas por primera vez por favor registrate en el sistema. </p>
+                <p class="text-danger" , style="text-align:justify">Para usar el sistema por favor Inicia Sesión. </p>
 
             }
         </div>
@@ -25,25 +25,25 @@
 {
     <div class="row">
         <div class="col-md-4">
-            <h2>Registrarse</h2>
-            <p>Crea tu propio usuario en el sistema.</p>
-            @Html.ActionLink("Registrarse", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "btn btn-primary" })&nbsp;&nbsp;&nbsp;
-            <img src="~/Content/Images/register.png" style="width:150px; height:150px; max-width:100%" />
-
-        </div>
-        <div class="col-md-4">
             <h2>Iniciar Sesión</h2>
             <p>Ingresa con tus credenciales en el sistema.</p>
-            @Html.ActionLink("Iniciar Sesión", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "btn btn-warning" })
+            @Html.ActionLink("Iniciar Sesión", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "btn btn-primary" })&nbsp;&nbsp;&nbsp;
             <img src="~/Content/Images/login.png" style="width:150px; height:150px; max-width:100%" />
 
         </div>
         <div class="col-md-4">
             <h2>Resultados</h2>
             <p>Mira los resultados de las votaciones.</p>
-            @Html.ActionLink("Resultados", "Results", "Votings", new { }, new { @class = "btn btn-info" })&nbsp;
-            <img src="~/Content/Images/resul.png" style="width:150px; height:150px; max-width:100%" />
+            @Html.ActionLink("Resultados", "Results", "Votings", new { }, new { @class = "btn btn-warning" })&nbsp;
+            <img src="~/Content/Images/results.png" style="width:150px; height:150px; max-width:100%" />
 
+        </div>
+        <div class="col-md-4">
+            <h2>Recuperar Contraseña</h2>
+            <p>¿Olvidaste tu contraseña? Recuperala aquí.</p>
+            @Html.ActionLink("Recuperar Contraseña", "ForgotPassword", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "btn btn-info" })
+            <img src="~/Content/Images/question1.png" style="width:150px; height:150px; max-width:100%" />
+            
         </div>
     </div>
 }
@@ -96,7 +96,7 @@ else
                 <h2>Resultados</h2>
                 <p>Mira los resultados de las votaciones.</p>
                 @Html.ActionLink("Resultados", "Results", "Votings", new { }, new { @class = "btn btn-info" })&nbsp;
-                <img src="~/Content/Images/resul.png" style="width:150px; height:150px; max-width:100%" />
+                <img src="~/Content/Images/results.png" style="width:150px; height:150px; max-width:100%" />
 
             </div>
         </div>

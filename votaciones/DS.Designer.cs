@@ -10,7 +10,7 @@
 
 #pragma warning disable 1591
 
-namespace votaciones {
+namespace votacionesAPI {
     
     
     /// <summary>
@@ -1824,7 +1824,7 @@ namespace votaciones {
         }
     }
 }
-namespace votaciones.DSTableAdapters {
+namespace votacionesAPI.DSTableAdapters {
     
     
     /// <summary>

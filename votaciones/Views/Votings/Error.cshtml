@@ -3,4 +3,31 @@
     ViewBag.Title = "Error";
 }
 
-<h2>Usted ya sufragó en esta votación</h2>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center">
+                Error
+            </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-4">
+            <img src="~/Content/Images/novote.png" style="margin-left: auto; margin-right: auto; display: block">
+        </div>
+        <div class="col-md-4">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="text-center">
+                Usted ya sufragó en esta votación.
+            </h2> <br />
+            <div align="center">
+                @Html.ActionLink("Inicio", "Index", "Home", new { }, new { @class = "btn btn-lg btn-primary" })
+            </div>
+        </div>
+    </div>
+</div>

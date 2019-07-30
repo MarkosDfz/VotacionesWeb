@@ -28,7 +28,7 @@ namespace votaciones.Classes
             if (file != null)
             {
                 pic = Path.GetFileName(file.FileName);
-                path = Path.Combine(HttpContext.Current.Server.MapPath("~/Content/Photos"), pic);
+                path = Path.Combine(HttpContext.Current.Server.MapPath("~/Security/Content/Photos"), pic);
                 file.SaveAs(path);
                 using (MemoryStream ms = new MemoryStream())
                 {

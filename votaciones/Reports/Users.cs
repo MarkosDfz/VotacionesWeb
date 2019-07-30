@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace votaciones.Reports {
+namespace votacionesAPI.Reports {
     using System;
     using System.ComponentModel;
     using CrystalDecisions.Shared;

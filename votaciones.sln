@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "votaciones", "votaciones\votaciones.csproj", "{9C677033-2CC4-43C1-BC39-6CEF454F78D3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "votacionesAPI", "votacionesAPI\votacionesAPI.csproj", "{EE5B13D3-BF6B-497B-AE75-0C20C1112DFF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{9C677033-2CC4-43C1-BC39-6CEF454F78D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C677033-2CC4-43C1-BC39-6CEF454F78D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C677033-2CC4-43C1-BC39-6CEF454F78D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE5B13D3-BF6B-497B-AE75-0C20C1112DFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE5B13D3-BF6B-497B-AE75-0C20C1112DFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE5B13D3-BF6B-497B-AE75-0C20C1112DFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE5B13D3-BF6B-497B-AE75-0C20C1112DFF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

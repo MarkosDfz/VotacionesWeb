@@ -30,6 +30,21 @@ namespace votaciones.Controllers
                     .OrderByDescending(c => c.QuantityVotes)
                     .FirstOrDefault();
 
+                var candidate1 = db.Candidates
+                    .Where(c => c.VotingId == voting.VotingId)
+                    .OrderByDescending(c => c.QuantityVotes).Take(2).Skip(1).FirstOrDefault();
+
+                if (candidate.QuantityVotes == candidate1.QuantityVotes)
+                {
+                    var state = Utilities.GetState("Cerrada");
+                    voting.StateId = state.StateId;
+                    voting.CandidateWinId = 0;
+                    
+                    db.Entry(voting).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+
                 if (candidate != null)
                 {
                     var state = Utilities.GetState("Cerrada");
@@ -193,7 +208,7 @@ namespace votaciones.Controllers
             }
 
             var successvote = db.VotingDetails
-                .Where(vd => vd.UserId == user.UserId)
+                .Where(vd => vd.UserId == user.UserId && vd.VotingId == votingId)
                 .FirstOrDefault();
 
             if (successvote != null)
@@ -215,7 +230,7 @@ namespace votaciones.Controllers
 
             if (this.VoteCandidate(user, candidate, voting))
             {
-                return RedirectToAction("MyVotings");
+                return RedirectToAction("MyCertificates");
             }
             
             return RedirectToAction("Index", "Home");
@@ -374,7 +389,7 @@ namespace votaciones.Controllers
                         ex.InnerException.InnerException != null &&
                         ex.InnerException.InnerException.Message.Contains("REFERENCE"))
                     {
-
+                        TempData["Errors"] = "* El candidato no puede ser eliminado porque ya cuenta con votos registrados";
                         ModelState.AddModelError(string.Empty, "El registro no puede ser eliminado porque tiene registros relacionados");
                     }
                     else
@@ -512,6 +527,11 @@ namespace votaciones.Controllers
             foreach (var voting in votings)
             {
                 User user = null;
+                if (voting.CandidateWinId == 0)
+                {
+                    user = new User { FirstName = "Empate" };
+                }
+
                 if (voting.CandidateWinId != 0)
                 {
                     user = db2.Users.Find(voting.CandidateWinId);
@@ -637,6 +657,11 @@ namespace votaciones.Controllers
             if (voting == null)
             {
                 return HttpNotFound();
+            }
+
+            if (voting.State.Description == "Cerrada")
+            {
+                return View("Error2");
             }
 
             var view = new VotingView

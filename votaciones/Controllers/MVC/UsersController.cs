@@ -107,7 +107,7 @@ namespace votaciones.Controllers
                 if (view.NewPhoto != null)
                 {
                     pic = Path.GetFileName(view.NewPhoto.FileName);
-                    path = Path.Combine(Server.MapPath("~/Content/Photos"), pic);
+                    path = Path.Combine(Server.MapPath("~/Security/Content/Photos"), pic);
                     view.NewPhoto.SaveAs(path);
                     using (MemoryStream ms = new MemoryStream())
                     {
@@ -126,7 +126,7 @@ namespace votaciones.Controllers
 
                 if (!string.IsNullOrEmpty(pic))
                 {
-                    user.Photo = string.Format("~/Content/Photos/{0}", pic);
+                    user.Photo = string.Format("~/Security/Content/Photos/{0}", pic);
                 }
 
                 db.Entry(user).State = EntityState.Modified;
@@ -239,7 +239,7 @@ namespace votaciones.Controllers
             if (userView.Photo != null)
             {
                 pic = Path.GetFileName(userView.Photo.FileName);
-                path = Path.Combine(Server.MapPath("~/Content/Photos"), pic);
+                path = Path.Combine(Server.MapPath("~/Security/Content/Photos"), pic);
                 userView.Photo.SaveAs(path);
                 using (MemoryStream ms = new MemoryStream())
                 {
@@ -257,7 +257,7 @@ namespace votaciones.Controllers
                 Group = userView.Group,
                 LastName = userView.LastName,
                 Cedula = userView.Cedula,
-                Photo = pic == string.Empty ? string.Format("~/Content/Photos/noimage.png") : string.Format("~/Content/Photos/{0}",pic),
+                Photo = string.IsNullOrEmpty(pic) ? string.Format("~/Security/Content/Photos/noimage.png") : string.Format("~/Security/Content/Photos/{0}",pic),
                 UserName = userView.UserName,
             };
 
@@ -338,7 +338,7 @@ namespace votaciones.Controllers
             if (userView.Photo != null)
             {
                 pic = Path.GetFileName(userView.Photo.FileName);
-                path = Path.Combine(Server.MapPath("~/Content/Photos"), pic);
+                path = Path.Combine(Server.MapPath("~/Security/Content/Photos"), pic);
                 userView.Photo.SaveAs(path);
                 using (MemoryStream ms = new MemoryStream())
                 {
@@ -357,7 +357,7 @@ namespace votaciones.Controllers
 
             if (!string.IsNullOrEmpty(pic))
             {
-                user.Photo = string.Format("~/Content/Photos/{0}", pic);
+                user.Photo = string.Format("~/Security/Content/Photos/{0}", pic);
             }
 
             db.Entry(user).State = EntityState.Modified;

@@ -22,6 +22,7 @@ namespace votaciones
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<DemocracyContext, Configuration>());
             this.CheckSuperUser();
+            this.CheckDraw();
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
@@ -74,6 +75,51 @@ namespace votaciones
 
             userManager.AddToRole(userASP.Id, "Admin");
             
+        }
+
+        private void CheckDraw()
+        {
+            var userContext = new ApplicationDbContext();
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(userContext));
+            var db = new DemocracyContext();
+
+            this.CheckRole("Admin", userContext);
+            this.CheckRole("User", userContext);
+
+            var user = db.Users
+                .Where(u => u.UserName.ToLower()
+                .Equals("empate@empate.com"))
+                .FirstOrDefault();
+
+            if (user == null)
+            {
+                user = new User
+                {
+                    Adress = "Latacunga",
+                    FirstName = "Empatada",
+                    LastName = "Votación",
+                    Cedula = "0000000000",
+                    UserName = "empate@empate.com",
+                    Photo = "~/Security/Content/Photos/balance.png",
+                };
+
+                db.Users.Add(user);
+                db.SaveChanges();
+
+            }
+
+            var userASP = userManager.FindByName(user.UserName);
+            if (userASP == null)
+            {
+                userASP = new ApplicationUser
+                {
+                    UserName = user.UserName,
+                    Email = user.UserName,
+                };
+
+                userManager.Create(userASP, user.UserName);
+            }
+
         }
 
         private void CheckRole(string roleName, ApplicationDbContext userContext)

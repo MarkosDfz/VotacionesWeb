@@ -81,7 +81,11 @@
                     @Html.ActionLink("Detalles", "Details", new { id = item.VotingId }) |
                     @Html.ActionLink("Cerrar", "Close", new { id = item.VotingId }, new { onclick = "return confirm('¿Está seguro de cerrar esta votación?')" }) |
                     @Html.ActionLink("Resultados", "ShowResults", new { id = item.VotingId }, new { target = "_blank" }) |
-                    @Html.ActionLink("Eliminar", "Delete", new { id = item.VotingId })
+                    @Html.ActionLink("Eliminar", "Delete", new { id = item.VotingId }) |
+                    @if (item.IsForAllUsers == true)
+                    {
+                      @Html.ActionLink("No Votaron", "ShowNoVote", new { id = item.VotingId }, new { target = "_blank" })
+                    }
                 </td>
             </tr>
         }

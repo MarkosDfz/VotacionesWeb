@@ -193,7 +193,13 @@ namespace votaciones.Controllers
                     UserName = user.UserName,
                 });
             }
-          
+
+            var j = (from itm in usersView
+                     where itm.UserName == "empate@empate.com"
+                     select itm)
+                  .FirstOrDefault();
+            usersView.Remove(j);
+
             return View(usersView);
         }
 

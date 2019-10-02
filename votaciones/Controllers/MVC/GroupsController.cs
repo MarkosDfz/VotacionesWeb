@@ -124,7 +124,18 @@ namespace votaciones.Controllers
             if (ModelState.IsValid)
             {
                 db.Groups.Add(group);
+                var gr = db.Groups
+                    .Where(g => g.Description == group.Description)
+                    .FirstOrDefault();
+
+                if (gr.Description == group.Description)
+                {
+                    ModelState.AddModelError(string.Empty, "El grupo ya existe");
+                    return View();
+                }
+
                 db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
 

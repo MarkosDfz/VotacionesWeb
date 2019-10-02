@@ -16,14 +16,14 @@ namespace votaciones.Reports {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class Users : ReportClass {
+    public class NoVote : ReportClass {
         
-        public Users() {
+        public NoVote() {
         }
         
         public override string ResourceName {
             get {
-                return "Users.rpt";
+                return "NoVote.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace votaciones.Reports {
         
         public override string FullResourceName {
             get {
-                return "votaciones.Reports.Users.rpt";
+                return "votaciones.Reports.NoVote.rpt";
             }
             set {
                 // Do nothing
@@ -90,9 +90,9 @@ namespace votaciones.Reports {
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedUsers : Component, ICachedReport {
+    public class CachedNoVote : Component, ICachedReport {
         
-        public CachedUsers() {
+        public CachedNoVote() {
         }
         
         [Browsable(false)]
@@ -129,7 +129,7 @@ namespace votaciones.Reports {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            Users rpt = new Users();
+            NoVote rpt = new NoVote();
             rpt.Site = this.Site;
             return rpt;
         }

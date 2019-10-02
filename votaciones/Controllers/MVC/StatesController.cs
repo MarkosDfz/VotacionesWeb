@@ -37,8 +37,17 @@ namespace votaciones.Controllers
                 return View(state);
             }
 
-            //para guardar en la bd los datos de la tabla estado
             db.States.Add(state);
+            var st = db.States
+                    .Where(s => s.Description == state.Description)
+                    .FirstOrDefault();
+            if (st.Description == state.Description)
+            {
+                ModelState.AddModelError(string.Empty, "El estado ya existe");
+                return View();
+            }
+
+            //para guardar en la bd los datos de la tabla estado
             db.SaveChanges();
             return RedirectToAction("Index");
         }

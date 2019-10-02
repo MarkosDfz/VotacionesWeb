@@ -1,25 +1,65 @@
 ﻿@{
-                /**/
+    /**/
 
-                ViewBag.Title = "Inicio";
+    ViewBag.Title = "Inicio";
 }
 
-<div class="jumbotron">
-    <div class="row">
-        <div class="col-md-6">
-            <h1>Votaciones</h1>
-            <p class="lead">Sistema de votaciones de la Universidad Técnica de Cotopaxi.</p>
-            @if (!this.User.IsInRole("Admin") && !this.User.IsInRole("User"))
-            {
-                <p class="text-danger" , style="text-align:justify">Para usar el sistema por favor Inicia Sesión. </p>
+<style>
+    .item {
+        width: 100%;
+        height: 400px;
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
 
-            }
+    .carousel-control-prev-icon {
+        background-image: url('https://apufpel.com.br/assets/img/seta_prim.png')
+    }
+
+    .carousel-control {
+        background-image: url('https://apufpel.com.br/assets/img/seta_ult.png')
+    }
+
+    .carousel .carousel-indicators li {
+        background-color: gray;
+    }
+
+        .carousel .carousel-indicators li.active {
+            background-color: black;
+        }
+</style>
+
+<div class="container">
+    <div class="row">
+
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="item active" style="background-image:url('/Content/Images/slide1.png')">
+                </div>
+                <div class="item" style="background-image:url('/Content/Images/slide2.png')">
+                </div>
+                <div class="item" style="background-image:url('/Content/Images/slide3.png')">
+                </div>
+            </div>
+            <a href="#carouselExampleIndicators" class="carousel-control left" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+            <a href="#carouselExampleIndicators" class="carousel-control right" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
         </div>
-        <div class="col-md-6">
-            <img src="~/Content/Images/logo1.png" class="img-responsive" />
-        </div>
+
     </div>
+
 </div>
+
+<br />
 
 @if (!this.User.IsInRole("Admin") && !this.User.IsInRole("User"))
 {
@@ -27,14 +67,14 @@
         <div class="col-md-4">
             <h2>Iniciar Sesión</h2>
             <p>Ingresa con tus credenciales en el sistema.</p>
-            @Html.ActionLink("Iniciar Sesión", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "btn btn-primary" })&nbsp;&nbsp;&nbsp;
+            @Html.ActionLink("Iniciar Sesión", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "btn btn-primary" })
             <img src="~/Content/Images/login.png" style="width:150px; height:150px; max-width:100%" />
 
         </div>
         <div class="col-md-4">
             <h2>Resultados</h2>
             <p>Mira los resultados de las votaciones.</p>
-            @Html.ActionLink("Resultados", "Results", "Votings", new { }, new { @class = "btn btn-warning" })&nbsp;
+            @Html.ActionLink("Resultados", "Results", "Votings", new { }, new { @class = "btn btn-warning" })
             <img src="~/Content/Images/results.png" style="width:150px; height:150px; max-width:100%" />
 
         </div>
@@ -43,7 +83,7 @@
             <p>¿Olvidaste tu contraseña? Recuperala aquí.</p>
             @Html.ActionLink("Recuperar Contraseña", "ForgotPassword", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "btn btn-info" })
             <img src="~/Content/Images/question1.png" style="width:150px; height:150px; max-width:100%" />
-            
+
         </div>
     </div>
 }
@@ -55,21 +95,21 @@ else
             <div class="col-md-4">
                 <h2>Grupos de Votación</h2>
                 <p>Gestiona los grupos de Votación del sistema.</p>
-                @Html.ActionLink("Grupos", "Index", "Groups", new { }, new { @class = "btn btn-primary" })&nbsp;&nbsp;&nbsp;
+                @Html.ActionLink("Grupos", "Index", "Groups", new { }, new { @class = "btn btn-primary" })
                 <img src="~/Content/Images/network.png" style="width:150px; height:150px; max-width:100%" />
 
             </div>
             <div class="col-md-4">
                 <h2>Usuarios del Sistema</h2>
                 <p>Gestiona todos los usuarios en el sistema.</p>
-                @Html.ActionLink("Usuarios", "Index", "Users", new { }, new { @class = "btn btn-warning" })&nbsp;&nbsp;&nbsp;
+                @Html.ActionLink("Usuarios", "Index", "Users", new { }, new { @class = "btn btn-warning" })
                 <img src="~/Content/Images/userv.png" style="width:150px; height:150px; max-width:100%" />
 
             </div>
             <div class="col-md-4">
                 <h2>Votaciones Electorales</h2>
                 <p>Gestiona las votaciones del sistema.</p>
-                @Html.ActionLink("Votaciones ", "Index", "Votings", new { }, new { @class = "btn btn-info" })&nbsp;&nbsp;&nbsp;
+                @Html.ActionLink("Votaciones ", "Index", "Votings", new { }, new { @class = "btn btn-info" })
                 <img src="~/Content/Images/newvote.png" style="width:150px; height:150px; max-width:100%" />
 
             </div>
@@ -81,7 +121,7 @@ else
             <div class="col-md-4">
                 <h2>Mis Certificados</h2>
                 <p>Encuentra aquí tus certificados de votación.</p>
-                @Html.ActionLink("Certificados", "MyCertificates", "Votings", new { }, new { @class = "btn btn-primary" })&nbsp;&nbsp;
+                @Html.ActionLink("Certificados", "MyCertificates", "Votings", new { }, new { @class = "btn btn-primary" })
                 <img src="~/Content/Images/certificate.png" style="width:150px; height:150px; max-width:100%" />
 
             </div>
@@ -95,7 +135,7 @@ else
             <div class="col-md-4">
                 <h2>Resultados</h2>
                 <p>Mira los resultados de las votaciones.</p>
-                @Html.ActionLink("Resultados", "Results", "Votings", new { }, new { @class = "btn btn-info" })&nbsp;
+                @Html.ActionLink("Resultados", "Results", "Votings", new { }, new { @class = "btn btn-info" })
                 <img src="~/Content/Images/results.png" style="width:150px; height:150px; max-width:100%" />
 
             </div>

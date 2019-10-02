@@ -38,7 +38,11 @@ namespace votaciones.Controllers
                 {
                     var state = Utilities.GetState("Cerrada");
                     voting.StateId = state.StateId;
-                    voting.CandidateWinId = 0;
+
+                    var draw = db.Users
+                    .Where(c => c.UserName == "empate@empate.com")
+                    .FirstOrDefault();
+                    voting.CandidateWinId = draw.UserId;
                     
                     db.Entry(voting).State = EntityState.Modified;
                     db.SaveChanges();
@@ -154,6 +158,46 @@ namespace votaciones.Controllers
 
             var report = new ReportClass();
             report.FileName = Server.MapPath("/Reports/Results.rpt");
+            report.Load();
+            report.SetDataSource(dataTable);
+            return report;
+        }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult ShowNoVote(int id)
+        {
+            var report = this.GenerateNoVoteReport(id);
+            var stream = report.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            return File(stream, "application/pdf");
+        }
+
+        private ReportClass GenerateNoVoteReport(int id)
+        {
+            var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            var connection = new SqlConnection(connectionString);
+            var dataTable = new DataTable();
+            var sql = @"SELECT LastName, FirstName, Cedula, UserName from Users where Users.UserId
+                        NOT IN (SELECT VotingDetails.UserId
+                        FROM    Votings INNER JOIN
+                                VotingDetails ON Votings.VotingId = VotingDetails.VotingId INNER JOIN
+                                Users ON VotingDetails.UserId = Users.UserId
+                        Where Votings.VotingId = " + id + ") EXCEPT ( select LastName, FirstName, Cedula, UserName " +
+                        "FROM Users WHERE username = 'empate@empate.com') ORDER BY LastName, FirstName";
+
+            try
+            {
+                connection.Open();
+                var command = new SqlCommand(sql, connection);
+                var adapter = new SqlDataAdapter(command);
+                adapter.Fill(dataTable);
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+
+            var report = new ReportClass();
+            report.FileName = Server.MapPath("/Reports/NoVote.rpt");
             report.Load();
             report.SetDataSource(dataTable);
             return report;
@@ -527,10 +571,6 @@ namespace votaciones.Controllers
             foreach (var voting in votings)
             {
                 User user = null;
-                if (voting.CandidateWinId == 0)
-                {
-                    user = new User { FirstName = "Empate" };
-                }
 
                 if (voting.CandidateWinId != 0)
                 {

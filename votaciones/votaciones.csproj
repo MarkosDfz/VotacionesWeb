@@ -245,6 +245,12 @@
       <SubType>Component</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="Reports\NoVote.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>NoVote.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Reports\Results.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -281,11 +287,13 @@
     <Content Include="Content\Images\question.png" />
     <Content Include="Content\Images\question1.png" />
     <Content Include="Content\Images\results.png" />
+    <Content Include="Content\Images\slide1.png" />
+    <Content Include="Content\Images\slide2.png" />
+    <Content Include="Content\Images\slide3.png" />
     <Content Include="Content\Images\userv.png" />
     <Content Include="Content\Images\voto.png" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\Photos\admin.jpg" />
-    <Content Include="Content\Photos\jotaro.jpg" />
     <Content Include="Content\Photos\noimage.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -426,6 +434,10 @@
       <LastGenOutput>Certificate.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Reports\NoVote.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>NoVote.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />

@@ -400,6 +400,8 @@ namespace votaciones {
             
             private global::System.Data.DataColumn columnCedula;
             
+            private global::System.Data.DataColumn columnFacultad;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public UsersDataTable() {
@@ -499,6 +501,14 @@ namespace votaciones {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn FacultadColumn {
+                get {
+                    return this.columnFacultad;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -534,7 +544,7 @@ namespace votaciones {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public UsersRow AddUsersRow(string UserName, string FirstName, string LastName, string Adress, string Group, string Photo, string Cedula) {
+            public UsersRow AddUsersRow(string UserName, string FirstName, string LastName, string Adress, string Group, string Photo, string Cedula, string Facultad) {
                 UsersRow rowUsersRow = ((UsersRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
@@ -544,7 +554,8 @@ namespace votaciones {
                         Adress,
                         Group,
                         Photo,
-                        Cedula};
+                        Cedula,
+                        Facultad};
                 rowUsersRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowUsersRow);
                 return rowUsersRow;
@@ -582,6 +593,7 @@ namespace votaciones {
                 this.columnGroup = base.Columns["Group"];
                 this.columnPhoto = base.Columns["Photo"];
                 this.columnCedula = base.Columns["Cedula"];
+                this.columnFacultad = base.Columns["Facultad"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -603,6 +615,8 @@ namespace votaciones {
                 base.Columns.Add(this.columnPhoto);
                 this.columnCedula = new global::System.Data.DataColumn("Cedula", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCedula);
+                this.columnFacultad = new global::System.Data.DataColumn("Facultad", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnFacultad);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnUserId}, true));
                 this.columnUserId.AutoIncrement = true;
@@ -623,6 +637,8 @@ namespace votaciones {
                 this.columnPhoto.MaxLength = 200;
                 this.columnCedula.AllowDBNull = false;
                 this.columnCedula.MaxLength = 13;
+                this.columnFacultad.AllowDBNull = false;
+                this.columnFacultad.MaxLength = 2147483647;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1834,6 +1850,17 @@ namespace votaciones {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string Facultad {
+                get {
+                    return ((string)(this[this.tableUsers.FacultadColumn]));
+                }
+                set {
+                    this[this.tableUsers.FacultadColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public bool IsGroupNull() {
                 return this.IsNull(this.tableUsers.GroupColumn);
             }
@@ -2381,6 +2408,7 @@ namespace votaciones.DSTableAdapters {
             tableMapping.ColumnMappings.Add("Group", "Group");
             tableMapping.ColumnMappings.Add("Photo", "Photo");
             tableMapping.ColumnMappings.Add("Cedula", "Cedula");
+            tableMapping.ColumnMappings.Add("Facultad", "Facultad");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
@@ -2389,27 +2417,29 @@ namespace votaciones.DSTableAdapters {
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_UserId", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "UserId", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = "INSERT INTO [dbo].[Users] ([UserName], [FirstName], [LastName], [Cedula], [Adress" +
-                "], [Group], [Photo]) VALUES (@UserName, @FirstName, @LastName, @Cedula, @Adress," +
-                " @Group, @Photo)";
+            this._adapter.InsertCommand.CommandText = "INSERT INTO [dbo].[Users] ([UserName], [FirstName], [LastName], [Cedula], [Facult" +
+                "ad], [Adress], [Group], [Photo]) VALUES (@UserName, @FirstName, @LastName, @Cedu" +
+                "la, @Facultad, @Adress, @Group, @Photo)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@UserName", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "UserName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@FirstName", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "FirstName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@LastName", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "LastName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Cedula", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Cedula", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Facultad", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Facultad", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Adress", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Adress", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Group", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Group", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Photo", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Photo", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
             this._adapter.UpdateCommand.CommandText = "UPDATE [dbo].[Users] SET [UserName] = @UserName, [FirstName] = @FirstName, [LastN" +
-                "ame] = @LastName, [Cedula] = @Cedula, [Adress] = @Adress, [Group] = @Group, [Pho" +
-                "to] = @Photo WHERE (([UserId] = @Original_UserId))";
+                "ame] = @LastName, [Cedula] = @Cedula, [Facultad] = @Facultad, [Adress] = @Adress" +
+                ", [Group] = @Group, [Photo] = @Photo WHERE (([UserId] = @Original_UserId))";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@UserName", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "UserName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@FirstName", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "FirstName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@LastName", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "LastName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Cedula", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Cedula", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Facultad", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Facultad", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Adress", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Adress", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Group", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Group", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Photo", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Photo", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -2429,8 +2459,8 @@ namespace votaciones.DSTableAdapters {
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT UserId, UserName, FirstName, LastName, Cedula, Adress, [Group], Photo FROM" +
-                " dbo.Users";
+            this._commandCollection[0].CommandText = "SELECT UserId, UserName, FirstName, LastName, Cedula, Facultad, Adress, [Group], " +
+                "Photo FROM dbo.Users";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         
@@ -2513,7 +2543,7 @@ namespace votaciones.DSTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(string UserName, string FirstName, string LastName, string Cedula, string Adress, string Group, string Photo) {
+        public virtual int Insert(string UserName, string FirstName, string LastName, string Cedula, string Facultad, string Adress, string Group, string Photo) {
             if ((UserName == null)) {
                 throw new global::System.ArgumentNullException("UserName");
             }
@@ -2538,23 +2568,29 @@ namespace votaciones.DSTableAdapters {
             else {
                 this.Adapter.InsertCommand.Parameters[3].Value = ((string)(Cedula));
             }
+            if ((Facultad == null)) {
+                throw new global::System.ArgumentNullException("Facultad");
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[4].Value = ((string)(Facultad));
+            }
             if ((Adress == null)) {
                 throw new global::System.ArgumentNullException("Adress");
             }
             else {
-                this.Adapter.InsertCommand.Parameters[4].Value = ((string)(Adress));
+                this.Adapter.InsertCommand.Parameters[5].Value = ((string)(Adress));
             }
             if ((Group == null)) {
-                this.Adapter.InsertCommand.Parameters[5].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[5].Value = ((string)(Group));
-            }
-            if ((Photo == null)) {
                 this.Adapter.InsertCommand.Parameters[6].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[6].Value = ((string)(Photo));
+                this.Adapter.InsertCommand.Parameters[6].Value = ((string)(Group));
+            }
+            if ((Photo == null)) {
+                this.Adapter.InsertCommand.Parameters[7].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[7].Value = ((string)(Photo));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -2576,7 +2612,7 @@ namespace votaciones.DSTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(string UserName, string FirstName, string LastName, string Cedula, string Adress, string Group, string Photo, int Original_UserId) {
+        public virtual int Update(string UserName, string FirstName, string LastName, string Cedula, string Facultad, string Adress, string Group, string Photo, int Original_UserId) {
             if ((UserName == null)) {
                 throw new global::System.ArgumentNullException("UserName");
             }
@@ -2601,25 +2637,31 @@ namespace votaciones.DSTableAdapters {
             else {
                 this.Adapter.UpdateCommand.Parameters[3].Value = ((string)(Cedula));
             }
+            if ((Facultad == null)) {
+                throw new global::System.ArgumentNullException("Facultad");
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[4].Value = ((string)(Facultad));
+            }
             if ((Adress == null)) {
                 throw new global::System.ArgumentNullException("Adress");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[4].Value = ((string)(Adress));
+                this.Adapter.UpdateCommand.Parameters[5].Value = ((string)(Adress));
             }
             if ((Group == null)) {
-                this.Adapter.UpdateCommand.Parameters[5].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[5].Value = ((string)(Group));
-            }
-            if ((Photo == null)) {
                 this.Adapter.UpdateCommand.Parameters[6].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[6].Value = ((string)(Photo));
+                this.Adapter.UpdateCommand.Parameters[6].Value = ((string)(Group));
             }
-            this.Adapter.UpdateCommand.Parameters[7].Value = ((int)(Original_UserId));
+            if ((Photo == null)) {
+                this.Adapter.UpdateCommand.Parameters[7].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[7].Value = ((string)(Photo));
+            }
+            this.Adapter.UpdateCommand.Parameters[8].Value = ((int)(Original_UserId));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {

@@ -172,6 +172,7 @@ namespace votaciones.Controllers.API
             return new User
             {
                 Adress = request.Adress,
+                Facultad = request.Facultad,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Photo = request.Photo,

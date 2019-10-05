@@ -237,6 +237,7 @@
     <Content Include="Content\Photos\admin.jpg" />
     <Content Include="Content\Photos\balance.png" />
     <Content Include="Content\Photos\noimage.png" />
+    <Content Include="Content\Photos\novote.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

@@ -54,6 +54,10 @@ namespace votacionesAPI.Models
            , MinimumLength = 5)]
         public string Adress { get; set; }
 
+        [Display(Name = "Facultad")]
+        [Required(ErrorMessage = "El campo {0} es requerido")]
+        public string Facultad { get; set; }
+
         [Display(Name = "Grupo")]
         public string Group { get; set; }
 

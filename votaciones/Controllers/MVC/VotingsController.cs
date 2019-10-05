@@ -182,7 +182,7 @@ namespace votaciones.Controllers
                                 VotingDetails ON Votings.VotingId = VotingDetails.VotingId INNER JOIN
                                 Users ON VotingDetails.UserId = Users.UserId
                         Where Votings.VotingId = " + id + ") EXCEPT ( select LastName, FirstName, Cedula, UserName " +
-                        "FROM Users WHERE username = 'empate@empate.com') ORDER BY LastName, FirstName";
+                        "FROM Users WHERE Cedula = '0000000000') ORDER BY LastName, FirstName";
 
             try
             {
@@ -347,8 +347,7 @@ namespace votaciones.Controllers
             var state = Utilities.GetState("Abierta");
 
             var votings = db.Votings
-                .Where(v => v.StateId == state.StateId &&
-                            v.DateTimeStart <= DateTime.Now &&
+                .Where(v => v.DateTimeStart <= DateTime.Now &&
                             v.DateTimeEnd >= DateTime.Now)
                             .Include(v => v.Candidates)
                             .Include(v => v.VotingGroups)

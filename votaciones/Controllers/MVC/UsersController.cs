@@ -51,7 +51,7 @@ namespace votaciones.Controllers
             var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             var connection = new SqlConnection(connectionString);
             var dataTable = new DataTable();
-            var sql = "SELECT * FROM Users ORDER BY LastName, FirstName";
+            var sql = "SELECT * FROM Users EXCEPT (SELECT * FROM Users WHERE Cedula = '0000000000') ORDER BY LastName, FirstName";
 
             try
             {
@@ -82,6 +82,7 @@ namespace votaciones.Controllers
             var view = new UserSettingsView
             {
                 Adress = user.Adress,
+                Facultad = user.Facultad,
                 FirstName = user.FirstName,
                 Group = user.Group,
                 LastName = user.LastName,
@@ -119,6 +120,7 @@ namespace votaciones.Controllers
                 var user = db.Users.Find(view.UserId);
 
                 user.Adress = view.Adress;
+                user.Facultad = view.Facultad;
                 user.FirstName = view.FirstName;
                 user.Group = view.Group;
                 user.LastName = view.LastName;
@@ -182,6 +184,7 @@ namespace votaciones.Controllers
                 {
                     Adress = user.Adress,
                     Candidates = user.Candidates,
+                    Facultad = user.Facultad,
                     FirstName = user.FirstName,
                     Group = user.Group,
                     GroupMembers = user.GroupMembers,
@@ -199,6 +202,12 @@ namespace votaciones.Controllers
                      select itm)
                   .FirstOrDefault();
             usersView.Remove(j);
+
+            var e = (from itm in usersView
+                     where itm.UserName == "votonulo"
+                     select itm)
+                  .FirstOrDefault();
+            usersView.Remove(e);
 
             return View(usersView);
         }
@@ -259,6 +268,7 @@ namespace votaciones.Controllers
             var user = new User
             {
                 Adress = userView.Adress,
+                Facultad = userView.Facultad,
                 FirstName = userView.FirstName,
                 Group = userView.Group,
                 LastName = userView.LastName,
@@ -315,6 +325,7 @@ namespace votaciones.Controllers
             var userView = new UserView
             {
                 Adress = user.Adress,
+                Facultad = user.Facultad,
                 FirstName = user.FirstName,
                 Group = user.Group,
                 LastName = user.LastName,
@@ -323,6 +334,14 @@ namespace votaciones.Controllers
                 UserName = user.UserName,
             };
 
+            List<SelectListItem> lst = new List<SelectListItem>();
+
+            lst.Add(new SelectListItem() { Text = "CAREN", Value = "CAREN" });
+            lst.Add(new SelectListItem() { Text = "CIYA", Value = "CIYA" });
+            lst.Add(new SelectListItem() { Text = "CCAA", Value = "CCAA" });
+            lst.Add(new SelectListItem() { Text = "CCHH", Value = "CCHH" });
+
+            ViewBag.Facultad = new SelectList(lst, "Value", "Text", user.Facultad);
             return View(userView);
         }
 
@@ -356,6 +375,7 @@ namespace votaciones.Controllers
             var user = db.Users.Find(userView.UserId);
 
             user.Adress = userView.Adress;
+            user.Facultad = userView.Facultad;
             user.FirstName = userView.FirstName;
             user.Group = userView.Group;
             user.LastName = userView.LastName;

@@ -43,8 +43,12 @@ namespace votaciones.Models
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(100, ErrorMessage =
             "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caracteres."
-           , MinimumLength = 5)]
+           , MinimumLength = 3)]
         public string Adress { get; set; }
+
+        [Required(ErrorMessage = "El campo {0} es requerido")]
+        [Display(Name = "Facultad")]
+        public string Facultad { get; set; }
 
         [Display(Name = "Grupo")]
         public string Group { get; set; }

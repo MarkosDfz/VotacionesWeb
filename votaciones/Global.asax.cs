@@ -23,6 +23,7 @@ namespace votaciones
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<DemocracyContext, Configuration>());
             this.CheckSuperUser();
             this.CheckDraw();
+            this.CheckNull();
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
@@ -51,6 +52,7 @@ namespace votaciones
                     Adress = "Latacunga",
                     FirstName = "Marcos",
                     LastName = "Banda",
+                    Facultad = "CIYA",
                     Cedula = "0503962169",
                     UserName = "markosdefaz@gmail.com",
                     Photo = "~/Security/Content/Photos/admin.jpg",
@@ -98,9 +100,56 @@ namespace votaciones
                     Adress = "Latacunga",
                     FirstName = "Empatada",
                     LastName = "Votación",
+                    Facultad = "null",
                     Cedula = "0000000000",
                     UserName = "empate@empate.com",
                     Photo = "~/Security/Content/Photos/balance.png",
+                };
+
+                db.Users.Add(user);
+                db.SaveChanges();
+
+            }
+
+            var userASP = userManager.FindByName(user.UserName);
+            if (userASP == null)
+            {
+                userASP = new ApplicationUser
+                {
+                    UserName = user.UserName,
+                    Email = user.UserName,
+                };
+
+                userManager.Create(userASP, user.UserName);
+            }
+
+        }
+
+        private void CheckNull()
+        {
+            var userContext = new ApplicationDbContext();
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(userContext));
+            var db = new DemocracyContext();
+
+            this.CheckRole("Admin", userContext);
+            this.CheckRole("User", userContext);
+
+            var user = db.Users
+                .Where(u => u.UserName.ToLower()
+                .Equals("votonulo"))
+                .FirstOrDefault();
+
+            if (user == null)
+            {
+                user = new User
+                {
+                    Adress = "null",
+                    FirstName = "Nulo",
+                    LastName = "Voto",
+                    Facultad = "null",
+                    Cedula = "0000000000",
+                    UserName = "votonulo",
+                    Photo = "~/Security/Content/Photos/novote.png",
                 };
 
                 db.Users.Add(user);

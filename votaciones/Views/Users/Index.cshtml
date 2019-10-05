@@ -34,6 +34,9 @@
                 @Html.DisplayNameFor(model => model.Cedula)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Facultad)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Photo)
             </th>
             <th>
@@ -59,9 +62,12 @@
                     @Html.DisplayFor(modelItem => item.Cedula)
                 </td>
                 <td>
+                    @Html.DisplayFor(modelItem => item.Facultad)
+                </td>
+                <td>
                     @if (!string.IsNullOrEmpty(item.Photo))
                     {
-                        <img src="@Url.Content(item.Photo)" alt="Image" style="width:100px;height:100px;max-width:100%;border-radius:50%; " />
+                        <img src="@Url.Content(item.Photo)" alt="Image" style="width:80px;height:80px;max-width:100%;border-radius:50%; " />
                     }
                 </td>
                 <td align="center">

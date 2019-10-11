@@ -423,10 +423,6 @@ namespace votaciones {
             
             private global::System.Data.DataColumn columnUserName;
             
-            private global::System.Data.DataColumn columnFirstName;
-            
-            private global::System.Data.DataColumn columnLastName;
-            
             private global::System.Data.DataColumn columnAdress;
             
             private global::System.Data.DataColumn columnGroup;
@@ -436,6 +432,8 @@ namespace votaciones {
             private global::System.Data.DataColumn columnCedula;
             
             private global::System.Data.DataColumn columnFacultad;
+            
+            private global::System.Data.DataColumn columnEstudiante;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
@@ -488,22 +486,6 @@ namespace votaciones {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public global::System.Data.DataColumn FirstNameColumn {
-                get {
-                    return this.columnFirstName;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public global::System.Data.DataColumn LastNameColumn {
-                get {
-                    return this.columnLastName;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public global::System.Data.DataColumn AdressColumn {
                 get {
                     return this.columnAdress;
@@ -544,6 +526,14 @@ namespace votaciones {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn EstudianteColumn {
+                get {
+                    return this.columnEstudiante;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -579,18 +569,17 @@ namespace votaciones {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public UsersRow AddUsersRow(string UserName, string FirstName, string LastName, string Adress, string Group, string Photo, string Cedula, string Facultad) {
+            public UsersRow AddUsersRow(string UserName, string Adress, string Group, string Photo, string Cedula, string Facultad, string Estudiante) {
                 UsersRow rowUsersRow = ((UsersRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
                         UserName,
-                        FirstName,
-                        LastName,
                         Adress,
                         Group,
                         Photo,
                         Cedula,
-                        Facultad};
+                        Facultad,
+                        Estudiante};
                 rowUsersRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowUsersRow);
                 return rowUsersRow;
@@ -622,13 +611,12 @@ namespace votaciones {
             internal void InitVars() {
                 this.columnUserId = base.Columns["UserId"];
                 this.columnUserName = base.Columns["UserName"];
-                this.columnFirstName = base.Columns["FirstName"];
-                this.columnLastName = base.Columns["LastName"];
                 this.columnAdress = base.Columns["Adress"];
                 this.columnGroup = base.Columns["Group"];
                 this.columnPhoto = base.Columns["Photo"];
                 this.columnCedula = base.Columns["Cedula"];
                 this.columnFacultad = base.Columns["Facultad"];
+                this.columnEstudiante = base.Columns["Estudiante"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -638,10 +626,6 @@ namespace votaciones {
                 base.Columns.Add(this.columnUserId);
                 this.columnUserName = new global::System.Data.DataColumn("UserName", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnUserName);
-                this.columnFirstName = new global::System.Data.DataColumn("FirstName", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnFirstName);
-                this.columnLastName = new global::System.Data.DataColumn("LastName", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnLastName);
                 this.columnAdress = new global::System.Data.DataColumn("Adress", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnAdress);
                 this.columnGroup = new global::System.Data.DataColumn("Group", typeof(string), null, global::System.Data.MappingType.Element);
@@ -652,6 +636,8 @@ namespace votaciones {
                 base.Columns.Add(this.columnCedula);
                 this.columnFacultad = new global::System.Data.DataColumn("Facultad", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnFacultad);
+                this.columnEstudiante = new global::System.Data.DataColumn("Estudiante", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnEstudiante);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnUserId}, true));
                 this.columnUserId.AutoIncrement = true;
@@ -662,10 +648,6 @@ namespace votaciones {
                 this.columnUserId.Unique = true;
                 this.columnUserName.AllowDBNull = false;
                 this.columnUserName.MaxLength = 100;
-                this.columnFirstName.AllowDBNull = false;
-                this.columnFirstName.MaxLength = 50;
-                this.columnLastName.AllowDBNull = false;
-                this.columnLastName.MaxLength = 50;
                 this.columnAdress.AllowDBNull = false;
                 this.columnAdress.MaxLength = 100;
                 this.columnGroup.MaxLength = 2147483647;
@@ -674,6 +656,8 @@ namespace votaciones {
                 this.columnCedula.MaxLength = 13;
                 this.columnFacultad.AllowDBNull = false;
                 this.columnFacultad.MaxLength = 2147483647;
+                this.columnEstudiante.ReadOnly = true;
+                this.columnEstudiante.MaxLength = 101;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1481,13 +1465,11 @@ namespace votaciones {
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
         public partial class NoVoteDataTable : global::System.Data.TypedTableBase<NoVoteRow> {
             
-            private global::System.Data.DataColumn columnLastName;
-            
-            private global::System.Data.DataColumn columnFirstName;
-            
             private global::System.Data.DataColumn columnCedula;
             
             private global::System.Data.DataColumn columnUserName;
+            
+            private global::System.Data.DataColumn columnEstudiante;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
@@ -1524,22 +1506,6 @@ namespace votaciones {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public global::System.Data.DataColumn LastNameColumn {
-                get {
-                    return this.columnLastName;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public global::System.Data.DataColumn FirstNameColumn {
-                get {
-                    return this.columnFirstName;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public global::System.Data.DataColumn CedulaColumn {
                 get {
                     return this.columnCedula;
@@ -1551,6 +1517,14 @@ namespace votaciones {
             public global::System.Data.DataColumn UserNameColumn {
                 get {
                     return this.columnUserName;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn EstudianteColumn {
+                get {
+                    return this.columnEstudiante;
                 }
             }
             
@@ -1591,13 +1565,12 @@ namespace votaciones {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public NoVoteRow AddNoVoteRow(string LastName, string FirstName, string Cedula, string UserName) {
+            public NoVoteRow AddNoVoteRow(string Cedula, string UserName, string Estudiante) {
                 NoVoteRow rowNoVoteRow = ((NoVoteRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
-                        LastName,
-                        FirstName,
                         Cedula,
-                        UserName};
+                        UserName,
+                        Estudiante};
                 rowNoVoteRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowNoVoteRow);
                 return rowNoVoteRow;
@@ -1620,31 +1593,26 @@ namespace votaciones {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             internal void InitVars() {
-                this.columnLastName = base.Columns["LastName"];
-                this.columnFirstName = base.Columns["FirstName"];
                 this.columnCedula = base.Columns["Cedula"];
                 this.columnUserName = base.Columns["UserName"];
+                this.columnEstudiante = base.Columns["Estudiante"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             private void InitClass() {
-                this.columnLastName = new global::System.Data.DataColumn("LastName", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnLastName);
-                this.columnFirstName = new global::System.Data.DataColumn("FirstName", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnFirstName);
                 this.columnCedula = new global::System.Data.DataColumn("Cedula", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCedula);
                 this.columnUserName = new global::System.Data.DataColumn("UserName", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnUserName);
-                this.columnLastName.AllowDBNull = false;
-                this.columnLastName.MaxLength = 50;
-                this.columnFirstName.AllowDBNull = false;
-                this.columnFirstName.MaxLength = 50;
+                this.columnEstudiante = new global::System.Data.DataColumn("Estudiante", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnEstudiante);
                 this.columnCedula.AllowDBNull = false;
                 this.columnCedula.MaxLength = 13;
                 this.columnUserName.AllowDBNull = false;
                 this.columnUserName.MaxLength = 100;
+                this.columnEstudiante.ReadOnly = true;
+                this.columnEstudiante.MaxLength = 101;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2137,28 +2105,6 @@ namespace votaciones {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public string FirstName {
-                get {
-                    return ((string)(this[this.tableUsers.FirstNameColumn]));
-                }
-                set {
-                    this[this.tableUsers.FirstNameColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public string LastName {
-                get {
-                    return ((string)(this[this.tableUsers.LastNameColumn]));
-                }
-                set {
-                    this[this.tableUsers.LastNameColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public string Adress {
                 get {
                     return ((string)(this[this.tableUsers.AdressColumn]));
@@ -2224,6 +2170,22 @@ namespace votaciones {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string Estudiante {
+                get {
+                    try {
+                        return ((string)(this[this.tableUsers.EstudianteColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Estudiante\' de la tabla \'Users\' es DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableUsers.EstudianteColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public bool IsGroupNull() {
                 return this.IsNull(this.tableUsers.GroupColumn);
             }
@@ -2244,6 +2206,18 @@ namespace votaciones {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public void SetPhotoNull() {
                 this[this.tableUsers.PhotoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsEstudianteNull() {
+                return this.IsNull(this.tableUsers.EstudianteColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetEstudianteNull() {
+                this[this.tableUsers.EstudianteColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -2459,28 +2433,6 @@ namespace votaciones {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public string LastName {
-                get {
-                    return ((string)(this[this.tableNoVote.LastNameColumn]));
-                }
-                set {
-                    this[this.tableNoVote.LastNameColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public string FirstName {
-                get {
-                    return ((string)(this[this.tableNoVote.FirstNameColumn]));
-                }
-                set {
-                    this[this.tableNoVote.FirstNameColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public string Cedula {
                 get {
                     return ((string)(this[this.tableNoVote.CedulaColumn]));
@@ -2499,6 +2451,34 @@ namespace votaciones {
                 set {
                     this[this.tableNoVote.UserNameColumn] = value;
                 }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string Estudiante {
+                get {
+                    try {
+                        return ((string)(this[this.tableNoVote.EstudianteColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Estudiante\' de la tabla \'NoVote\' es DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableNoVote.EstudianteColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsEstudianteNull() {
+                return this.IsNull(this.tableNoVote.EstudianteColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetEstudianteNull() {
+                this[this.tableNoVote.EstudianteColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -2903,42 +2883,25 @@ namespace votaciones.DSTableAdapters {
             tableMapping.DataSetTable = "Users";
             tableMapping.ColumnMappings.Add("UserId", "UserId");
             tableMapping.ColumnMappings.Add("UserName", "UserName");
-            tableMapping.ColumnMappings.Add("FirstName", "FirstName");
-            tableMapping.ColumnMappings.Add("LastName", "LastName");
             tableMapping.ColumnMappings.Add("Adress", "Adress");
             tableMapping.ColumnMappings.Add("Group", "Group");
             tableMapping.ColumnMappings.Add("Photo", "Photo");
             tableMapping.ColumnMappings.Add("Cedula", "Cedula");
             tableMapping.ColumnMappings.Add("Facultad", "Facultad");
+            tableMapping.ColumnMappings.Add("Estudiante", "Estudiante");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
             this._adapter.DeleteCommand.CommandText = "DELETE FROM [dbo].[Users] WHERE (([UserId] = @Original_UserId))";
             this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_UserId", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "UserId", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
-            this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
-            this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = "INSERT INTO [dbo].[Users] ([UserName], [FirstName], [LastName], [Cedula], [Facult" +
-                "ad], [Adress], [Group], [Photo]) VALUES (@UserName, @FirstName, @LastName, @Cedu" +
-                "la, @Facultad, @Adress, @Group, @Photo)";
-            this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@UserName", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "UserName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@FirstName", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "FirstName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@LastName", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "LastName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Cedula", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Cedula", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Facultad", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Facultad", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Adress", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Adress", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Group", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Group", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Photo", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Photo", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = "UPDATE [dbo].[Users] SET [UserName] = @UserName, [FirstName] = @FirstName, [LastN" +
-                "ame] = @LastName, [Cedula] = @Cedula, [Facultad] = @Facultad, [Adress] = @Adress" +
-                ", [Group] = @Group, [Photo] = @Photo WHERE (([UserId] = @Original_UserId))";
+            this._adapter.UpdateCommand.CommandText = "UPDATE [dbo].[Users] SET [UserName] = @UserName, [Cedula] = @Cedula, [Facultad] =" +
+                " @Facultad, [Adress] = @Adress, [Group] = @Group, [Photo] = @Photo WHERE (([User" +
+                "Id] = @Original_UserId))";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@UserName", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "UserName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@FirstName", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "FirstName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@LastName", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "LastName", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Cedula", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Cedula", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Facultad", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Facultad", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Adress", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Adress", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -2960,8 +2923,8 @@ namespace votaciones.DSTableAdapters {
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT UserId, UserName, FirstName, LastName, Cedula, Facultad, Adress, [Group], " +
-                "Photo FROM dbo.Users";
+            this._commandCollection[0].CommandText = "SELECT UserId, UserName,  LastName + \' \' + FirstName AS Estudiante, Cedula, Facul" +
+                "tad, Adress, [Group], Photo FROM dbo.Users";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         
@@ -3043,126 +3006,45 @@ namespace votaciones.DSTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(string UserName, string FirstName, string LastName, string Cedula, string Facultad, string Adress, string Group, string Photo) {
-            if ((UserName == null)) {
-                throw new global::System.ArgumentNullException("UserName");
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[0].Value = ((string)(UserName));
-            }
-            if ((FirstName == null)) {
-                throw new global::System.ArgumentNullException("FirstName");
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[1].Value = ((string)(FirstName));
-            }
-            if ((LastName == null)) {
-                throw new global::System.ArgumentNullException("LastName");
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[2].Value = ((string)(LastName));
-            }
-            if ((Cedula == null)) {
-                throw new global::System.ArgumentNullException("Cedula");
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[3].Value = ((string)(Cedula));
-            }
-            if ((Facultad == null)) {
-                throw new global::System.ArgumentNullException("Facultad");
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[4].Value = ((string)(Facultad));
-            }
-            if ((Adress == null)) {
-                throw new global::System.ArgumentNullException("Adress");
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[5].Value = ((string)(Adress));
-            }
-            if ((Group == null)) {
-                this.Adapter.InsertCommand.Parameters[6].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[6].Value = ((string)(Group));
-            }
-            if ((Photo == null)) {
-                this.Adapter.InsertCommand.Parameters[7].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[7].Value = ((string)(Photo));
-            }
-            global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
-            if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
-                        != global::System.Data.ConnectionState.Open)) {
-                this.Adapter.InsertCommand.Connection.Open();
-            }
-            try {
-                int returnValue = this.Adapter.InsertCommand.ExecuteNonQuery();
-                return returnValue;
-            }
-            finally {
-                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
-                    this.Adapter.InsertCommand.Connection.Close();
-                }
-            }
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(string UserName, string FirstName, string LastName, string Cedula, string Facultad, string Adress, string Group, string Photo, int Original_UserId) {
+        public virtual int Update(string UserName, string Cedula, string Facultad, string Adress, string Group, string Photo, int Original_UserId) {
             if ((UserName == null)) {
                 throw new global::System.ArgumentNullException("UserName");
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[0].Value = ((string)(UserName));
             }
-            if ((FirstName == null)) {
-                throw new global::System.ArgumentNullException("FirstName");
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[1].Value = ((string)(FirstName));
-            }
-            if ((LastName == null)) {
-                throw new global::System.ArgumentNullException("LastName");
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[2].Value = ((string)(LastName));
-            }
             if ((Cedula == null)) {
                 throw new global::System.ArgumentNullException("Cedula");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[3].Value = ((string)(Cedula));
+                this.Adapter.UpdateCommand.Parameters[1].Value = ((string)(Cedula));
             }
             if ((Facultad == null)) {
                 throw new global::System.ArgumentNullException("Facultad");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[4].Value = ((string)(Facultad));
+                this.Adapter.UpdateCommand.Parameters[2].Value = ((string)(Facultad));
             }
             if ((Adress == null)) {
                 throw new global::System.ArgumentNullException("Adress");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[5].Value = ((string)(Adress));
+                this.Adapter.UpdateCommand.Parameters[3].Value = ((string)(Adress));
             }
             if ((Group == null)) {
-                this.Adapter.UpdateCommand.Parameters[6].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[4].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[6].Value = ((string)(Group));
+                this.Adapter.UpdateCommand.Parameters[4].Value = ((string)(Group));
             }
             if ((Photo == null)) {
-                this.Adapter.UpdateCommand.Parameters[7].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[5].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[7].Value = ((string)(Photo));
+                this.Adapter.UpdateCommand.Parameters[5].Value = ((string)(Photo));
             }
-            this.Adapter.UpdateCommand.Parameters[8].Value = ((int)(Original_UserId));
+            this.Adapter.UpdateCommand.Parameters[6].Value = ((int)(Original_UserId));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -3653,10 +3535,9 @@ FROM     Users INNER JOIN
             global::System.Data.Common.DataTableMapping tableMapping = new global::System.Data.Common.DataTableMapping();
             tableMapping.SourceTable = "Table";
             tableMapping.DataSetTable = "NoVote";
-            tableMapping.ColumnMappings.Add("LastName", "LastName");
-            tableMapping.ColumnMappings.Add("FirstName", "FirstName");
             tableMapping.ColumnMappings.Add("Cedula", "Cedula");
             tableMapping.ColumnMappings.Add("UserName", "UserName");
+            tableMapping.ColumnMappings.Add("Estudiante", "Estudiante");
             this._adapter.TableMappings.Add(tableMapping);
         }
         
@@ -3673,7 +3554,7 @@ FROM     Users INNER JOIN
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = @"SELECT LastName, FirstName, Cedula, UserName from Users where Users.UserId
+            this._commandCollection[0].CommandText = @"SELECT LastName + ' ' + FirstName AS Estudiante, Cedula, UserName from Users where Users.UserId
 NOT IN (SELECT VotingDetails.UserId
 FROM     Votings INNER JOIN
                   VotingDetails ON Votings.VotingId = VotingDetails.VotingId INNER JOIN

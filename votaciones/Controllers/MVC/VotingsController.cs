@@ -128,6 +128,7 @@ namespace votaciones.Controllers
             return report;
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult ShowFacultadResults(int id)
         {
             var report = this.GenerateFacultadResults(id);
@@ -220,13 +221,13 @@ namespace votaciones.Controllers
             var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             var connection = new SqlConnection(connectionString);
             var dataTable = new DataTable();
-            var sql = @"SELECT LastName, FirstName, Cedula, UserName from Users where Users.UserId
+            var sql = @"SELECT LastName + ' ' + FirstName AS Estudiante, Cedula, UserName from Users where Users.UserId
                         NOT IN (SELECT VotingDetails.UserId
                         FROM    Votings INNER JOIN
                                 VotingDetails ON Votings.VotingId = VotingDetails.VotingId INNER JOIN
                                 Users ON VotingDetails.UserId = Users.UserId
-                        Where Votings.VotingId = " + id + ") EXCEPT ( select LastName, FirstName, Cedula, UserName " +
-                        "FROM Users WHERE Cedula = '0000000000') ORDER BY LastName, FirstName";
+                        Where Votings.VotingId = " + id + ") EXCEPT (SELECT LastName + ' ' + FirstName AS Estudiante, Cedula, UserName " +
+                        "FROM Users WHERE Cedula = '0000000000') ORDER BY Estudiante";
 
             try
             {

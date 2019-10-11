@@ -51,7 +51,12 @@ namespace votaciones.Controllers
             var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             var connection = new SqlConnection(connectionString);
             var dataTable = new DataTable();
-            var sql = "SELECT * FROM Users EXCEPT (SELECT * FROM Users WHERE Cedula = '0000000000') ORDER BY LastName, FirstName";
+            var sql = @"SELECT UserId, UserName, LastName + ' ' + FirstName 
+                        AS     Estudiante, Cedula, Facultad, Adress, Photo 
+                        FROM   Users 
+                        EXCEPT (SELECT UserId, UserName, LastName + ' ' + FirstName 
+                        AS     Estudiante, Cedula, Facultad, Adress, Photo  FROM Users WHERE Cedula = '0000000000')
+                        ORDER BY Estudiante";
 
             try
             {

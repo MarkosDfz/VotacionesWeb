@@ -143,6 +143,29 @@ FROM     Votings INNER JOIN
             </Mappings>
             <Sources />
           </TableAdapter>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="FacultadReportTableAdapter" GeneratorDataComponentClassName="FacultadReportTableAdapter" Name="FacultadReport" UserDataComponentName="FacultadReportTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="DefaultConnection (Web.config)" DbObjectType="Unknown" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>SELECT votings.votingid,candidates.candidateid, users.lastname + ' ' + users.firstname AS Candidato, us2.facultad, COUNT(us2.facultad) AS votantes FROM Votings INNER JOIN
+        VotingDetails ON Votings.VotingId = VotingDetails.VotingId
+INNER JOIN candidates ON VotingDetails.candidateid = candidates.candidateid INNER JOIN users ON users.userid = candidates.userid INNER JOIN users us2 ON  VotingDetails.userid = us2.userid
+GROUP BY votings.votingid,candidates.candidateid, users.lastname, users.firstname, us2.facultad</CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="candidateid" DataSetColumn="candidateid" />
+              <Mapping SourceColumn="facultad" DataSetColumn="facultad" />
+              <Mapping SourceColumn="votantes" DataSetColumn="votantes" />
+              <Mapping SourceColumn="Candidato" DataSetColumn="Candidato" />
+              <Mapping SourceColumn="votingid" DataSetColumn="votingid" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
         </Tables>
         <Sources />
       </DataSource>
@@ -308,6 +331,29 @@ FROM     Votings INNER JOIN
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        <xs:element name="FacultadReport" msprop:Generator_TableClassName="FacultadReportDataTable" msprop:Generator_TableVarName="tableFacultadReport" msprop:Generator_TablePropName="FacultadReport" msprop:Generator_RowDeletingName="FacultadReportRowDeleting" msprop:Generator_RowChangingName="FacultadReportRowChanging" msprop:Generator_RowEvHandlerName="FacultadReportRowChangeEventHandler" msprop:Generator_RowDeletedName="FacultadReportRowDeleted" msprop:Generator_UserTableName="FacultadReport" msprop:Generator_RowChangedName="FacultadReportRowChanged" msprop:Generator_RowEvArgName="FacultadReportRowChangeEvent" msprop:Generator_RowClassName="FacultadReportRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="candidateid" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columncandidateid" msprop:Generator_ColumnPropNameInRow="candidateid" msprop:Generator_ColumnPropNameInTable="candidateidColumn" msprop:Generator_UserColumnName="candidateid" type="xs:int" />
+              <xs:element name="facultad" msprop:Generator_ColumnVarNameInTable="columnfacultad" msprop:Generator_ColumnPropNameInRow="facultad" msprop:Generator_ColumnPropNameInTable="facultadColumn" msprop:Generator_UserColumnName="facultad">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="2147483647" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="votantes" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnvotantes" msprop:Generator_ColumnPropNameInRow="votantes" msprop:Generator_ColumnPropNameInTable="votantesColumn" msprop:Generator_UserColumnName="votantes" type="xs:int" minOccurs="0" />
+              <xs:element name="Candidato" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnCandidato" msprop:Generator_ColumnPropNameInRow="Candidato" msprop:Generator_ColumnPropNameInTable="CandidatoColumn" msprop:Generator_UserColumnName="Candidato" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="101" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="votingid" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnvotingid" msprop:Generator_ColumnPropNameInRow="votingid" msprop:Generator_ColumnPropNameInTable="votingidColumn" msprop:Generator_UserColumnName="votingid" type="xs:int" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
       </xs:choice>
     </xs:complexType>
     <xs:unique name="Constraint1" msdata:PrimaryKey="true">
@@ -317,6 +363,10 @@ FROM     Votings INNER JOIN
     <xs:unique name="ResultsReport_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
       <xs:selector xpath=".//mstns:ResultsReport" />
       <xs:field xpath="mstns:VotingId" />
+    </xs:unique>
+    <xs:unique name="FacultadReport_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:FacultadReport" />
+      <xs:field xpath="mstns:candidateid" />
     </xs:unique>
   </xs:element>
 </xs:schema>

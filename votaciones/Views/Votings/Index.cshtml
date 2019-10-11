@@ -84,7 +84,8 @@
                     @Html.ActionLink("Eliminar", "Delete", new { id = item.VotingId }) |
                     @if (item.IsForAllUsers == true && item.State.Description == "Cerrada")
                     {
-                      @Html.ActionLink("No Votaron", "ShowNoVote", new { id = item.VotingId }, new { target = "_blank" })
+                      @Html.ActionLink("Facultad", "ShowFacultadResults", new { id = item.VotingId }, new { target = "_blank" })
+                      @Html.ActionLink(" No Votaron", "ShowNoVote", new { id = item.VotingId }, new { target = "_blank" })
                     }
                 </td>
             </tr>

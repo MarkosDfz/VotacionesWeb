@@ -30,24 +30,28 @@ namespace votaciones.Controllers
                     .OrderByDescending(c => c.QuantityVotes)
                     .FirstOrDefault();
 
-                var candidate1 = db.Candidates
-                    .Where(c => c.VotingId == voting.VotingId)
-                    .OrderByDescending(c => c.QuantityVotes).Take(2).Skip(1).FirstOrDefault();
-
-                if (candidate.QuantityVotes == candidate1.QuantityVotes)
+                if ( voting.Candidates.Count > 1 )
                 {
-                    var state = Utilities.GetState("Cerrada");
-                    voting.StateId = state.StateId;
+                    var candidate1 = db.Candidates
+                            .Where(c => c.VotingId == voting.VotingId)
+                            .OrderByDescending(c => c.QuantityVotes).Take(2).Skip(1).FirstOrDefault();
 
-                    var draw = db.Users
-                    .Where(c => c.UserName == "empate@empate.com")
-                    .FirstOrDefault();
-                    voting.CandidateWinId = draw.UserId;
-                    
-                    db.Entry(voting).State = EntityState.Modified;
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
+                    if (candidate.QuantityVotes == candidate1.QuantityVotes)
+                    {
+                        var state = Utilities.GetState("Cerrada");
+                        voting.StateId = state.StateId;
+
+                        var draw = db.Users
+                        .Where(c => c.UserName == "empate@empate.com")
+                        .FirstOrDefault();
+                        voting.CandidateWinId = draw.UserId;
+
+                        db.Entry(voting).State = EntityState.Modified;
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
                 }
+                
 
                 if (candidate != null)
                 {
@@ -119,6 +123,46 @@ namespace votaciones.Controllers
 
             var report = new ReportClass();
             report.FileName = Server.MapPath("/Reports/Certificate.rpt");
+            report.Load();
+            report.SetDataSource(dataTable);
+            return report;
+        }
+
+        public ActionResult ShowFacultadResults(int id)
+        {
+            var report = this.GenerateFacultadResults(id);
+            var stream = report.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            return File(stream, "application/pdf");
+        }
+
+        private ReportClass GenerateFacultadResults(int id)
+        {
+            var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            var connection = new SqlConnection(connectionString);
+            var dataTable = new DataTable();
+            var sql = @"SELECT votings.votingid, candidates.candidateid, users.lastname + ' ' + users.firstname AS Candidato, us2.facultad,
+                        COUNT  (us2.facultad) AS votantes FROM Votings 
+                        INNER JOIN VotingDetails ON Votings.VotingId = VotingDetails.VotingId
+                        INNER JOIN candidates ON VotingDetails.candidateid = candidates.candidateid
+                        INNER JOIN users ON users.userid = candidates.userid 
+                        INNER JOIN users us2 ON  VotingDetails.userid = us2.userid
+                        WHERE votings.votingid = " + id +
+                        "GROUP BY votings.votingid, candidates.candidateid, users.lastname, users.firstname, us2.facultad ORDER BY votantes DESC";
+
+            try
+            {
+                connection.Open();
+                var command = new SqlCommand(sql, connection);
+                var adapter = new SqlDataAdapter(command);
+                adapter.Fill(dataTable);
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+
+            var report = new ReportClass();
+            report.FileName = Server.MapPath("/Reports/Facultad.rpt");
             report.Load();
             report.SetDataSource(dataTable);
             return report;

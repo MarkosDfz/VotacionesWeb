@@ -182,7 +182,7 @@ namespace votaciones.Controllers
             var connection = new SqlConnection(connectionString);
             var dataTable = new DataTable();
             var sql = @"SELECT Votings.VotingId, Votings.Description AS Voting, States.Description AS State, 
-                               Users.FirstName + ' ' + Users.LastName AS Candidate, Candidates.QuantityVotes
+                               Users.LastName + ' ' + Users.FirstName AS Candidate, Candidates.QuantityVotes
                         FROM   Candidates INNER JOIN
                                Users ON Candidates.UserId = Users.UserId INNER JOIN
                                Votings ON Candidates.VotingId = Votings.VotingId INNER JOIN
@@ -319,7 +319,7 @@ namespace votaciones.Controllers
 
             if (this.VoteCandidate(user, candidate, voting))
             {
-                return RedirectToAction("MyCertificates");
+                return View("SuccessfulVote");
             }
             
             return RedirectToAction("Index", "Home");
@@ -504,7 +504,7 @@ namespace votaciones.Controllers
                 if (candidate != null)
                 {
                     ModelState.AddModelError(string.Empty, "El candidato ya pertenece a la votación");
-                    ViewBag.UserId = new SelectList(db.Users
+                    ViewBag.UserId = new SelectList(db.Users.Where(x => x.UserName != "empate@empate.com")
                     .OrderBy(u => u.FirstName)
                     .ThenBy(u => u.LastName), "UserId", "FullName");
 
@@ -524,7 +524,7 @@ namespace votaciones.Controllers
 
             }
 
-            ViewBag.UserId = new SelectList(db.Users
+            ViewBag.UserId = new SelectList(db.Users.Where(x => x.UserName != "empate@empate.com")
                     .OrderBy(u => u.FirstName)
                     .ThenBy(u => u.LastName), "UserId", "FullName");
 
@@ -540,7 +540,7 @@ namespace votaciones.Controllers
 
             };
 
-             ViewBag.UserId = new SelectList(db.Users
+             ViewBag.UserId = new SelectList(db.Users.Where(x => x.UserName != "empate@empate.com")
                     .OrderBy(u => u.FirstName)
                     .ThenBy(u => u.LastName), "UserId", "FullName");
 

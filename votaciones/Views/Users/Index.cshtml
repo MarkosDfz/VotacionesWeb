@@ -3,18 +3,20 @@
     ViewBag.Title = "Usuarios";
 }
 
-<div >
+<div>
     <div class="row">
         <div class="col-sm-4"><h2>Usuarios</h2></div>
-        <div class="col-sm-4" ></div>
+        <div class="col-sm-4"></div>
         <div class="col-sm-4" style="text-align:right">
             <br />
             <p>
-                @Html.ActionLink("Pdf", "PDF", new { }, new { @class = "btn btn-default", target = "_blank" })
-                @Html.ActionLink("Excel", "XLS", new { }, new { @class = "btn btn-default" })
-                @Html.ActionLink("Doc", "DOC", new { }, new { @class = "btn btn-default" })
-                @Html.ActionLink("Nuevo Usuario", "Create", new { }, new { @class = "btn btn-primary" })
-            </p>    
+                <div class="btn-group">
+                    @Html.ActionLink("Pdf", "PDF", new { }, new { @class = "btn btn-default", target = "_blank" })
+                    @Html.ActionLink("Excel", "XLS", new { }, new { @class = "btn btn-default" })
+                    @Html.ActionLink("Doc", "DOC", new { }, new { @class = "btn btn-default" })
+                    @Html.ActionLink("Nuevo Usuario", "Create", new { }, new { @class = "btn btn-primary" })
+                </div>
+            </p>
         </div>
     </div>
 </div>
@@ -28,7 +30,7 @@
                 Usuario
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UserName)
+                Correo
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Cedula)
@@ -42,7 +44,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.IsAdmin)
             </th>
-            <th>
+            <th class="text-center">
                 Acciones
             </th>
         </tr>
@@ -51,34 +53,35 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>
+                <td style="vertical-align:middle">
                     @Html.DisplayFor(modelItem => item.FullName)
                 </td>
-                
-                <td>
+
+                <td style="vertical-align:middle">
                     @Html.DisplayFor(modelItem => item.UserName)
                 </td>
-                <td>
+                <td style="vertical-align:middle">
                     @Html.DisplayFor(modelItem => item.Cedula)
                 </td>
-                <td>
+                <td style="vertical-align:middle">
                     @Html.DisplayFor(modelItem => item.Facultad)
                 </td>
-                <td>
+                <td style="vertical-align:middle">
                     @if (!string.IsNullOrEmpty(item.Photo))
                     {
-                        <img src="@Url.Content(item.Photo)" alt="Image" style="width:80px;height:80px;max-width:100%;border-radius:50%; " />
+                        <img src="@Url.Content(item.Photo)" alt="Image" style="width:60px;height:60px;max-width:100%;border-radius:50%; " />
                     }
                 </td>
-                <td align="center">
+                <td align="center" style="vertical-align:middle">
                     @Html.DisplayFor(modelItem => item.IsAdmin)
                 </td>
-                <td>
-                    @Html.ActionLink("Editar", "Edit", new { id = item.UserId }) |
-                    @Html.ActionLink("Detalles", "Details", new { id = item.UserId }) |
-                    @Html.ActionLink("Cambiar Rol", "OnOffAdmin", new { id = item.UserId },
-                    new { onclick = "return confirm('¿Cambiar el Rol de este usuario?')" }) |
-                    @Html.ActionLink("Eliminar", "Delete", new { id = item.UserId })
+                <td style="vertical-align:middle">
+                    <div class="btn-group">
+                        @Html.ActionLink("Editar", "Edit", new { id = item.UserId }, new { @class = "btn btn-default btn-sm" })
+                        @Html.ActionLink("Detalles", "Details", new { id = item.UserId }, new { @class = "btn btn-default btn-sm" })
+                        <input type="button" class="btn btn-default btn-sm" value="Cambiar Rol" onclick="admin(@item.UserId,'@item.FullName')" />
+                        @Html.ActionLink("Eliminar", "Delete", new { id = item.UserId }, new { @class = "btn btn-default btn-sm"})
+                    </div>
                 </td>
             </tr>
         }
@@ -87,17 +90,46 @@
 
 @section Styles {
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.18/datatables.min.css" />
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css">
 }
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script type="text/javascript" src="~/Scripts/datatables.min.js"></script>
+    <script src="https://kit.fontawesome.com/bf44875ae6.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+
     <script>
         $(document).ready(function () {
             $("#users").DataTable({
-            "dom": '<"pull-left"f><"pull-right"l>tip'
+                "dom": '<"pull-left"f><"pull-right"l>tip'
             });
         });
+
+        function admin(id,n) {
+            $.confirm({
+                title: 'Cambiar Rol',
+                icon: 'fas fa-exchange-alt',
+                type: 'blue',
+                closeIcon: true,
+                draggable: false,
+                animation: 'scale',
+                theme: 'modern',
+                content: '¿Está seguro de cambiar de rol a<b> ' + n + '</b>?',
+                buttons: {
+                    Cambiar: {
+                        btnClass: 'btn-blue',
+                        action: function () {
+                            location.href = '@Url.Action("OnOffAdmin", "Users", new {id = "ID"})'.replace("ID", parseInt(id));
+
+                        }
+                    },
+                    Cancelar: {
+                        btnClass: 'btn-red',
+
+                    }
+                }
+            });
+        }
     </script>
 }

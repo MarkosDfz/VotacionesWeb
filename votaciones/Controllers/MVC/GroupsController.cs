@@ -46,7 +46,7 @@ namespace votaciones.Controllers
 
             if (member != null)
             {
-                ViewBag.UserId = new SelectList(db.Users
+                ViewBag.UserId = new SelectList(db.Users.Where(x => x.UserName != "empate@empate.com" && x.UserName != "votonulo")
                 .OrderBy(u => u.FirstName)
                 .ThenBy(u => u.LastName), "UserId", "FullName");
                 ModelState.AddModelError(string.Empty, "El miembro ya pertenece al grupo");
@@ -69,7 +69,7 @@ namespace votaciones.Controllers
         [HttpGet]
         public ActionResult AddMember(int groupId)
         {
-            ViewBag.UserId = new SelectList(db.Users
+            ViewBag.UserId = new SelectList(db.Users.Where(x => x.UserName != "empate@empate.com" && x.UserName != "votonulo")
                 .OrderBy(u => u.FirstName)
                 .ThenBy(u => u.LastName), "UserId", "FullName");
             var view = new AddMemberView
@@ -124,14 +124,20 @@ namespace votaciones.Controllers
             if (ModelState.IsValid)
             {
                 db.Groups.Add(group);
+
                 var gr = db.Groups
                     .Where(g => g.Description == group.Description)
                     .FirstOrDefault();
 
-                if (gr.Description == group.Description)
+                var gru = db.Groups.Count();
+
+                if ( gru > 0)
                 {
-                    ModelState.AddModelError(string.Empty, "El grupo ya existe");
-                    return View();
+                    if (gr.Description == group.Description)
+                    {
+                        ModelState.AddModelError(string.Empty, "El grupo ya existe");
+                        return View();
+                    }
                 }
 
                 db.SaveChanges();

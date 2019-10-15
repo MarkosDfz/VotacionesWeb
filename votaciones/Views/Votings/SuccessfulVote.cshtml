@@ -1,5 +1,6 @@
-﻿@{
-    ViewBag.Title = "Recuperación de contraseña";
+﻿
+@{
+    ViewBag.Title = "SuccessfulVote";
 }
 
 <style>
@@ -30,14 +31,15 @@
 
 <div class="container-fluid">
     <div class="row">
-        <br/><br />
-        <img src="~/Content/Images/mail.png" class="img-responsive" style="width:82%;height:600px;max-width:100%;margin-left: auto; margin-right: auto; display: block">
+        <br /><br />
+        <img src="~/Content/Images/votook.png" class="img-responsive" style="width:55%;height:570px;max-width:100%;margin-left: auto; margin-right: auto; display: block">
     </div>
     <div class="row">
         <div class="col-md-12">
             <div align="center">
                 <br />
-                @Html.ActionLink("VOLVER", "Index", "Home", new { }, new { @class = "myButton" })
+                @Html.ActionLink("CERTIFICADO", "MyCertificates", "Votings", new { }, new { @class = "myButton" })
+                @Html.ActionLink("INICIO", "Index", "Home", new { }, new { @class = "myButton" })
             </div>
         </div>
     </div>

@@ -3205,7 +3205,7 @@ namespace votaciones.DSTableAdapters {
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
             this._commandCollection[0].CommandText = @"SELECT Votings.VotingId, Votings.Description AS Voting, States.Description AS State, 
-Users.FirstName + ' ' + Users.LastName AS Candidate, Candidates.QuantityVotes
+Users.LastName + ' ' + Users.FirstName AS Candidate, Candidates.QuantityVotes
 FROM Candidates INNER JOIN
  Users ON Candidates.UserId = Users.UserId INNER JOIN
  Votings ON Candidates.VotingId = Votings.VotingId INNER JOIN

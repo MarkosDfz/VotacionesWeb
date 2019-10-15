@@ -7,7 +7,7 @@
 
 <div>
     <h2>Detalle de la Votación</h2>
-   
+
     <div class="text-danger">
         @TempData["Errors"]
     </div>
@@ -113,9 +113,7 @@
                                 @Html.DisplayFor(modelItem => modelItem.VotingGroups[i].Group.Description)
                             </td>
                             <td>
-                                @Html.ActionLink("Eliminar", "DeleteGroup",
-                                new { id = Model.VotingGroups[i].VotingGroupId },
-                                new { @class = "btn btn-danger", onclick = "return confirm('¿Está seguro de eliminar este grupo?')"})
+                                <input type="button" class="btn btn-danger" value="Eliminar" onclick="grupo(@Model.VotingGroups[i].VotingGroupId,'@Model.VotingGroups[i].Group.Description')" />
                             </td>
                         </tr>
                     }
@@ -136,10 +134,10 @@
                 <table class="table">
                     <tr>
                         <th>
-                            @Html.DisplayNameFor(model => Model.Candidates[0].User.UserName)
+                            @Html.DisplayNameFor(model => Model.Candidates[0].User.FullName)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => Model.Candidates[0].User.FullName)
+                            @Html.DisplayNameFor(model => Model.Candidates[0].User.Group)
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => Model.Candidates[0].User.Photo)
@@ -151,10 +149,10 @@
                     {
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => Model.Candidates[i].User.UserName)
+                                @Html.DisplayFor(modelItem => Model.Candidates[i].User.FullName)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => Model.Candidates[i].User.FullName)
+                                @Html.DisplayFor(modelItem => Model.Candidates[i].User.Group)
                             </td>
                             <td>
                                 @if (!string.IsNullOrEmpty(Model.Candidates[i].User.Photo))
@@ -163,7 +161,7 @@
                                 }
                             </td>
                             <td>
-                                @Html.ActionLink("Eliminar", "DeleteCandidate", new { id = Model.Candidates[i].CandidateId }, new { @class = "btn btn-danger", onclick = "return confirm('¿Está seguro de eliminar este candidato?')" })
+                                <input type="button" class="btn btn-danger" value="Eliminar" onclick="candidado(@Model.Candidates[i].CandidateId,'@Model.Candidates[i].User.FullName')" />
                             </td>
                         </tr>
                     }
@@ -177,3 +175,67 @@
         </section>
     </div>
 </div>
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css">
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="https://kit.fontawesome.com/bf44875ae6.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+
+    <script>
+        function grupo(id,n) {
+            $.confirm({
+                title: 'Eliminar Grupo',
+                icon: 'fas fa-times-circle',
+                type: 'red',
+                closeIcon: true,
+                draggable: false,
+                animation: 'scale',
+                theme: 'modern',
+                content: '¿Está seguro de eliminar el grupo<b> ' + n + '</b> de la votación?',
+                buttons: {
+                    Eliminar: {
+                        btnClass: 'btn-red',
+                        action: function () {
+                            location.href = '@Url.Action("DeleteGroup", "Votings", new {id = "ID"})'.replace("ID", parseInt(id));
+
+                        }
+                    },
+                    Cancelar: {
+                        btnClass: 'btn-blue',
+
+                    }
+                }
+            });
+        }
+
+        function candidado(id,n) {
+            $.confirm({
+                title: 'Eliminar Candidato',
+                icon: 'fas fa-times-circle',
+                type: 'red',
+                closeIcon: true,
+                draggable: false,
+                animation: 'scale',
+                theme: 'modern',
+                content: '¿Está seguro de eliminar a<b> ' + n + '</b> de la votación?',
+                buttons: {
+                    Eliminar: {
+                        btnClass: 'btn-red',
+                        action: function () {
+                            location.href = '@Url.Action("DeleteCandidate", "Votings", new {id = "ID"})'.replace("ID", parseInt(id));
+
+                        }
+                    },
+                    Cancelar: {
+                        btnClass: 'btn-blue',
+
+                    }
+                }
+            });
+        }
+    </script>
+}

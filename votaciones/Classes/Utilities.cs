@@ -169,17 +169,37 @@ namespace votaciones.Classes
             }
 
             var random = new Random();
-            var newPassword = string.Format("{0}{1}{2:04}*", user.FirstName.ToUpper().Substring(0, 1), user.LastName.ToLower(), random.Next(9999));
+            var newPassword = string.Format("{0}{1}{2:04}*", user.FirstName.ToUpper().Substring(0, 1), user.LastName.ToLower().Substring(0, 2), random.Next(99999));
 
             userManager.RemovePassword(userASP.Id);
             userManager.AddPassword(userASP.Id, newPassword);
 
             var subject = "Votaciones Utc Recuperar contraseña";
             var body = string.Format(@"
-            <h1>Votaciones UTC Recuperar Contraseña</h1>
-            <p>Su nueva contraseña es: <strong>{0}</strong></p>
-            <p>Puede cambiar esta contraseña por una nueva que recuerde facilmente.",
-                    newPassword);
+            <div style='margin-left: auto;
+                        margin-right: auto;
+                        max-width: 1000px;
+                        float: none; text-align: center;'>
+                <h1>Votaciones UTC <br/> Recuperar Contraseña</h1>
+                <p>Su nueva contraseña es: </p>
+                <table style='margin-left: auto;
+                        margin-right: auto;
+                        max-width: 1000px;
+                        float: none;'>
+                    <th style='border-style:solid;
+                            border-width:2px;
+                            border-color:black;
+                            font-size:22px;
+                            font-weight:bold;
+                            letter-spacing:3px;
+                            padding:0 26px;
+                            text-align:center'>
+                        {0}
+                    </th>
+                </table>
+                <p>Puede cambiar esta contraseña por una nueva que recuerde fácilmente.</p>
+                <h6>Ha recibido este correo electrónico porque se ha solicitado el cambio de contraseña.</h6>
+            </div>", newPassword);
 
             await SendMail(email, subject, body);
         }

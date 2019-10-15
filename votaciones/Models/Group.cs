@@ -15,7 +15,7 @@ namespace votaciones.Models
 
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(50, ErrorMessage =
-            "El campo {0} puede contener un máximo de {1} y un mínimo de {2} de caracteres."
+            "El campo {0} debe contener un mínimo de {2} y un máximo de {1} de caracteres."
            , MinimumLength = 3)]
         [Display(Name = "Descripción")]
         public string Description { get; set; }

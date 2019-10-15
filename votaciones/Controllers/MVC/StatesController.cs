@@ -41,10 +41,16 @@ namespace votaciones.Controllers
             var st = db.States
                     .Where(s => s.Description == state.Description)
                     .FirstOrDefault();
-            if (st.Description == state.Description)
+
+            var stad = db.States.Count();
+
+            if (stad > 0)
             {
-                ModelState.AddModelError(string.Empty, "El estado ya existe");
-                return View();
+                if (st.Description == state.Description)
+                {
+                    ModelState.AddModelError(string.Empty, "El estado ya existe");
+                    return View();
+                }
             }
 
             //para guardar en la bd los datos de la tabla estado

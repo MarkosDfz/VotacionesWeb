@@ -1,87 +1,101 @@
 ﻿@model IEnumerable<votaciones.Models.Voting>
 
 @{
+    /**/
+
     ViewBag.Title = "Mis Votaciones";
 }
 
 @if (!Model.Any())
 {
+    <style>
+        .myButton {
+            background-color: #535270;
+            border-radius: 32px;
+            border: 1px solid #535270;
+            display: inline-block;
+            cursor: pointer;
+            color: #ffffff;
+            font-family: Arial;
+            font-size: 13px;
+            padding: 12px 24px;
+            text-decoration: none;
+            text-shadow: 0px 1px 0px #535270;
+        }
+
+        .myButton:hover {
+            background-color: #535270;
+            color: white;
+        }
+
+        .myButton:active {
+            position: relative;
+            top: 1px;
+        }
+    </style>
+
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12">
-                <h1 class="text-center">
-                    Mis Votaciones
-                </h1>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-            </div>
-            <div class="col-md-4">
-                <img src="~/Content/Images/complete.png" style="margin-left: auto; margin-right: auto; display: block">
-            </div>
-            <div class="col-md-4">
-            </div>
+            <br /><br />
+            <img src="~/Content/Images/pendientes.png" class="img-responsive" style="width:44%;height:550px;max-width:100%;margin-left: auto; margin-right: auto; display: block">
         </div>
         <div class="row">
             <div class="col-md-12">
-                <h2 class="text-center">
-                    No tiene votaciones pendientes.
-                </h2> <br />
                 <div align="center">
-                    @Html.ActionLink("Inicio", "Index", "Home", new { }, new { @class = "btn btn-lg btn-primary" })
+                    <br/>
+                    @Html.ActionLink("INICIO", "Index", "Home", new { }, new { @class = "myButton" })
                 </div>
             </div>
         </div>
     </div>
-}
+} 
 else
 {
-    <h2>Mis Votaciones</h2>
+<h2>Mis Votaciones</h2>
     using (Html.BeginForm("Vote", "Votings", FormMethod.Post))
     {
-        <table class="table">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Remarks)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DateTimeStart)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DateTimeEnd)
-                </th>
-                <th>
-                    Acciones
-                </th>
-            </tr>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Remarks)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateTimeStart)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateTimeEnd)
+        </th>
+        <th>
+            Acción
+        </th>
+    </tr>
 
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Remarks)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DateTimeStart)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DateTimeEnd)
-                    </td>
-                    <td>
-                        <input type="hidden" id="votingId" name="votingId" value="@item.VotingId" />
-                        <input type="submit" value="Votar" class="btn btn-primary" />
-                    </td>
-                </tr>
-            }
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td style=" word-wrap: break-word;  width: 280px; overflow: hidden; vertical-align:middle">
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td style=" word-wrap: break-word;  width: 280px; overflow: hidden; vertical-align:middle">
+                @Html.DisplayFor(modelItem => item.Remarks)
+            </td>
+            <td style="vertical-align:middle">
+                @Html.DisplayFor(modelItem => item.DateTimeStart)
+            </td>
+            <td style="vertical-align:middle">
+                @Html.DisplayFor(modelItem => item.DateTimeEnd)
+            </td>
+            <td style="vertical-align:middle">
+                <input type="hidden" id="votingId" name="votingId" value="@item.VotingId" />
+                <input type="submit" value="Votar" class="btn btn-primary" />
+            </td>
+        </tr>
+    }
 
-        </table>
+</table>
 
 
     }

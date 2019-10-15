@@ -1,12 +1,13 @@
-﻿@{
-    ViewBag.Title = "Recuperación de contraseña";
+﻿
+@{
+    ViewBag.Title = "Error 404";
 }
 
 <style>
     .myButton {
-        background-color: #4663E2;
+        background-color: #535270;
         border-radius: 32px;
-        border: 1px solid #4663E2;
+        border: 1px solid #535270;
         display: inline-block;
         cursor: pointer;
         color: #ffffff;
@@ -14,11 +15,11 @@
         font-size: 13px;
         padding: 12px 24px;
         text-decoration: none;
-        text-shadow: 0px 1px 0px #4663E2;
+        text-shadow: 0px 1px 0px #535270;
     }
 
         .myButton:hover {
-            background-color: #4663E2;
+            background-color: #535270;
             color: white;
         }
 
@@ -30,13 +31,11 @@
 
 <div class="container-fluid">
     <div class="row">
-        <br/><br />
-        <img src="~/Content/Images/mail.png" class="img-responsive" style="width:82%;height:600px;max-width:100%;margin-left: auto; margin-right: auto; display: block">
+        <img src="~/Content/Images/error404.png" class="img-responsive" style="width:94%;height:700px;max-width:100%;margin-left: auto; margin-right: auto; display: block">
     </div>
     <div class="row">
         <div class="col-md-12">
             <div align="center">
-                <br />
                 @Html.ActionLink("VOLVER", "Index", "Home", new { }, new { @class = "myButton" })
             </div>
         </div>

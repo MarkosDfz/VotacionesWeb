@@ -21,7 +21,7 @@
         <th>
             @Html.DisplayNameFor(model => model.Description)
         </th>
-        <th>
+        <th style="padding-left:37px;">
             Acciones
         </th>
     </tr>
@@ -32,8 +32,10 @@
             @Html.DisplayFor(modelItem => item.Description)
         </td>
         <td>
-            @Html.ActionLink("Editar", "Edit", new { id = item.StateId }) |
-            @Html.ActionLink("Eliminar", "Delete", new { id = item.StateId })
+            <div class="btn-group">
+                @Html.ActionLink("Editar", "Edit", new { id = item.StateId }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Eliminar", "Delete", new { id = item.StateId }, new { @class = "btn btn-default" })
+            </div>
         </td>
     </tr>
 }

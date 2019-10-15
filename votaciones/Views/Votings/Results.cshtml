@@ -41,25 +41,25 @@ else
     <table class="table">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                Votación
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Remarks)
+                Descripción
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateTimeStart)
+                Fecha Inicio
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateTimeEnd)
+                Fecha Fin
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.State.Description)
+                Estado
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.QuantityVotes)
+                Total Votos
             </th>
             <th>
-                Candidato Ganador
+                Ganador
             </th>
             <th>
                 Reporte
@@ -69,28 +69,28 @@ else
         @foreach (var item in Model)
         {
             <tr>
-                <td>
+                <td style=" word-wrap: break-word;  width: 170px; overflow: hidden; vertical-align:middle">
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
-                <td>
+                <td style=" word-wrap: break-word;  width: 170px; overflow: hidden; vertical-align:middle">
                     @Html.DisplayFor(modelItem => item.Remarks)
                 </td>
-                <td>
+                <td style="vertical-align: middle">
                     @Html.DisplayFor(modelItem => item.DateTimeStart)
                 </td>
-                <td>
+                <td style="vertical-align: middle">
                     @Html.DisplayFor(modelItem => item.DateTimeEnd)
                 </td>
-                <td>
+                <td style="vertical-align: middle">
                     @Html.DisplayFor(modelItem => item.State.Description)
                 </td>
-                <td align="center">
+                <td align="center" style="vertical-align: middle">
                     @Html.DisplayFor(modelItem => item.QuantityVotes)
                 </td>
-                <td>
+                <td style=" word-wrap: break-word;  width: 150px; overflow: hidden; vertical-align:middle">
                     @Html.DisplayFor(modelItem => item.Winner.FullName)
                 </td>
-                <td>
+                <td style="vertical-align: middle">
                     @Html.ActionLink("Resultados", "ShowResults",
                     new { id = item.VotingId }, new { @class = "btn btn-primary", target = "_blank" })
                 </td>

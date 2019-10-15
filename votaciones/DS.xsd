@@ -58,7 +58,7 @@
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>SELECT Votings.VotingId, Votings.Description AS Voting, States.Description AS State, 
-Users.FirstName + ' ' + Users.LastName AS Candidate, Candidates.QuantityVotes
+Users.LastName + ' ' + Users.FirstName AS Candidate, Candidates.QuantityVotes
 FROM Candidates INNER JOIN
  Users ON Candidates.UserId = Users.UserId INNER JOIN
  Votings ON Candidates.VotingId = Votings.VotingId INNER JOIN
@@ -155,7 +155,7 @@ GROUP BY votings.votingid,candidates.candidateid, users.lastname, users.firstnam
   <xs:element name="DS" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="DS" msprop:Generator_UserDSName="DS">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="Users" msprop:Generator_TableClassName="UsersDataTable" msprop:Generator_TableVarName="tableUsers" msprop:Generator_TablePropName="Users" msprop:Generator_RowDeletingName="UsersRowDeleting" msprop:Generator_RowChangingName="UsersRowChanging" msprop:Generator_RowEvHandlerName="UsersRowChangeEventHandler" msprop:Generator_RowDeletedName="UsersRowDeleted" msprop:Generator_UserTableName="Users" msprop:Generator_RowChangedName="UsersRowChanged" msprop:Generator_RowEvArgName="UsersRowChangeEvent" msprop:Generator_RowClassName="UsersRow">
+        <xs:element name="Users" msprop:Generator_TableClassName="UsersDataTable" msprop:Generator_TableVarName="tableUsers" msprop:Generator_RowChangedName="UsersRowChanged" msprop:Generator_TablePropName="Users" msprop:Generator_RowDeletingName="UsersRowDeleting" msprop:Generator_RowChangingName="UsersRowChanging" msprop:Generator_RowEvHandlerName="UsersRowChangeEventHandler" msprop:Generator_RowDeletedName="UsersRowDeleted" msprop:Generator_RowClassName="UsersRow" msprop:Generator_UserTableName="Users" msprop:Generator_RowEvArgName="UsersRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="UserId" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnUserId" msprop:Generator_ColumnPropNameInRow="UserId" msprop:Generator_ColumnPropNameInTable="UserIdColumn" msprop:Generator_UserColumnName="UserId" type="xs:int" />
@@ -211,7 +211,7 @@ GROUP BY votings.votingid,candidates.candidateid, users.lastname, users.firstnam
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="ResultsReport" msprop:Generator_TableClassName="ResultsReportDataTable" msprop:Generator_TableVarName="tableResultsReport" msprop:Generator_RowChangedName="ResultsReportRowChanged" msprop:Generator_TablePropName="ResultsReport" msprop:Generator_RowDeletingName="ResultsReportRowDeleting" msprop:Generator_RowChangingName="ResultsReportRowChanging" msprop:Generator_RowEvHandlerName="ResultsReportRowChangeEventHandler" msprop:Generator_RowDeletedName="ResultsReportRowDeleted" msprop:Generator_RowClassName="ResultsReportRow" msprop:Generator_UserTableName="ResultsReport" msprop:Generator_RowEvArgName="ResultsReportRowChangeEvent">
+        <xs:element name="ResultsReport" msprop:Generator_TableClassName="ResultsReportDataTable" msprop:Generator_TableVarName="tableResultsReport" msprop:Generator_TablePropName="ResultsReport" msprop:Generator_RowDeletingName="ResultsReportRowDeleting" msprop:Generator_RowChangingName="ResultsReportRowChanging" msprop:Generator_RowEvHandlerName="ResultsReportRowChangeEventHandler" msprop:Generator_RowDeletedName="ResultsReportRowDeleted" msprop:Generator_UserTableName="ResultsReport" msprop:Generator_RowChangedName="ResultsReportRowChanged" msprop:Generator_RowEvArgName="ResultsReportRowChangeEvent" msprop:Generator_RowClassName="ResultsReportRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="VotingId" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnVotingId" msprop:Generator_ColumnPropNameInRow="VotingId" msprop:Generator_ColumnPropNameInTable="VotingIdColumn" msprop:Generator_UserColumnName="VotingId" type="xs:int" />
@@ -240,7 +240,7 @@ GROUP BY votings.votingid,candidates.candidateid, users.lastname, users.firstnam
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="CertificateReport" msprop:Generator_TableClassName="CertificateReportDataTable" msprop:Generator_TableVarName="tableCertificateReport" msprop:Generator_RowChangedName="CertificateReportRowChanged" msprop:Generator_TablePropName="CertificateReport" msprop:Generator_RowDeletingName="CertificateReportRowDeleting" msprop:Generator_RowChangingName="CertificateReportRowChanging" msprop:Generator_RowEvHandlerName="CertificateReportRowChangeEventHandler" msprop:Generator_RowDeletedName="CertificateReportRowDeleted" msprop:Generator_RowClassName="CertificateReportRow" msprop:Generator_UserTableName="CertificateReport" msprop:Generator_RowEvArgName="CertificateReportRowChangeEvent">
+        <xs:element name="CertificateReport" msprop:Generator_TableClassName="CertificateReportDataTable" msprop:Generator_TableVarName="tableCertificateReport" msprop:Generator_TablePropName="CertificateReport" msprop:Generator_RowDeletingName="CertificateReportRowDeleting" msprop:Generator_RowChangingName="CertificateReportRowChanging" msprop:Generator_RowEvHandlerName="CertificateReportRowChangeEventHandler" msprop:Generator_RowDeletedName="CertificateReportRowDeleted" msprop:Generator_UserTableName="CertificateReport" msprop:Generator_RowChangedName="CertificateReportRowChanged" msprop:Generator_RowEvArgName="CertificateReportRowChangeEvent" msprop:Generator_RowClassName="CertificateReportRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="VotingId" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnVotingId" msprop:Generator_ColumnPropNameInRow="VotingId" msprop:Generator_ColumnPropNameInTable="VotingIdColumn" msprop:Generator_UserColumnName="VotingId" type="xs:int" />
@@ -271,7 +271,7 @@ GROUP BY votings.votingid,candidates.candidateid, users.lastname, users.firstnam
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="NoVote" msprop:Generator_TableClassName="NoVoteDataTable" msprop:Generator_TableVarName="tableNoVote" msprop:Generator_RowChangedName="NoVoteRowChanged" msprop:Generator_TablePropName="NoVote" msprop:Generator_RowDeletingName="NoVoteRowDeleting" msprop:Generator_RowChangingName="NoVoteRowChanging" msprop:Generator_RowEvHandlerName="NoVoteRowChangeEventHandler" msprop:Generator_RowDeletedName="NoVoteRowDeleted" msprop:Generator_RowClassName="NoVoteRow" msprop:Generator_UserTableName="NoVote" msprop:Generator_RowEvArgName="NoVoteRowChangeEvent">
+        <xs:element name="NoVote" msprop:Generator_TableClassName="NoVoteDataTable" msprop:Generator_TableVarName="tableNoVote" msprop:Generator_TablePropName="NoVote" msprop:Generator_RowDeletingName="NoVoteRowDeleting" msprop:Generator_RowChangingName="NoVoteRowChanging" msprop:Generator_RowEvHandlerName="NoVoteRowChangeEventHandler" msprop:Generator_RowDeletedName="NoVoteRowDeleted" msprop:Generator_UserTableName="NoVote" msprop:Generator_RowChangedName="NoVoteRowChanged" msprop:Generator_RowEvArgName="NoVoteRowChangeEvent" msprop:Generator_RowClassName="NoVoteRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="Cedula" msprop:Generator_ColumnVarNameInTable="columnCedula" msprop:Generator_ColumnPropNameInRow="Cedula" msprop:Generator_ColumnPropNameInTable="CedulaColumn" msprop:Generator_UserColumnName="Cedula">
@@ -298,7 +298,7 @@ GROUP BY votings.votingid,candidates.candidateid, users.lastname, users.firstnam
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="FacultadReport" msprop:Generator_TableClassName="FacultadReportDataTable" msprop:Generator_TableVarName="tableFacultadReport" msprop:Generator_TablePropName="FacultadReport" msprop:Generator_RowDeletingName="FacultadReportRowDeleting" msprop:Generator_RowChangingName="FacultadReportRowChanging" msprop:Generator_RowEvHandlerName="FacultadReportRowChangeEventHandler" msprop:Generator_RowDeletedName="FacultadReportRowDeleted" msprop:Generator_UserTableName="FacultadReport" msprop:Generator_RowChangedName="FacultadReportRowChanged" msprop:Generator_RowEvArgName="FacultadReportRowChangeEvent" msprop:Generator_RowClassName="FacultadReportRow">
+        <xs:element name="FacultadReport" msprop:Generator_TableClassName="FacultadReportDataTable" msprop:Generator_TableVarName="tableFacultadReport" msprop:Generator_RowChangedName="FacultadReportRowChanged" msprop:Generator_TablePropName="FacultadReport" msprop:Generator_RowDeletingName="FacultadReportRowDeleting" msprop:Generator_RowChangingName="FacultadReportRowChanging" msprop:Generator_RowEvHandlerName="FacultadReportRowChangeEventHandler" msprop:Generator_RowDeletedName="FacultadReportRowDeleted" msprop:Generator_RowClassName="FacultadReportRow" msprop:Generator_UserTableName="FacultadReport" msprop:Generator_RowEvArgName="FacultadReportRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="candidateid" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columncandidateid" msprop:Generator_ColumnPropNameInRow="candidateid" msprop:Generator_ColumnPropNameInTable="candidateidColumn" msprop:Generator_UserColumnName="candidateid" type="xs:int" />

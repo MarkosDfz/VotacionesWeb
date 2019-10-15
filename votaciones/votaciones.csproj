@@ -183,6 +183,7 @@
     <Compile Include="Classes\MailHelper.cs" />
     <Compile Include="Classes\Utilities.cs" />
     <Compile Include="Controllers\MVC\AccountController.cs" />
+    <Compile Include="Controllers\MVC\ErrorController.cs" />
     <Compile Include="Controllers\MVC\GroupsController.cs" />
     <Compile Include="Controllers\MVC\HomeController.cs" />
     <Compile Include="Controllers\MVC\ManageController.cs" />
@@ -281,25 +282,32 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\certificate.png" />
-    <Content Include="Content\Images\complete.png" />
-    <Content Include="Content\Images\conf.png" />
-    <Content Include="Content\Images\email.png" />
+    <Content Include="Content\Images\error403.png" />
+    <Content Include="Content\Images\error404.png" />
+    <Content Include="Content\Images\errorvoto.png" />
+    <Content Include="Content\Images\finalizo.png" />
+    <Content Include="Content\Images\forgot.png" />
     <Content Include="Content\Images\login.png" />
     <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\logo1.png" />
-    <Content Include="Content\Images\message.png" />
+    <Content Include="Content\Images\mail.png" />
+    <Content Include="Content\Images\mesa.png" />
     <Content Include="Content\Images\network.png" />
     <Content Include="Content\Images\newvote.png" />
-    <Content Include="Content\Images\noedit.png" />
     <Content Include="Content\Images\novote.png" />
+    <Content Include="Content\Images\password.png" />
+    <Content Include="Content\Images\pendientes.png" />
     <Content Include="Content\Images\question.png" />
     <Content Include="Content\Images\question1.png" />
+    <Content Include="Content\Images\repetido.png" />
     <Content Include="Content\Images\results.png" />
+    <Content Include="Content\Images\settings.png" />
     <Content Include="Content\Images\slide1.png" />
     <Content Include="Content\Images\slide2.png" />
     <Content Include="Content\Images\slide3.png" />
     <Content Include="Content\Images\userv.png" />
     <Content Include="Content\Images\voto.png" />
+    <Content Include="Content\Images\votook.png" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\Photos\admin.jpg" />
     <Content Include="Content\Photos\noimage.png" />
@@ -401,6 +409,8 @@
     <Content Include="Views\Votings\Error.cshtml" />
     <Content Include="Views\Votings\MyCertificates.cshtml" />
     <Content Include="Views\Votings\Error2.cshtml" />
+    <Content Include="Views\Error\PageNotFound.cshtml" />
+    <Content Include="Views\Votings\SuccessfulVote.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

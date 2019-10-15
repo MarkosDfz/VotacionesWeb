@@ -24,9 +24,11 @@
         <div class="col-sm-4" style="text-align:right">
             <br />
             <p>
-                @Html.ActionLink("Editar", "Edit", new { id = Model.GroupId }, new { @class = "btn btn-primary" })
-                @Html.ActionLink("Agregar Miembro", "AddMember", new { groupId = Model.GroupId }, new { @class = "btn btn-warning" })
-                @Html.ActionLink("Volver", "Index", new { }, new { @class = "btn btn-success" })
+                <div class="btn-group">
+                    @Html.ActionLink("Editar", "Edit", new { id = Model.GroupId }, new { @class = "btn btn-default" })
+                    @Html.ActionLink("Agregar Miembro", "AddMember", new { groupId = Model.GroupId }, new { @class = "btn btn-default" })
+                    @Html.ActionLink("Volver", "Index", new { }, new { @class = "btn btn-default" })
+                </div>
             </p>
         </div>
     </div>
@@ -42,42 +44,81 @@
 }
 else
 {
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => Model.Members[0].User.FullName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => Model.Members[0].User.UserName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => Model.Members[0].User.Photo)
-        </th>
-        <th>
-            Acción
-        </th>
-    </tr>
-
-    @for (int i = 0; i < Model.Members.Count; i++)
-     { 
+    <table class="table">
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => Model.Members[i].User.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => Model.Members[i].User.UserName)
-            </td>
-            <td>
-                @if (!string.IsNullOrEmpty(Model.Members[i].User.Photo))
-                {
-                    <img src="@Url.Content(Model.Members[i].User.Photo)" alt="Image" style="width:100px;height:100px;max-width:100%;border-radius:50%;" />
-                }
-            </td>
-            <td>
-                @Html.ActionLink("Eliminar", "DeleteMember", new { id = Model.Members[i].GroupMemberId }, new { @class = "btn btn-danger", onclick = "return confirm('¿Está seguro de eliminar a " + Model.Members[i].User.FullName + " del grupo?')" })
-            </td>
+            <th>
+                @Html.DisplayNameFor(model => Model.Members[0].User.FullName)
+            </th>
+            <th>
+                Correo
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.Members[0].User.Photo)
+            </th>
+            <th>
+                Acción
+            </th>
         </tr>
-     }
 
-</table>
+        @for (int i = 0; i < Model.Members.Count; i++)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.Members[i].User.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.Members[i].User.UserName)
+                </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(Model.Members[i].User.Photo))
+                    {
+                        <img src="@Url.Content(Model.Members[i].User.Photo)" alt="Image" style="width:100px;height:100px;max-width:100%;border-radius:50%;" />
+                    }
+                </td>
+                <td>
+                    <input type="button" class="btn btn-danger" value="Eliminar" onclick="miembro(@Model.Members[i].GroupMemberId,'@Model.Members[i].User.FullName')" />
+                </td>
+            </tr>
+        }
+
+    </table>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css">
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="https://kit.fontawesome.com/bf44875ae6.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+
+    <script>
+
+        function miembro(id,n) {
+            $.confirm({
+                title: 'Eliminar Miembro',
+                icon: 'fas fa-times-circle',
+                type: 'red',
+                closeIcon: true,
+                draggable: false,
+                animation: 'scale',
+                theme: 'modern',
+                content: '¿Está seguro de eliminar a<b> ' + n + '</b> del grupo?',
+                buttons: {
+                    Eliminar: {
+                        btnClass: 'btn-red',
+                        action: function () {
+                            location.href = '@Url.Action("DeleteMember", "Groups", new {id = "ID"})'.replace("ID", parseInt(id));
+
+                        }
+                    },
+                    Cancelar: {
+                        btnClass: 'btn-blue',
+
+                    }
+                }
+            });
+        }
+    </script>
 }

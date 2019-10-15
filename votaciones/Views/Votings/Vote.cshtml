@@ -44,6 +44,7 @@
                     @Html.DisplayFor(model => model.DateTimeEnd)
                 </dd>
             </dl>
+            <img src="~/Content/Images/mesa.png" class="img-responsive" style="margin-left: auto; margin-right: auto; display: block; width:450px; height:450px; max-width:100%" />
             <br />
             @Html.ActionLink("Volver a mis votaciones", "MyVotings", new { }, new { @class = "btn btn-success" })
         </div>
@@ -56,22 +57,24 @@
         {
             <table class="table">
                 <tr>
-                    <th>
+                    <th style="border-top:none;padding-top:0">
                         Nombre
                     </th>
-                    <th>
+                    <th style="border-top:none">
 
                     </th>
-                    <th></th>
+                    <th style="border-top:none">
+
+                    </th>
                 </tr>
 
                 @for (int i = 0; i < Model.MyCandidates.Count; i++)
                 {
                     <tr>
-                        <td style="vertical-align:middle">
+                        <td style="vertical-align:middle; font-style:italic; font-size:larger">
 
                             @Html.DisplayFor(modelItem => Model.MyCandidates[i].User.FullName)<br />
-                            Grupo: @Html.DisplayFor(modelItem => Model.MyCandidates[i].User.Group)
+                            @Html.DisplayFor(modelItem => Model.MyCandidates[i].User.Group)
                         </td>
                         <td>
                             @if (!string.IsNullOrEmpty(Model.MyCandidates[i].User.Photo))
@@ -80,11 +83,12 @@
                             }
                         </td>
                         <td style="vertical-align:middle">
-                            @using (Html.BeginForm("VoteForCandidate", "Votings", FormMethod.Post))
+                            @using (Html.BeginForm("VoteForCandidate", "Votings", FormMethod.Post, new { enctype = "multipart/form-data", id = "formAddCandidate" + @Model.MyCandidates[i].CandidateId }))
                             {
                                 <input type="hidden" id="candidateId" name="candidateId" value="@Model.MyCandidates[i].CandidateId" />
                                 <input type="hidden" id="votingId" name="votingId" value="@Model.VotingId" />
-                                <input type="submit" value="Votar" class="btn btn-primary" onclick="@string.Format("return confirm('¿Está seguro de votar por {0}?');", Model.MyCandidates[i].User.FullName)" />
+
+                                <input type="button" value="Votar" class="btn btn-primary" onclick="votar(@Model.MyCandidates[i].CandidateId,'@Model.MyCandidates[i].User.FullName')" />     
                             }
                         </td>
 
@@ -100,3 +104,41 @@
         }
     </div>
 </div>
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css">
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="https://kit.fontawesome.com/bf44875ae6.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+    <script>
+        function votar(id,n) {
+            $.confirm({
+                title: 'Confirmar Voto',
+                icon: 'fas fa-vote-yea',
+                type: 'blue',
+                closeIcon: true,
+                draggable: false,
+                animation: 'scale',
+                theme: 'modern',
+                content: '¿Está seguro de votar por<b> ' + n + '</b>?',
+                buttons: {
+                    Votar: {
+                        btnClass: 'btn-blue',
+                        action: function () {
+                            $(`#formAddCandidate${id}`).submit();
+
+                        }
+                    },
+                    Cancelar: {
+                        btnClass: 'btn-red',
+
+                    }
+                }
+            });
+        }      
+    </script>
+}

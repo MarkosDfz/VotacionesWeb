@@ -11,6 +11,6 @@ namespace votaciones.Models
         public int VotingId { get; set; }
 
         [Required(ErrorMessage = "Debe seleccionar un usuario")]
-        public int UserId { get; set; }
+        public int[] UserId { get; set; }
     }
 }

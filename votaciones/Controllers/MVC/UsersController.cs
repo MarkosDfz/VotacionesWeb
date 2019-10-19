@@ -1,6 +1,7 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -14,7 +15,6 @@ using System.Web;
 using System.Web.Mvc;
 using votaciones.Classes;
 using votaciones.Models;
-using PagedList;
 
 namespace votaciones.Controllers
 {
@@ -39,11 +39,97 @@ namespace votaciones.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public ActionResult DOC()
+        public ActionResult ImportData()
         {
-            var report = this.GenerateUserReport();
-            var stream = report.ExportToStream(CrystalDecisions.Shared.ExportFormatType.WordForWindows);
-            return File(stream, "application/doc,", "Usuarios.doc");
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public ActionResult Import(HttpPostedFileBase excelfile)
+        {
+            if (excelfile == null || excelfile.ContentLength == 0)
+            {
+                ViewBag.Error = "Por favor seleccione un archivo Excel<br/>";
+                return View("Index");
+            }
+            else
+            {
+                if (excelfile.FileName.EndsWith("xls") || excelfile.FileName.EndsWith("xlsx"))
+                {
+                    string doc = string.Empty;
+                    doc = Path.GetFileName(excelfile.FileName);
+                    string path = Server.MapPath("~/Content/Data/" + doc);
+                    if (System.IO.File.Exists(path))
+                        System.IO.File.Delete(path);
+                    excelfile.SaveAs(path);
+
+                    // Leer datos del excel
+                    var package = new ExcelPackage(new FileInfo(path));
+                    ExcelWorksheet workSheet = package.Workbook.Worksheets[1];
+                    var range = workSheet.Dimension.Rows;
+                    for (int row = 4; row <= range; row++)
+                    {
+                        User u = new User();
+
+                        u.UserName = workSheet.Cells[row, 1].Value.ToString();
+                        u.LastName = workSheet.Cells[row, 2].Value.ToString();
+                        u.FirstName = workSheet.Cells[row, 3].Value.ToString();
+                        u.Cedula = workSheet.Cells[row, 4].Value.ToString();
+                        u.Adress = workSheet.Cells[row, 5].Value.ToString();
+                        u.Facultad = workSheet.Cells[row, 6].Value.ToString();
+                        u.Group = null;
+                        u.Photo = "~/Security/Content/Photos/noimage.png";
+
+                        var userview = new UserView
+                        {
+                            UserName = u.UserName,
+                        };
+
+                        var repetido = false;
+
+                        var user = db.Users
+                            .Where(nu => nu.UserName == u.UserName)
+                            .FirstOrDefault();
+
+                        if (user != null)
+                        {
+                            repetido = true;
+                        }
+
+                        if (!repetido)
+                        {
+                            db.Users.Add(u);
+
+                            try
+                            {
+                                db.SaveChanges();
+                                Utilities.CreateASPUser(userview);
+                            }
+                            catch (Exception ex)
+                            {
+                                ModelState.AddModelError(string.Empty, ex.Message);
+                                return View("ImportData");
+                            }
+                        }
+                    }
+
+                    TempData["DataOk"] = "* Usuarios importados correctamente";
+                    return View("ImportData");
+                }
+                else
+                {
+                    ViewBag.Error = "El tipo de archivo es incorrecto<br/>";
+                    return View("ImportData");
+                }
+            }
+        }
+
+        [Authorize(Roles = "Admin")]
+        public virtual ActionResult DownloadFile()
+        {
+            string fullPath = Path.Combine(Server.MapPath("~/Content/Formato/users.xlsx"));
+            return File(fullPath, "application/octet-stream", "users.xlsx");
         }
 
         private ReportClass GenerateUserReport()
@@ -203,7 +289,7 @@ namespace votaciones.Controllers
             }
 
             var j = (from itm in usersView
-                     where itm.UserName == "empate@empate.com"
+                     where itm.UserName == "votacionempatada"
                      select itm)
                   .FirstOrDefault();
             usersView.Remove(j);

@@ -44,7 +44,7 @@ namespace votaciones.Controllers
 
             var stad = db.States.Count();
 
-            if (stad > 0)
+            if (stad > 1)
             {
                 if (st.Description == state.Description)
                 {

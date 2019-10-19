@@ -40,27 +40,44 @@ namespace votaciones.Controllers
                 return View(view);
             }
 
-            var member = db.GroupMembers
-                .Where(gm => gm.GroupId == view.GroupId && gm.UserId == view.UserId)
-                .FirstOrDefault();
-
-            if (member != null)
+            foreach (var user in view.UserId)
             {
-                ViewBag.UserId = new SelectList(db.Users.Where(x => x.UserName != "empate@empate.com" && x.UserName != "votonulo")
-                .OrderBy(u => u.FirstName)
-                .ThenBy(u => u.LastName), "UserId", "FullName");
-                ModelState.AddModelError(string.Empty, "El miembro ya pertenece al grupo");
-                return View(view);
+                var member = db.GroupMembers
+                    .Where(gm => gm.GroupId == view.GroupId && gm.UserId == user)
+                    .FirstOrDefault();
+
+                var repetido = false;
+
+                if (member != null)
+                {
+                    if ( view.UserId.Count() == 1 )
+                    {
+                        ViewBag.UserId = new SelectList(db.Users.Where(x => x.UserName != "votacionempatada" && x.UserName != "votonulo")
+                        .OrderBy(u => u.FirstName)
+                        .ThenBy(u => u.LastName), "UserId", "FullName");
+                        ModelState.AddModelError(string.Empty, "El miembro ya pertenece al grupo");
+                        return View(view);
+                    }
+                    else
+                    {
+                        repetido = true;
+                    }
+                }
+            
+                if (!repetido)
+                {
+                    member = new GroupMember
+                    {
+                        GroupId = view.GroupId,
+                        UserId = user,
+                    };
+
+                    db.GroupMembers.Add(member);
+                    db.SaveChanges();
+                }
+                
             }
 
-            member = new GroupMember
-            {
-                GroupId = view.GroupId,
-                UserId = view.UserId,
-            };
-
-            db.GroupMembers.Add(member);
-            db.SaveChanges();
             return RedirectToAction(string.Format("Details/{0}",view.GroupId));
 
         }
@@ -69,7 +86,7 @@ namespace votaciones.Controllers
         [HttpGet]
         public ActionResult AddMember(int groupId)
         {
-            ViewBag.UserId = new SelectList(db.Users.Where(x => x.UserName != "empate@empate.com" && x.UserName != "votonulo")
+            ViewBag.UserId = new SelectList(db.Users.Where(x => x.UserName != "votacionempatada" && x.UserName != "votonulo")
                 .OrderBy(u => u.FirstName)
                 .ThenBy(u => u.LastName), "UserId", "FullName");
             var view = new AddMemberView

@@ -90,19 +90,19 @@ namespace votaciones
 
             var user = db.Users
                 .Where(u => u.UserName.ToLower()
-                .Equals("empate@empate.com"))
+                .Equals("votacionempatada"))
                 .FirstOrDefault();
 
             if (user == null)
             {
                 user = new User
                 {
-                    Adress = "Latacunga",
+                    Adress = "null",
                     FirstName = "Empatada",
                     LastName = "Votación",
                     Facultad = "null",
                     Cedula = "0000000000",
-                    UserName = "empate@empate.com",
+                    UserName = "votacionempatada",
                     Photo = "~/Security/Content/Photos/balance.png",
                 };
 

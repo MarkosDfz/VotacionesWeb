@@ -42,7 +42,7 @@ namespace votaciones.Controllers
                         voting.StateId = state.StateId;
 
                         var draw = db.Users
-                        .Where(c => c.UserName == "empate@empate.com")
+                        .Where(c => c.UserName == "votacionempatada")
                         .FirstOrDefault();
                         voting.CandidateWinId = draw.UserId;
 
@@ -390,10 +390,10 @@ namespace votaciones.Controllers
             }
 
             var state = Utilities.GetState("Abierta");
-
+            var time = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time"));
             var votings = db.Votings
-                .Where(v => v.DateTimeStart <= DateTime.Now &&
-                            v.DateTimeEnd >= DateTime.Now)
+                .Where(v => v.DateTimeStart <= time &&
+                            v.DateTimeEnd >= time)
                             .Include(v => v.Candidates)
                             .Include(v => v.VotingGroups)
                             .Include(v => v.State)
@@ -496,35 +496,50 @@ namespace votaciones.Controllers
         {
             if (ModelState.IsValid)
             {
-                var candidate = db.Candidates
-                    .Where(c => c.VotingId == view.VotingId &&
-                                c.UserId == view.UserId)
-                    .FirstOrDefault();
 
-                if (candidate != null)
+                foreach (var user in view.UserId)
                 {
-                    ModelState.AddModelError(string.Empty, "El candidato ya pertenece a la votación");
-                    ViewBag.UserId = new SelectList(db.Users.Where(x => x.UserName != "empate@empate.com")
-                    .OrderBy(u => u.FirstName)
-                    .ThenBy(u => u.LastName), "UserId", "FullName");
+                    var candidate = db.Candidates
+                        .Where(c => c.VotingId == view.VotingId &&
+                                    c.UserId == user)
+                        .FirstOrDefault();
 
-                    return View(view);
+                    var repetido = false;
+
+                    if (candidate != null)
+                    {
+                        if ( view.UserId.Count() == 1 )
+                        {
+                            ModelState.AddModelError(string.Empty, "El candidato ya pertenece a la votación");
+                            ViewBag.UserId = new SelectList(db.Users.Where(x => x.UserName != "votacionempatada")
+                            .OrderBy(u => u.FirstName)
+                            .ThenBy(u => u.LastName), "UserId", "FullName");
+                            return View(view);
+                        }
+                        else
+                        {
+                            repetido = true;
+                        }
+                    }
+
+                    if (!repetido)
+                    {
+                        candidate = new Candidate
+                        {
+                            UserId = user,
+                            VotingId = view.VotingId,
+                        };
+
+                        db.Candidates.Add(candidate);
+                        db.SaveChanges();
+                    }
                 }
 
-                candidate = new Candidate
-                {
-                    UserId = view.UserId,
-                    VotingId = view.VotingId,
-
-                };
-
-                db.Candidates.Add(candidate);
-                db.SaveChanges();
                 return RedirectToAction(string.Format("Details/{0}", view.VotingId));
 
             }
 
-            ViewBag.UserId = new SelectList(db.Users.Where(x => x.UserName != "empate@empate.com")
+            ViewBag.UserId = new SelectList(db.Users.Where(x => x.UserName != "votacionempatada")
                     .OrderBy(u => u.FirstName)
                     .ThenBy(u => u.LastName), "UserId", "FullName");
 
@@ -540,7 +555,7 @@ namespace votaciones.Controllers
 
             };
 
-             ViewBag.UserId = new SelectList(db.Users.Where(x => x.UserName != "empate@empate.com")
+             ViewBag.UserId = new SelectList(db.Users.Where(x => x.UserName != "votacionempatada")
                     .OrderBy(u => u.FirstName)
                     .ThenBy(u => u.LastName), "UserId", "FullName");
 

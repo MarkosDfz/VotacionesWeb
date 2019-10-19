@@ -20,7 +20,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.UserId, "Usuario", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("UserId", null, "", htmlAttributes: new { @class = "form-control select-user" })
+                @Html.DropDownList("UserId", null, "", htmlAttributes: new { @class = "form-control select-user", multiple = "multiple" }) &nbsp;
                 @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -46,10 +46,8 @@
     <script>
 
         $('.select-user').select2({
-            placeholder: "Buscar candidato",
-            minimumInputLength: 2,
+            minimumInputLength: 5,
             language: "es",
-
         });
 
     </script>

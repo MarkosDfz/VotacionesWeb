@@ -79,14 +79,7 @@
             <td style="vertical-align:middle">
                 <div class="btn-group">
                     <input type="button" class="btn btn-default btn-sm" value="Opciones" onclick="opciones(@item.VotingId,'@item.Description')" />
-                    @if (item.IsForAllUsers == true)
-                    {
-                        <input type="button" target="_blank" class="btn btn-default btn-sm" value="Reportes" onclick="reportes(@item.VotingId,'@item.Description')" />
-                    }
-                    else
-                    {
-                        @Html.ActionLink("Resultados", "ShowResults", new { id = item.VotingId }, new { @class= "btn btn-default btn-sm", target = "_blank" })
-                    }
+                    <input type="button" target="_blank" class="btn btn-default btn-sm" value="Reportes" onclick="reportes(@item.VotingId,'@item.Description')" />
                 </div>
             </td>
         </tr>
@@ -216,10 +209,10 @@
                             window.open('@Url.Action("ShowResults", "Votings", new {id = "ID" })'.replace("ID", parseInt(id)));
                         }
                     },
-                    Facultad: {
+                    Curso: {
                         btnClass: 'btn-purple',
                         action: function () {
-                            window.open('@Url.Action("ShowFacultadResults", "Votings", new {id = "ID"})'.replace("ID", parseInt(id)));
+                            window.open('@Url.Action("ShowCursoResults", "Votings", new {id = "ID"})'.replace("ID", parseInt(id)));
                         }
                     },
                     Faltantes: {

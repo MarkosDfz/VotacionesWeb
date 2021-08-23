@@ -4,62 +4,27 @@
     ViewBag.Title = "Inicio";
 }
 
-<style>
-    .item {
-        width: 100%;
-        height: 400px;
-        background-size: contain;
-        background-position: center;
-        background-repeat: no-repeat;
-    }
-
-    .carousel-control-prev-icon {
-        background-image: url('https://apufpel.com.br/assets/img/seta_prim.png')
-    }
-
-    .carousel-control {
-        background-image: url('https://apufpel.com.br/assets/img/seta_ult.png')
-    }
-
-    .carousel .carousel-indicators li {
-        background-color: gray;
-    }
-
-        .carousel .carousel-indicators li.active {
-            background-color: black;
-        }
-</style>
-
-<div class="container">
+<div class="jumbotron">
     <div class="row">
-
-        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-            <ol class="carousel-indicators">
-                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-            </ol>
-            <div class="carousel-inner">
-                <div class="item active" style="background-image:url('/Content/Images/slide1.png')">
-                </div>
-                <div class="item" style="background-image:url('/Content/Images/slide2.png')">
-                </div>
-                <div class="item" style="background-image:url('/Content/Images/slide3.png')">
-                </div>
-            </div>
-            <a href="#carouselExampleIndicators" class="carousel-control left" data-slide="prev">
-                <span class="glyphicon glyphicon-chevron-left"></span>
-            </a>
-            <a href="#carouselExampleIndicators" class="carousel-control right" data-slide="next">
-                <span class="glyphicon glyphicon-chevron-right"></span>
-            </a>
+        <div class="col-md-6">
+            <h1>Votaciones</h1>
+            <p class="lead">Sistema de votaciones estudiantiles</p>
+            @if (!this.User.IsInRole("Admin") && !this.User.IsInRole("User"))
+            {
+                <br />
+                <p class="text-danger" , style="text-align:justify">Para utilizar el sistema por favor Inicie Sesión. </p>
+            }
+            else
+            {
+                <br />
+                <p class="text-danger" , style="text-align:justify"><i>“El oro del sabio está en su palabra porque es luz y verdad para los cuerdos” </i></p>
+            }
         </div>
-
+        <div class="col-md-6">
+            <img src="~/Content/Images/logo.png" class="img-responsive" style="margin-left: auto;margin-right: auto;display: block;width:300px;height:300px;max-width:100%;" />
+        </div>
     </div>
-
 </div>
-
-<br />
 
 @if (!this.User.IsInRole("Admin") && !this.User.IsInRole("User"))
 {
@@ -67,23 +32,22 @@
         <div class="col-md-4">
             <h2>Iniciar Sesión</h2>
             <p>Ingresa con tus credenciales en el sistema.</p>
-            @Html.ActionLink("Iniciar Sesión", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "btn btn-primary" })
-            <img src="~/Content/Images/login.png" style="width:150px; height:150px; max-width:100%" />
+            @Html.ActionLink("Iniciar Sesión", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "btn btn-primary" }) &nbsp;&nbsp;
+            <a href="/Account/Login"><img src="~/Content/Images/login.png" style="width:150px; height:150px; max-width:100%" /></a>
 
         </div>
         <div class="col-md-4">
             <h2>Resultados</h2>
             <p>Mira los resultados de las votaciones.</p>
             @Html.ActionLink("Resultados", "Results", "Votings", new { }, new { @class = "btn btn-warning" })
-            <img src="~/Content/Images/results.png" style="width:150px; height:150px; max-width:100%" />
+            <a href="/Votings/Results"><img src="~/Content/Images/results.png" style="width:150px; height:150px; max-width:100%" /></a>
 
         </div>
         <div class="col-md-4">
-            <h2>Recuperar Contraseña</h2>
-            <p>¿Olvidaste tu contraseña? Recuperala aquí.</p>
-            @Html.ActionLink("Recuperar Contraseña", "ForgotPassword", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "btn btn-info" })
-            <img src="~/Content/Images/question1.png" style="width:150px; height:150px; max-width:100%" />
-
+            <h2>Propuestas Electorales</h2>
+            <p>Conoce la propuestas que tinen los candidatos para tí.</p>
+            @Html.ActionLink("Propuestas", "DownloadPropuesta", "Votings", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "btn btn-info" }) &nbsp;&nbsp;
+            <img src="~/Content/Images/propuestas.png" style="width:150px; height:150px; max-width:100%" />
         </div>
     </div>
 }
@@ -96,22 +60,19 @@ else
                 <h2>Grupos de Votación</h2>
                 <p>Gestiona los grupos de Votación del sistema.</p>
                 @Html.ActionLink("Grupos", "Index", "Groups", new { }, new { @class = "btn btn-primary" })
-                <img src="~/Content/Images/network.png" style="width:150px; height:150px; max-width:100%" />
-
+                <a href="/Groups"><img src="~/Content/Images/network.png" style="width:150px; height:150px; max-width:100%" /></a>
             </div>
             <div class="col-md-4">
                 <h2>Usuarios del Sistema</h2>
                 <p>Gestiona todos los usuarios en el sistema.</p>
                 @Html.ActionLink("Usuarios", "Index", "Users", new { }, new { @class = "btn btn-warning" })
-                <img src="~/Content/Images/userv.png" style="width:150px; height:150px; max-width:100%" />
-
+                <a href="/Users"><img src="~/Content/Images/userv.png" style="width:150px; height:150px; max-width:100%" /></a>
             </div>
             <div class="col-md-4">
                 <h2>Votaciones Electorales</h2>
                 <p>Gestiona las votaciones del sistema.</p>
-                @Html.ActionLink("Votaciones ", "Index", "Votings", new { }, new { @class = "btn btn-info" })
-                <img src="~/Content/Images/newvote.png" style="width:150px; height:150px; max-width:100%" />
-
+                @Html.ActionLink("Votaciones ", "Index", "Votings", new { }, new { @class = "btn btn-info" }) &nbsp;&nbsp;
+                <a href="/Votings"><img src="~/Content/Images/newvote.png" style="width:150px; height:150px; max-width:100%" /></a>
             </div>
         </div>
     }
@@ -121,24 +82,67 @@ else
             <div class="col-md-4">
                 <h2>Mis Certificados</h2>
                 <p>Encuentra aquí tus certificados de votación.</p>
-                @Html.ActionLink("Certificados", "MyCertificates", "Votings", new { }, new { @class = "btn btn-primary" })
-                <img src="~/Content/Images/certificate.png" style="width:150px; height:150px; max-width:100%" />
-
+                @Html.ActionLink("Certificados", "MyCertificates", "Votings", new { }, new { @class = "btn btn-primary" }) &nbsp;&nbsp;
+                <a href="/Votings/MyCertificates"><img src="~/Content/Images/certificate.png" style="width:150px; height:150px; max-width:100%" /></a>
             </div>
             <div class="col-md-4">
                 <h2>Mis Votaciones</h2>
                 <p>Vota por los candidatos de tu preferencia.</p>
                 @Html.ActionLink("Mis Votaciones", "MyVotings", "Votings", new { }, new { @class = "btn btn-warning" })
-                <img src="~/Content/Images/voto.png" style="width:150px; height:150px; max-width:100%" />
-
+                <a href="/Votings/MyVotings"><img src="~/Content/Images/voto.png" style="width:150px; height:150px; max-width:100%" /></a>
             </div>
             <div class="col-md-4">
                 <h2>Resultados</h2>
                 <p>Mira los resultados de las votaciones.</p>
                 @Html.ActionLink("Resultados", "Results", "Votings", new { }, new { @class = "btn btn-info" })
-                <img src="~/Content/Images/results.png" style="width:150px; height:150px; max-width:100%" />
-
+                <a href="/Votings/Results"><img src="~/Content/Images/results.png" style="width:150px; height:150px; max-width:100%" /></a>
             </div>
         </div>
+
+
     }
+}
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css">
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="https://kit.fontawesome.com/bf44875ae6.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+
+
+    <script>
+        var userRole = '@(this.User.IsInRole("User") ? "true" : "false")';
+        var sesion = '@Session["modal"]';
+
+        var jc = $.confirm({
+            title: 'Cambiar Contraseña',
+            icon: 'fas fa-key',
+            type: 'blue',
+            closeIcon: true,
+            draggable: false,
+            lazyOpen: true,
+            animation: 'scale',
+            theme: 'modern',
+            content: 'Como medida de seguridad le sugerimos que cambie su clave de acceso al sistema',
+            buttons: {
+                Cambiar: {
+                    btnClass: 'btn-blue',
+                    action: function () {
+                        location.href = '@Url.Action("ChangePassword", "Manage")';
+                    }
+                },
+                Ignorar: {
+                    btnClass: 'btn-red',
+                }
+            }
+        });
+
+        if (userRole == 'true' && sesion == 'True') {
+            jc.open();
+        }
+
+    </script>
 }

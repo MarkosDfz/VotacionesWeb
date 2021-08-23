@@ -52,7 +52,8 @@ namespace votaciones.Controllers
                 {
                     if ( view.UserId.Count() == 1 )
                     {
-                        ViewBag.UserId = new SelectList(db.Users.Where(x => x.UserName != "votacionempatada" && x.UserName != "votonulo")
+                        ViewBag.UserId = new SelectList(db.Users.Where(x => x.Cedula != "0000000000" && x.Cedula != "0000000001"
+                                                        && x.Cedula != "0000000002" && x.Cedula != "0000000003")
                         .OrderBy(u => u.FirstName)
                         .ThenBy(u => u.LastName), "UserId", "FullName");
                         ModelState.AddModelError(string.Empty, "El miembro ya pertenece al grupo");
@@ -86,7 +87,8 @@ namespace votaciones.Controllers
         [HttpGet]
         public ActionResult AddMember(int groupId)
         {
-            ViewBag.UserId = new SelectList(db.Users.Where(x => x.UserName != "votacionempatada" && x.UserName != "votonulo")
+            ViewBag.UserId = new SelectList(db.Users.Where(x => x.Cedula != "0000000000" && x.Cedula != "0000000001"
+                                            && x.Cedula != "0000000002" && x.Cedula != "0000000003")
                 .OrderBy(u => u.FirstName)
                 .ThenBy(u => u.LastName), "UserId", "FullName");
             var view = new AddMemberView
@@ -120,7 +122,7 @@ namespace votaciones.Controllers
             {
                 GroupId = group.GroupId,
                 Description = group.Description,
-                Members = group.GroupMembers.ToList(),
+                Members = group.GroupMembers.OrderBy(g => g.User.FullName).ToList()
             };
 
             return View(view);
@@ -150,10 +152,13 @@ namespace votaciones.Controllers
 
                 if ( gru > 0)
                 {
-                    if (gr.Description == group.Description)
+                    if (gr != null)
                     {
-                        ModelState.AddModelError(string.Empty, "El grupo ya existe");
-                        return View();
+                        if (gr.Description == group.Description)
+                        {
+                            ModelState.AddModelError(string.Empty, "El grupo ya existe");
+                            return View();
+                        }
                     }
                 }
 

@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - Votaciones UTC</title>
+    <title>@ViewBag.Title - U.E. José Mejía Lequerica</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @RenderSection("Styles", false)
@@ -32,6 +32,7 @@
                             <ul class="dropdown-menu">
                                 <li>@Html.ActionLink("Estados", "Index", "States")</li>
                                 <li>@Html.ActionLink("Grupos", "Index", "Groups")</li>
+                                <li>@Html.ActionLink("Propuestas", "Propuesta", "Votings")</li>
                                 <li>@Html.ActionLink("Usuarios", "Index", "Users")</li>
                                 <li>@Html.ActionLink("Votaciones", "Index", "Votings")</li>
                             </ul>
@@ -49,8 +50,6 @@
                             </ul>
                         </li>
                      }
-                    
-
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -60,7 +59,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Votaciones UTC</p>
+            <p>&copy; @DateTime.Now.Year - Votaciones Dfz-Code</p>
         </footer>
     </div>
 

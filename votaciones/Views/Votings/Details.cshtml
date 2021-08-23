@@ -83,12 +83,18 @@
 </div>
 <p>
     @Html.ActionLink("Editar", "Edit", new { id = Model.VotingId }, new { @class = "btn btn-primary" })
-    @if (!Model.IsForAllUsers)
+    @if (Model.State.Description != "Cerrada")
     {
-        @Html.ActionLink("Añadir Grupo", "AddGroup", new { id = Model.VotingId }, new { @class = "btn btn-warning" })
+        if (!Model.IsForAllUsers)
+        {
+            @Html.ActionLink("Añadir Grupo", "AddGroup", new { id = Model.VotingId }, new { @class = "btn btn-warning" })
+        }
+    }
+    @if (Model.State.Description != "Cerrada")
+    {
+        @Html.ActionLink("Añadir Candidato", "AddCandidate", new { id = Model.VotingId }, new { @class = "btn btn-info" })
     }
 
-    @Html.ActionLink("Añadir Candidato", "AddCandidate", new { id = Model.VotingId }, new { @class = "btn btn-info" })
     @Html.ActionLink("Volver", "Index", new { }, new { @class = "btn btn-success" })
 </p>
 
@@ -109,11 +115,14 @@
                     @for (int i = 0; i < Model.VotingGroups.Count; i++)
                     {
                         <tr>
-                            <td>
+                            <td style="vertical-align:middle">
                                 @Html.DisplayFor(modelItem => modelItem.VotingGroups[i].Group.Description)
                             </td>
-                            <td>
-                                <input type="button" class="btn btn-danger" value="Eliminar" onclick="grupo(@Model.VotingGroups[i].VotingGroupId,'@Model.VotingGroups[i].Group.Description')" />
+                            <td style="vertical-align:middle">
+                                @if (Model.State.Description != "Cerrada")
+                                {
+                                    <input type="button" class="btn btn-danger" value="Eliminar" onclick="grupo(@Model.VotingGroups[i].VotingGroupId,'@Model.VotingGroups[i].Group.Description')" />
+                                }
                             </td>
                         </tr>
                     }
@@ -139,7 +148,7 @@
                         <th>
                             @Html.DisplayNameFor(model => Model.Candidates[0].User.Group)
                         </th>
-                        <th>
+                        <th style="padding-left: 20px;">
                             @Html.DisplayNameFor(model => Model.Candidates[0].User.Photo)
                         </th>
                         <th></th>
@@ -148,20 +157,23 @@
                     @for (int i = 0; i < Model.Candidates.Count; i++)
                     {
                         <tr>
-                            <td>
+                            <td style="vertical-align:middle">
                                 @Html.DisplayFor(modelItem => Model.Candidates[i].User.FullName)
                             </td>
-                            <td>
+                            <td style="vertical-align:middle">
                                 @Html.DisplayFor(modelItem => Model.Candidates[i].User.Group)
                             </td>
-                            <td>
+                            <td style="vertical-align:middle">
                                 @if (!string.IsNullOrEmpty(Model.Candidates[i].User.Photo))
                                 {
-                                    <img src="@Url.Content(Model.Candidates[i].User.Photo)" alt="Image" style="width:100px;height:100px;max-width:100%;" />
+                                    <img src="@Url.Content(Model.Candidates[i].User.Photo)" alt="Image" style="width:60px;height:60px;max-width:100%;border-radius:50%;" />
                                 }
                             </td>
-                            <td>
-                                <input type="button" class="btn btn-danger" value="Eliminar" onclick="candidado(@Model.Candidates[i].CandidateId,'@Model.Candidates[i].User.FullName')" />
+                            <td style="vertical-align:middle">
+                                @if (Model.State.Description != "Cerrada")
+                                {
+                                    <input type="button" class="btn btn-danger" value="Eliminar" onclick="candidado(@Model.Candidates[i].CandidateId,'@Model.Candidates[i].User.FullName')" />
+                                }
                             </td>
                         </tr>
                     }

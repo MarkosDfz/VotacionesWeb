@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.Entity;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -18,58 +19,184 @@ namespace votaciones.Controllers
     {
         private DemocracyContext db = new DemocracyContext();
         private DemocracyContext db2 = new DemocracyContext();
+        private DemocracyContext db3 = new DemocracyContext();
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult Propuesta()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public ActionResult ImportPropuestas(HttpPostedFileBase pdffile)
+        {
+            if (pdffile == null || pdffile.ContentLength == 0)
+            {
+                ViewBag.Error = "Por favor seleccione un archivo Pdf<br/>";
+                return View("Index");
+            }
+            else
+            {
+                if (pdffile.FileName.EndsWith("pdf"))
+                {
+                    string doc = string.Empty;
+                    doc = "propuesta.pdf";
+                    string path = Server.MapPath("~/Content/Data/" + doc);
+                    if (System.IO.File.Exists(path))
+                        System.IO.File.Delete(path);
+                    pdffile.SaveAs(path);
+
+                    TempData["DataPdf"] = "* Propuesta importada correctamente";
+                    return View("Propuesta");
+                }
+                else
+                {
+                    ViewBag.Error = "El tipo de archivo es incorrecto<br/>";
+                    return View("Propuesta");
+                }
+            }
+        }
+
+        public virtual ActionResult DownloadPropuesta()
+        {
+            string fullPath = Path.Combine(Server.MapPath("~/Content/Data/propuesta.pdf"));
+            return File(fullPath, "application/octet-stream", "propuesta.pdf");
+        }
 
         [Authorize(Roles = "Admin")]
         public ActionResult Close(int id)
         {
-            var voting = db.Votings.Find(id);
-            if (voting != null)
-            {
-                var candidate = db.Candidates
-                    .Where(c => c.VotingId == voting.VotingId)
-                    .OrderByDescending(c => c.QuantityVotes)
-                    .FirstOrDefault();
+            var voting = db3.Votings.Find(id);
 
-                if ( voting.Candidates.Count > 1 )
+            
+                var us = db3.Users.Where(u => u.Cedula == "0000000003").FirstOrDefault();
+
+                if (us != null)
                 {
-                    var candidate1 = db.Candidates
-                            .Where(c => c.VotingId == voting.VotingId)
-                            .OrderByDescending(c => c.QuantityVotes).Take(2).Skip(1).FirstOrDefault();
+                    int[] use = new int[1];
+                    use[0] = us.UserId;
 
-                    if (candidate.QuantityVotes == candidate1.QuantityVotes)
+                    var ccs = new AddCandidateView
+                    {
+                        UserId = use,
+                        VotingId = voting.VotingId
+                    };
+
+                    AddCandidate(ccs);
+
+                    var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+                    var connection = new SqlConnection(connectionString);
+                    var sql = @"SELECT Count(LastName) - 4 FROM Users
+                                WHERE  Users.UserId NOT IN (SELECT VotingDetails.UserId
+                                FROM    Votings INNER JOIN VotingDetails ON Votings.VotingId = VotingDetails.VotingId
+                                INNER JOIN Users ON VotingDetails.UserId = Users.UserId WHERE Votings.VotingId = " + voting.VotingId + ") EXCEPT (SELECT Count(LastName) - 4 FROM Users WHERE Cedula LIKE '00000000%')";
+
+                    connection.Open();
+                    var command = new SqlCommand(sql, connection);
+                    var reader = command.ExecuteReader();
+                    reader.Read();
+                    var s = reader.GetInt32(0);
+                    connection.Close();
+
+                    var usw = db3.Candidates.Where(u => u.User.Cedula == "0000000003" && u.VotingId == voting.VotingId).FirstOrDefault();
+
+                    usw.QuantityVotes = s;
+
+                    db3.Entry(usw).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+
+                if (voting != null)
+                {
+                    var candidate = db3.Candidates
+                        .Where(c => c.VotingId == voting.VotingId && c.User.Cedula != "0000000003")
+                        .OrderByDescending(c => c.QuantityVotes)
+                        .FirstOrDefault();
+
+                    if (voting.Candidates.Count > 1)
+                    {
+                        var candidate1 = db3.Candidates
+                                .Where(c => c.VotingId == voting.VotingId && c.User.Cedula != "0000000003")
+                                .OrderByDescending(c => c.QuantityVotes).Take(2).Skip(1).FirstOrDefault();
+
+                        if (candidate.QuantityVotes == candidate1.QuantityVotes)
+                        {
+                            var state = Utilities.GetState("Cerrada");
+                            voting.StateId = state.StateId;
+
+                            var draw = db3.Users
+                            .Where(c => c.Cedula == "0000000000")
+                            .FirstOrDefault();
+                            voting.CandidateWinId = draw.UserId;
+
+                            db3.Entry(voting).State = EntityState.Modified;
+                            db3.SaveChanges();
+                            return RedirectToAction("Index");
+                        }
+                    }
+
+                    if (candidate != null)
                     {
                         var state = Utilities.GetState("Cerrada");
                         voting.StateId = state.StateId;
+                        voting.CandidateWinId = candidate.User.UserId;
 
-                        var draw = db.Users
-                        .Where(c => c.UserName == "votacionempatada")
-                        .FirstOrDefault();
-                        voting.CandidateWinId = draw.UserId;
-
-                        db.Entry(voting).State = EntityState.Modified;
-                        db.SaveChanges();
-                        return RedirectToAction("Index");
+                        db3.Entry(voting).State = EntityState.Modified;
+                        db3.SaveChanges();
+                        TempData["candi"] = candidate.User.UserId;
                     }
                 }
-                
+            
 
-                if (candidate != null)
-                {
-                    var state = Utilities.GetState("Cerrada");
-                    voting.StateId = state.StateId;
-                    voting.CandidateWinId = candidate.User.UserId;
-
-                    db.Entry(voting).State = EntityState.Modified;
-                    db.SaveChanges();
-                }
-            }
             return RedirectToAction("Index");
+        }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult ShowCursoResults(int id)
+        {
+            var report = this.GenerateCursoResults(id);
+            var stream = report.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            return File(stream, "application/pdf");
+        }
+
+        private ReportClass GenerateCursoResults(int id)
+        {
+            var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            var connection = new SqlConnection(connectionString);
+            var dataTable = new DataTable();
+            var sql = @"SELECT votings.votingid, candidates.candidateid, users.lastname + ' ' + users.firstname AS Candidato, us2.curso,
+                        COUNT  (us2.curso) AS votantes FROM Votings 
+                        INNER JOIN VotingDetails ON Votings.VotingId = VotingDetails.VotingId
+                        INNER JOIN candidates ON VotingDetails.candidateid = candidates.candidateid
+                        INNER JOIN users ON users.userid = candidates.userid 
+                        INNER JOIN users us2 ON  VotingDetails.userid = us2.userid
+                        WHERE votings.votingid = " + id +
+                        "GROUP BY votings.votingid, candidates.candidateid, users.lastname, users.firstname, us2.curso ORDER BY votantes DESC";
+
+            try
+            {
+                connection.Open();
+                var command = new SqlCommand(sql, connection);
+                var adapter = new SqlDataAdapter(command);
+                adapter.Fill(dataTable);
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+
+            var report = new ReportClass();
+            report.FileName = Server.MapPath("/Reports/Curso.rpt");
+            report.Load();
+            report.SetDataSource(dataTable);
+            return report;
         }
 
         [Authorize(Roles = "User")]
         public ActionResult MyCertificates()
         {
-            var user = db.Users.Where(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
+            var user = db.Users.Where(u => u.Cedula == this.User.Identity.Name).FirstOrDefault();
             if (user == null)
             {
                 ModelState.AddModelError(string.Empty, "Existe un error con el usuario actual, contacte con soporte.");
@@ -94,7 +221,7 @@ namespace votaciones.Controllers
         {
             var report = this.GenerateCertificateReport(id, id2);
             var stream = report.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
-            return File(stream, "application/pdf", "certificado.pdf");
+            return File(stream, "application/pdf");
         }
 
         private ReportClass GenerateCertificateReport(int id, int id2)
@@ -103,7 +230,7 @@ namespace votaciones.Controllers
             var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             var connection = new SqlConnection(connectionString);
             var dataTable = new DataTable();
-            var sql = @"SELECT   Votings.VotingId, Votings.Description, Votings.DateTimeStart, Votings.DateTimeEnd, Users.UserId, Users.Cedula, Users.FirstName +' '+ Users.LastName AS Users
+            var sql = @"SELECT   Votings.VotingId, Votings.Description, Votings.DateTimeStart, Votings.DateTimeEnd, Users.UserId, Users.Cedula, Users.LastName +' '+ Users.FirstName AS Users
                         FROM     Users INNER JOIN
                                  VotingDetails ON Users.UserId = VotingDetails.UserId INNER JOIN
                                  Votings ON VotingDetails.VotingId = Votings.VotingId
@@ -128,47 +255,6 @@ namespace votaciones.Controllers
             return report;
         }
 
-        [Authorize(Roles = "Admin")]
-        public ActionResult ShowFacultadResults(int id)
-        {
-            var report = this.GenerateFacultadResults(id);
-            var stream = report.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
-            return File(stream, "application/pdf");
-        }
-
-        private ReportClass GenerateFacultadResults(int id)
-        {
-            var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            var connection = new SqlConnection(connectionString);
-            var dataTable = new DataTable();
-            var sql = @"SELECT votings.votingid, candidates.candidateid, users.lastname + ' ' + users.firstname AS Candidato, us2.facultad,
-                        COUNT  (us2.facultad) AS votantes FROM Votings 
-                        INNER JOIN VotingDetails ON Votings.VotingId = VotingDetails.VotingId
-                        INNER JOIN candidates ON VotingDetails.candidateid = candidates.candidateid
-                        INNER JOIN users ON users.userid = candidates.userid 
-                        INNER JOIN users us2 ON  VotingDetails.userid = us2.userid
-                        WHERE votings.votingid = " + id +
-                        "GROUP BY votings.votingid, candidates.candidateid, users.lastname, users.firstname, us2.facultad ORDER BY votantes DESC";
-
-            try
-            {
-                connection.Open();
-                var command = new SqlCommand(sql, connection);
-                var adapter = new SqlDataAdapter(command);
-                adapter.Fill(dataTable);
-            }
-            catch (Exception ex)
-            {
-                ex.ToString();
-            }
-
-            var report = new ReportClass();
-            report.FileName = Server.MapPath("/Reports/Facultad.rpt");
-            report.Load();
-            report.SetDataSource(dataTable);
-            return report;
-        }
-
         public ActionResult ShowResults(int id)
         {
             var report = this.GenerateResultReport(id);
@@ -178,16 +264,13 @@ namespace votaciones.Controllers
 
         private ReportClass GenerateResultReport(int id)
         {
+            var us = db.Candidates.Where(c => c.VotingId == id && c.User.Cedula == "0000000003").FirstOrDefault();
             var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             var connection = new SqlConnection(connectionString);
             var dataTable = new DataTable();
             var sql = @"SELECT Votings.VotingId, Votings.Description AS Voting, States.Description AS State, 
-                               Users.LastName + ' ' + Users.FirstName AS Candidate, Candidates.QuantityVotes
-                        FROM   Candidates INNER JOIN
-                               Users ON Candidates.UserId = Users.UserId INNER JOIN
-                               Votings ON Candidates.VotingId = Votings.VotingId INNER JOIN
-                               States ON Votings.StateId = States.StateId
-                        WHERE  Votings.VotingId = " + id + " ORDER BY Candidates.QuantityVotes DESC";
+                               Users.LastName + ' ' + Users.FirstName AS Candidate, Candidates.QuantityVotes,
+                               Count(Us2.FirstName) - 4 As Num, Count(Candidates.QuantityVotes) - " + us.QuantityVotes + " - 4 As Votos FROM   Users As Us2, Candidates INNER JOIN Users ON Candidates.UserId = Users.UserId INNER JOIN Votings ON Candidates.VotingId = Votings.VotingId INNER JOIN States ON Votings.StateId = States.StateId WHERE  Votings.VotingId = " + id + " GROUP BY Votings.VotingId, Votings.Description, States.Description, Candidates.QuantityVotes, Users.LastName , Users.FirstName ORDER BY Candidates.QuantityVotes DESC";
 
             try
             {
@@ -211,9 +294,20 @@ namespace votaciones.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult ShowNoVote(int id)
         {
-            var report = this.GenerateNoVoteReport(id);
-            var stream = report.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
-            return File(stream, "application/pdf");
+            var voting = db.Votings.Where(v => v.VotingId == id).FirstOrDefault();
+
+            if (voting.IsForAllUsers)
+            {
+                var report = this.GenerateNoVoteReport(id);
+                var stream = report.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+                return File(stream, "application/pdf");
+            }
+            else
+            {
+                var report = this.GenerateNoVoteGroupReport(id);
+                var stream = report.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+                return File(stream, "application/pdf");
+            }
         }
 
         private ReportClass GenerateNoVoteReport(int id)
@@ -221,14 +315,45 @@ namespace votaciones.Controllers
             var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             var connection = new SqlConnection(connectionString);
             var dataTable = new DataTable();
-            var sql = @"SELECT LastName + ' ' + FirstName AS Estudiante, Cedula, UserName from Users where Users.UserId
-                        NOT IN (SELECT VotingDetails.UserId
-                        FROM    Votings INNER JOIN
-                                VotingDetails ON Votings.VotingId = VotingDetails.VotingId INNER JOIN
-                                Users ON VotingDetails.UserId = Users.UserId
-                        Where Votings.VotingId = " + id + ") EXCEPT (SELECT LastName + ' ' + FirstName AS Estudiante, Cedula, UserName " +
-                        "FROM Users WHERE Cedula = '0000000000') ORDER BY Estudiante";
+            var sql = @"SELECT LastName + ' ' + FirstName AS Estudiante, Cedula, Curso FROM Users
+                        WHERE  Users.UserId NOT IN (SELECT VotingDetails.UserId
+                        FROM    Votings INNER JOIN VotingDetails ON Votings.VotingId = VotingDetails.VotingId
+                        INNER JOIN Users ON VotingDetails.UserId = Users.UserId WHERE Votings.VotingId = " + id + ")" +
+                        "EXCEPT (SELECT LastName + ' ' + FirstName AS Estudiante, Cedula, Curso FROM Users WHERE Cedula LIKE '000000000%') ORDER BY Estudiante";
 
+            try
+            {
+                connection.Open();
+                var command = new SqlCommand(sql, connection);
+                var adapter = new SqlDataAdapter(command);
+                adapter.Fill(dataTable);
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+
+            var report = new ReportClass();
+            report.FileName = Server.MapPath("/Reports/NoVote.rpt");
+            report.Load();
+            report.SetDataSource(dataTable);
+            return report;
+        }
+
+        private ReportClass GenerateNoVoteGroupReport(int id)
+        {
+            var s = string.Join(",", db.VotingGroups.Where(v => v.VotingId == id)
+                                 .Select(v => v.GroupId.ToString()));
+
+            var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            var connection = new SqlConnection(connectionString);
+            var dataTable = new DataTable();
+            var sql = @"SELECT users.userid, LastName + ' ' + FirstName AS Estudiante, Cedula, Curso
+                        FROM   Users INNER JOIN GroupMembers ON GroupMembers.UserId = Users.UserId 
+                        WHERE  Users.UserId NOT IN (SELECT VotingDetails.UserId 
+                        FROM   Votings INNER JOIN VotingDetails ON Votings.VotingId = VotingDetails.VotingId
+                        INNER JOIN Users ON VotingDetails.UserId = Users.UserId
+                        WHERE Votings.VotingId = " + id + ") AND GroupMembers.groupid IN (" + s + ") ORDER BY Estudiante";
             try
             {
                 connection.Open();
@@ -252,17 +377,42 @@ namespace votaciones.Controllers
         public ActionResult Results()
         {
             var state = Utilities.GetState("Cerrada");
-            var votings = db.Votings
+            var state2 = Utilities.GetState("Abierta");
+
+
+            var votings = db2.Votings
                 .Where(v => v.StateId == state.StateId)
                 .Include(v => v.State);
+
+            var votings2 = db2.Votings
+                .Where(v => v.StateId == state2.StateId)
+                .Include(v => v.State);
+
+            foreach (var voting in votings2)
+            {
+                if (voting.StateId == state2.StateId)
+                {
+                    var time = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time"));
+
+                    if (voting.DateTimeEnd < time)
+                    {
+                        Close(voting.VotingId);
+                        voting.StateId = state.StateId;
+                        voting.State = state;
+                        voting.CandidateWinId = Int32.Parse(TempData["candi"].ToString());
+                    }
+                }
+            }
+
             var views = new List<VotingIndexView>();
             
             foreach (var voting in votings)
             {
                 User user = null;
+
                 if (voting.CandidateWinId != 0)
                 {
-                    user = db2.Users.Find(voting.CandidateWinId);
+                    user = db.Users.Find(voting.CandidateWinId);
                 }
 
                 views.Add(new VotingIndexView
@@ -289,8 +439,9 @@ namespace votaciones.Controllers
         public ActionResult VoteForCandidate(int candidateId, int votingId)
         {
             var user = db.Users
-                .Where(u => u.UserName == this.User.Identity.Name)
+                .Where(u => u.Cedula == this.User.Identity.Name)
                 .FirstOrDefault();
+
             if (user == null)
             {
                 return RedirectToAction("Index","Home");
@@ -329,10 +480,12 @@ namespace votaciones.Controllers
         {
             using (var transaction = db.Database.BeginTransaction())
             {
+                var time = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time"));
+
                 var votingDetail = new VotingDetail
                 {
                     CandidateId = candidate.CandidateId,
-                    DateTime = DateTime.Now,
+                    DateTime = time,
                     UserId = user.UserId,
                     VotingId = voting.VotingId,
                 };
@@ -382,7 +535,7 @@ namespace votaciones.Controllers
         [Authorize(Roles = "User")]
         public ActionResult MyVotings()
         {
-            var user = db.Users.Where(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
+            var user = db.Users.Where(u => u.Cedula == this.User.Identity.Name).FirstOrDefault();
             if (user == null)
             {
                 ModelState.AddModelError(string.Empty, "Existe un error con el usuario actual, contacte con soporte.");
@@ -391,14 +544,16 @@ namespace votaciones.Controllers
 
             var state = Utilities.GetState("Abierta");
             var time = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time"));
+
             var votings = db.Votings
-                .Where(v => v.DateTimeStart <= time &&
+                .Where(v => v.StateId == state.StateId &&
+                            v.DateTimeStart <= time &&
                             v.DateTimeEnd >= time)
                             .Include(v => v.Candidates)
                             .Include(v => v.VotingGroups)
                             .Include(v => v.State)
                             .ToList();
-
+            
             //Descartar eventos de votacion en el que el usuario ya voto
             foreach (var voting in votings.ToList())
             {
@@ -496,7 +651,6 @@ namespace votaciones.Controllers
         {
             if (ModelState.IsValid)
             {
-
                 foreach (var user in view.UserId)
                 {
                     var candidate = db.Candidates
@@ -511,7 +665,8 @@ namespace votaciones.Controllers
                         if ( view.UserId.Count() == 1 )
                         {
                             ModelState.AddModelError(string.Empty, "El candidato ya pertenece a la votación");
-                            ViewBag.UserId = new SelectList(db.Users.Where(x => x.UserName != "votacionempatada")
+                            ViewBag.UserId = new SelectList(db.Users.Where(x => x.Cedula != "0000000000"
+                                                                           && x.Cedula != "0000000003")
                             .OrderBy(u => u.FirstName)
                             .ThenBy(u => u.LastName), "UserId", "FullName");
                             return View(view);
@@ -539,7 +694,8 @@ namespace votaciones.Controllers
 
             }
 
-            ViewBag.UserId = new SelectList(db.Users.Where(x => x.UserName != "votacionempatada")
+            ViewBag.UserId = new SelectList(db.Users.Where(x => x.Cedula != "0000000000"
+                                                           && x.Cedula != "0000000003")
                     .OrderBy(u => u.FirstName)
                     .ThenBy(u => u.LastName), "UserId", "FullName");
 
@@ -555,7 +711,8 @@ namespace votaciones.Controllers
 
             };
 
-             ViewBag.UserId = new SelectList(db.Users.Where(x => x.UserName != "votacionempatada")
+             ViewBag.UserId = new SelectList(db.Users.Where(x => x.Cedula != "0000000000"
+                                                            && x.Cedula != "0000000003")
                     .OrderBy(u => u.FirstName)
                     .ThenBy(u => u.LastName), "UserId", "FullName");
 
@@ -567,39 +724,50 @@ namespace votaciones.Controllers
         {
             if (ModelState.IsValid)
             {
-                var votingGroup = db.VotingGroups
+                foreach (var group in view.GroupId)
+                {
+                    var votingGroup = db.VotingGroups
                     .Where(vg => vg.VotingId == view.VotingId &&
-                                 vg.GroupId == view.GroupId)
+                                 vg.GroupId == group)
                     .FirstOrDefault();
 
-                if (votingGroup != null)
-                {
-                    ModelState.AddModelError(string.Empty, "El grupo ya pertenece a la votación");
-                    ViewBag.GroupId = new SelectList(
-                    db.Groups.OrderBy(g => g.Description),
-                    "GroupId",
-                    "Description");
+                    var repetido = false;
 
-                    return View(view);
+                    if (votingGroup != null)
+                    {
+                        if (view.GroupId.Count() == 1)
+                        {
+                            ModelState.AddModelError(string.Empty, "El grupo ya pertenece a la votación");
+                            ViewBag.GroupId = new SelectList(db.Groups.OrderBy(g => g.Description),
+                            "GroupId","Description");
+                            return View(view);
+                        }
+                        else
+                        {
+                            repetido = true;
+                        }
+                    }
+
+                    if (!repetido)
+                    {
+                        votingGroup = new VotingGroup
+                        {
+                            GroupId = group,
+                            VotingId = view.VotingId,
+                        };
+
+                        db.VotingGroups.Add(votingGroup);
+                        db.SaveChanges();
+                    }
                 }
 
-                votingGroup = new VotingGroup
-                {
-                    GroupId = view.GroupId,
-                    VotingId = view.VotingId,
-
-                };
-
-                db.VotingGroups.Add(votingGroup);
-                db.SaveChanges();
                 return RedirectToAction(string.Format("Details/{0}", view.VotingId));
 
             }
 
             ViewBag.GroupId = new SelectList(
                 db.Groups.OrderBy(g => g.Description),
-                "GroupId",
-                "Description");
+                "GroupId","Description");
 
             return View(view);
         }
@@ -626,10 +794,25 @@ namespace votaciones.Controllers
         {
             var votings = db.Votings.Include(v => v.State);
             var views = new List<VotingIndexView>();
+            var state = Utilities.GetState("Abierta");
+            var state2 = Utilities.GetState("Cerrada");
             var db2 = new DemocracyContext();
             foreach (var voting in votings)
             {
                 User user = null;
+
+                if (voting.StateId == state.StateId)
+                {
+                    var time = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time"));
+
+                    if (voting.DateTimeEnd < time)
+                    {
+                        Close(voting.VotingId);
+                        voting.StateId = state2.StateId;
+                        voting.State = state2;
+                        voting.CandidateWinId = Int32.Parse(TempData["candi"].ToString());
+                    }
+                }
 
                 if (voting.CandidateWinId != 0)
                 {
@@ -651,6 +834,7 @@ namespace votaciones.Controllers
                     Winner = user,
                 });
             }
+
             return View(views);
         }
 
@@ -675,7 +859,7 @@ namespace votaciones.Controllers
             }
             var view = new DetailsVotingView
             {
-                Candidates = voting.Candidates.ToList(),
+                Candidates = voting.Candidates.Where(x => x.User.Cedula != "0000000003").ToList(),
                 CandidateWinId = voting.CandidateWinId,
                 Nombre = user,
                 DateTimeStart = voting.DateTimeStart,
@@ -698,11 +882,14 @@ namespace votaciones.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
+            var time = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time"));
+            
             ViewBag.StateId = new SelectList(db.States, "StateId", "Description");
+            
             var view = new VotingView
             {
-                DateStart = DateTime.Now,
-                DateEnd = DateTime.Now,
+                DateStart = time,
+                DateEnd = time,
             };
 
             return View(view);
@@ -872,6 +1059,7 @@ namespace votaciones.Controllers
             {
                 db.Dispose();
                 db2.Dispose();
+                db3.Dispose();
             }
             base.Dispose(disposing);
         }

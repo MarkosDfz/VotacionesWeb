@@ -13,14 +13,13 @@ namespace votaciones.Models
         [Key]
         public int UserId { get; set; }
 
-        [Display(Name = "E-Mail")]
+        [Display(Name = "Cédula")]
         [Required(ErrorMessage = "El campo {0} es requerido")]
-        [StringLength(100, ErrorMessage =
+        [StringLength(13, ErrorMessage =
             "El campo {0} debe contener un mínimo de {2} y un máximo de {1} de caracteres."
-           , MinimumLength = 7)]
-        [DataType(DataType.EmailAddress)]
-        [Index("UserNameIndex", IsUnique = true)]
-        public string UserName { get; set; }
+           , MinimumLength = 10)]
+        [Index("CedulaIndex", IsUnique = true)]
+        public string Cedula { get; set; }
 
         [Display(Name = "Nombres")]
         [Required(ErrorMessage = "El campo {0} es requerido")]
@@ -39,26 +38,12 @@ namespace votaciones.Models
         [Display(Name = "Usuario")]
         public string FullName { get { return string.Format ("{0} {1}", this.LastName, this.FirstName) ; } }
 
-        [Display(Name = "Cédula")]
-        [Required(ErrorMessage = "El campo {0} es requerido")]
-        [StringLength(13, ErrorMessage =
-            "El campo {0} debe contener un mínimo de {2} y un máximo de {1} de caracteres."
-           , MinimumLength = 10)]
-        public string Cedula { get; set; }
-
-        [Display(Name = "Dirección")]
-        [Required(ErrorMessage = "El campo {0} es requerido")]
-        [StringLength(100, ErrorMessage =
-            "El campo {0} debe contener un mínimo de {2} y un máximo de {1} de caracteres."
-           , MinimumLength = 3)]
-        public string Adress { get; set; }
-
-        [Display(Name = "Facultad")]
-        [Required(ErrorMessage = "El campo {0} es requerido")]
-        public string Facultad { get; set; }
-
         [Display(Name = "Grupo")]
         public string Group { get; set; }
+
+        [Display(Name = "Curso")]
+        [Required(ErrorMessage = "El campo {0} es requerido")]
+        public string Curso { get; set; }
 
         [Display(Name = "Foto")]
         [DataType(DataType.ImageUrl)]

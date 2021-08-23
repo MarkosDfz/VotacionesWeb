@@ -1,16 +1,12 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
-using System.Collections.Generic;
-using System.Data.Entity;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Mail;
-using System.Threading.Tasks;
 using System.Web;
-using System.Web.Configuration;
 using votaciones.Models;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace votaciones.Classes
 {
@@ -63,13 +59,13 @@ namespace votaciones.Classes
 
             var userASP = new ApplicationUser
             {
-                UserName = userView.UserName,
-                Email = userView.UserName,
+                UserName = userView.Cedula,
+                Email = userView.Cedula,
             };
 
             userManager.Create(userASP, userASP.UserName);
 
-            userASP = userManager.FindByName(userView.UserName);
+            userASP = userManager.FindByName(userView.Cedula);
             userManager.AddToRole(userASP.Id, "User");
 
         }
@@ -101,8 +97,8 @@ namespace votaciones.Classes
 
             userASP = new ApplicationUser
             {
-                UserName = user.UserName,
-                Email = user.UserName,
+                UserName = user.Cedula,
+                Email = user.Cedula,
             };
 
             userManager.Create(userASP, user.CurrentPassword);
@@ -126,82 +122,83 @@ namespace votaciones.Classes
             return state;
         }
 
-        public static async Task SendMail(string to, string subject, string body)
+        public static string Encriptar(string texto)
         {
-            var message = new MailMessage();
-            message.To.Add(new MailAddress(to));
-            message.From = new MailAddress(WebConfigurationManager.AppSettings["AdminUser"]);
-            message.Subject = subject;
-            message.Body = body;
-            message.IsBodyHtml = true;
-
-            using (var smtp = new SmtpClient())
+            try
             {
-                var credential = new NetworkCredential
-                {
-                    UserName = WebConfigurationManager.AppSettings["AdminUser"],
-                    Password = WebConfigurationManager.AppSettings["AdminPassWord"]
-                };
 
-                smtp.Credentials = credential;
-                smtp.Host = WebConfigurationManager.AppSettings["SMTPName"];
-                smtp.Port = int.Parse(WebConfigurationManager.AppSettings["SMTPPort"]);
-                smtp.EnableSsl = true;
-                await smtp.SendMailAsync(message);
+                string key = "democracyurjosemejiainc"; //llave para encriptar datos
+
+                byte[] keyArray;
+
+                byte[] Arreglo_a_Cifrar = UTF8Encoding.UTF8.GetBytes(texto);
+
+                //Se utilizan las clases de encriptación MD5
+
+                MD5CryptoServiceProvider hashmd5 = new MD5CryptoServiceProvider();
+
+                keyArray = hashmd5.ComputeHash(UTF8Encoding.UTF8.GetBytes(key));
+
+                hashmd5.Clear();
+
+                //Algoritmo TripleDES
+                TripleDESCryptoServiceProvider tdes = new TripleDESCryptoServiceProvider();
+
+                tdes.Key = keyArray;
+                tdes.Mode = CipherMode.ECB;
+                tdes.Padding = PaddingMode.PKCS7;
+
+                ICryptoTransform cTransform = tdes.CreateEncryptor();
+
+                byte[] ArrayResultado = cTransform.TransformFinalBlock(Arreglo_a_Cifrar, 0, Arreglo_a_Cifrar.Length);
+
+                tdes.Clear();
+
+                //se regresa el resultado en forma de una cadena
+                texto = Convert.ToBase64String(ArrayResultado, 0, ArrayResultado.Length);
+
             }
+            catch (Exception)
+            {
+
+            }
+            return texto;
         }
 
-
-        public static async Task PasswordRecovery(string email)
+        public static string Desencriptar(string textoEncriptado)
         {
-            var userContext = new ApplicationDbContext();
-            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(userContext));
-            var userASP = userManager.FindByEmail(email);
-            if (userASP == null)
+            try
             {
-                return;
-            }
+                string key = "democracyurjosemejiainc";
+                byte[] keyArray;
+                byte[] Array_a_Descifrar = Convert.FromBase64String(textoEncriptado);
 
-            var user = db.Users.Where(tp => tp.UserName == email).FirstOrDefault();
-            if (user == null)
+                //algoritmo MD5
+                MD5CryptoServiceProvider hashmd5 = new MD5CryptoServiceProvider();
+
+                keyArray = hashmd5.ComputeHash(UTF8Encoding.UTF8.GetBytes(key));
+
+                hashmd5.Clear();
+
+                TripleDESCryptoServiceProvider tdes = new TripleDESCryptoServiceProvider();
+
+                tdes.Key = keyArray;
+                tdes.Mode = CipherMode.ECB;
+                tdes.Padding = PaddingMode.PKCS7;
+
+                ICryptoTransform cTransform = tdes.CreateDecryptor();
+
+                byte[] resultArray = cTransform.TransformFinalBlock(Array_a_Descifrar, 0, Array_a_Descifrar.Length);
+
+                tdes.Clear();
+                textoEncriptado = UTF8Encoding.UTF8.GetString(resultArray);
+
+            }
+            catch (Exception)
             {
-                return;
+
             }
-
-            var random = new Random();
-            var newPassword = string.Format("{0}{1}{2:04}*", user.FirstName.ToUpper().Substring(0, 1), user.LastName.ToLower().Substring(0, 2), random.Next(99999));
-
-            userManager.RemovePassword(userASP.Id);
-            userManager.AddPassword(userASP.Id, newPassword);
-
-            var subject = "Votaciones Utc Recuperar contraseña";
-            var body = string.Format(@"
-            <div style='margin-left: auto;
-                        margin-right: auto;
-                        max-width: 1000px;
-                        float: none; text-align: center;'>
-                <h1>Votaciones UTC <br/> Recuperar Contraseña</h1>
-                <p>Su nueva contraseña es: </p>
-                <table style='margin-left: auto;
-                        margin-right: auto;
-                        max-width: 1000px;
-                        float: none;'>
-                    <th style='border-style:solid;
-                            border-width:2px;
-                            border-color:black;
-                            font-size:22px;
-                            font-weight:bold;
-                            letter-spacing:3px;
-                            padding:0 26px;
-                            text-align:center'>
-                        {0}
-                    </th>
-                </table>
-                <p>Puede cambiar esta contraseña por una nueva que recuerde fácilmente.</p>
-                <h6>Ha recibido este correo electrónico porque se ha solicitado el cambio de contraseña.</h6>
-            </div>", newPassword);
-
-            await SendMail(email, subject, body);
+            return textoEncriptado;
         }
 
         public void Dispose()

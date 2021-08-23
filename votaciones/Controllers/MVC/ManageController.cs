@@ -230,6 +230,7 @@ namespace votaciones.Controllers
             {
                 return View(model);
             }
+
             var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
@@ -238,6 +239,9 @@ namespace votaciones.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
+
+                Session["modal"] = false;
+
                 return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
             }
             AddErrors(result);

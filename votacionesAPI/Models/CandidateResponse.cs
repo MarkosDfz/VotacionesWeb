@@ -9,6 +9,8 @@ namespace votacionesAPI.Models
     [NotMapped]
     public class CandidateResponse
     {
+        public int VotingId { get; set; }
+
         public int CandidateId { get; set; }
 
         public int QuantityVotes { get; set; }

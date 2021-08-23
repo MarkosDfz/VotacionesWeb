@@ -28,11 +28,12 @@ namespace votaciones.Controllers.API
             }
 
             var state = Utilities.GetState("Abierta");
+            var time = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time"));
 
             var votings = db.Votings
                 .Where(v => v.StateId == state.StateId &&
-                            v.DateTimeStart <= DateTime.Now &&
-                            v.DateTimeEnd >= DateTime.Now)
+                            v.DateTimeStart <= time &&
+                            v.DateTimeEnd >= time)
                             .Include(v => v.Candidates)
                             .Include(v => v.VotingGroups)
                             .Include(v => v.State)
@@ -94,9 +95,10 @@ namespace votaciones.Controllers.API
                 {
                     candidates.Add(new CandidateResponse
                     {
+                        VotingId = voting.VotingId,
                         CandidateId = candidate.CandidateId,
                         QuantityVotes = candidate.QuantityVotes,
-                        User = candidate.User,
+                        User = candidate.User
                     });
                 }
 
@@ -118,41 +120,41 @@ namespace votaciones.Controllers.API
         }
 
         [HttpPost]
-        [Route("{userId}/{candidateId}/{votingId}")]
-        public IHttpActionResult VoteCandidate(int userId, int candidateId, int votingId)
+        [Route("VoteForCandidate")]
+        public IHttpActionResult VoteCandidate(VotingDetail model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var user = db.Users.Find(userId);
+            var user = db.Users.Find(model.UserId);
             if (user == null)
             {
                 return this.BadRequest("Usuario no encontrado");
             }
 
-            var candidate = db.Candidates.Find(candidateId);
+            var candidate = db.Candidates.Find(model.CandidateId);
             if (user == null)
             {
                 return this.BadRequest("Candidato no encontrado");
             }
 
-            var voting = db.Votings.Find(votingId);
+            var voting = db.Votings.Find(model.VotingId);
             if (user == null)
             {
                 return this.BadRequest("Usuario no encontrado");
             }
 
-            var votingDetail = new VotingDetail
+            model = new VotingDetail
             {
                 CandidateId = candidate.CandidateId,
-                DateTime = DateTime.Now,
-                UserId = user.UserId,
-                VotingId = voting.VotingId,
+                DateTime    = DateTime.Now,
+                UserId      = user.UserId,
+                VotingId    = voting.VotingId,
             };
 
-            db.VotingDetails.Add(votingDetail);
+            db.VotingDetails.Add(model);
 
             candidate.QuantityVotes++;
             db.Entry(candidate).State = EntityState.Modified;
@@ -162,8 +164,7 @@ namespace votaciones.Controllers.API
 
             db.SaveChanges();
 
-
-            return this.Ok(votingDetail);
+            return this.Ok(true);
         }
 
         [HttpGet]
@@ -210,6 +211,37 @@ namespace votaciones.Controllers.API
             }
 
             return this.Ok(votingResponse);
+        }
+
+        [HttpGet]
+        [Route("Certificados/{userId}")]
+        public IHttpActionResult Certificados(int userId)
+        {
+            var user = db.Users.Find(userId);
+            if (user == null)
+            {
+                return this.BadRequest("Usuario no encontrado");
+            }
+
+            var details = db.VotingDetails.Where(v => v.UserId == user.UserId)
+                                          .Include(v => v.Voting)
+                                          .ToList();
+
+            var response = new List<CertificateResponse>();
+            
+            foreach (var detail in details)
+            {
+                response.Add(new CertificateResponse
+                {
+                    VotingId = detail.VotingId,
+                    Description = detail.Voting.Description,
+                    DateTimeEnd = detail.Voting.DateTimeEnd,
+                    DateTimeStart = detail.Voting.DateTimeStart,
+                    Remarks = detail.Voting.Remarks
+                });
+            }
+
+            return this.Ok(response);
         }
 
         protected override void Dispose(bool disposing)

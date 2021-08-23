@@ -44,12 +44,15 @@ namespace votaciones.Controllers
 
             var stad = db.States.Count();
 
-            if (stad > 1)
+            if (stad > 0)
             {
-                if (st.Description == state.Description)
+                if (st != null)
                 {
-                    ModelState.AddModelError(string.Empty, "El estado ya existe");
-                    return View();
+                    if (st.Description == state.Description)
+                    {
+                        ModelState.AddModelError(string.Empty, "El estado ya existe");
+                        return View();
+                    }
                 }
             }
 

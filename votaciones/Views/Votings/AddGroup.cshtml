@@ -18,9 +18,9 @@
 
 
         <div class="form-group">
-            @Html.LabelFor(model => model.GroupId, "Grupo", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.GroupId, "Grupo *", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("GroupId", null, "", htmlAttributes: new { @class = "form-control select-user" })
+                @Html.DropDownList("GroupId", null, "", htmlAttributes: new { @class = "form-control select-user", multiple = "multiple" }) &nbsp;
                 @Html.ValidationMessageFor(model => model.GroupId, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -47,10 +47,8 @@
     <script>
 
         $('.select-user').select2({
-            placeholder: "Buscar grupo",
-            minimumInputLength: 2,
+            minimumInputLength: 3,
             language: "es",
-
         });
 
     </script>

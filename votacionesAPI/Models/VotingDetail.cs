@@ -16,10 +16,13 @@ namespace votacionesAPI.Models
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd HH:mm }", ApplyFormatInEditMode = true)]
         public DateTime DateTime { get; set; }
 
+        [Required]
         public int VotingId { get; set; }
 
+        [Required]
         public int UserId { get; set; }
 
+        [Required]
         public int CandidateId { get; set; }
 
         [JsonIgnore]

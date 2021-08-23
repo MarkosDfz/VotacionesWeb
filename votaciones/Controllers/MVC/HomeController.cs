@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.IO;
 using System.Web.Mvc;
 
 namespace votaciones.Controllers
@@ -25,6 +22,12 @@ namespace votaciones.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        public virtual ActionResult DownloadManual()
+        {
+            string fullPath = Path.Combine(Server.MapPath("~/Content/Data/manual.pdf"));
+            return File(fullPath, "application/octet-stream", "manual.pdf");
         }
     }
 }

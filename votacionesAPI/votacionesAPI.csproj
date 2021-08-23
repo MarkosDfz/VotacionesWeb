@@ -210,6 +210,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Candidate.cs" />
     <Compile Include="Models\CandidateResponse.cs" />
+    <Compile Include="Models\CertificateResponse.cs" />
     <Compile Include="Models\DemocracyContext.cs" />
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\GroupMember.cs" />
@@ -236,6 +237,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Photos\admin.jpg" />
     <Content Include="Content\Photos\balance.png" />
+    <Content Include="Content\Photos\empyvote.png" />
     <Content Include="Content\Photos\noimage.png" />
     <Content Include="Content\Photos\novote.png" />
     <Content Include="favicon.ico" />

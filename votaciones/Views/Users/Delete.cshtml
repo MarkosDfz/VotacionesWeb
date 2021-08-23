@@ -7,6 +7,7 @@
 
 
 <h3>¿Está seguro de eliminar este registro?</h3>
+<h5>Tenga en cuenta que esta acción es irreversible</h5>
 <div>
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -39,27 +40,11 @@
                 </dd>
 
                 <dt>
-                    @Html.DisplayNameFor(model => model.Facultad)
+                    @Html.DisplayNameFor(model => model.Curso)
                 </dt>
 
                 <dd>
-                    @Html.DisplayFor(model => model.Facultad)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.UserName)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.UserName)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.Adress)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.Adress)
+                    @Html.DisplayFor(model => model.Curso)
                 </dd>
 
                 <dt>

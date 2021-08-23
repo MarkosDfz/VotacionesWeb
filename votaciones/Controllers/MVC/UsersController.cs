@@ -1,6 +1,7 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using votaciones.Classes;
@@ -21,6 +23,100 @@ namespace votaciones.Controllers
     public class UsersController : Controller
     {
         private DemocracyContext db = new DemocracyContext();
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        public string GetUserList(string sEcho, int iDisplayStart, int iDisplayLength, string sSearch)
+        {
+            sSearch = sSearch.ToLower();
+            int totalRecord = db.Users.Where(x => x.Cedula != "0000000000" && x.Cedula != "0000000001" && x.Cedula != "0000000002"
+                                             && x.Cedula != "0000000003").Count();
+            var usuarios = new List<User>();
+            if (!string.IsNullOrEmpty(sSearch))
+                usuarios = db.Users.Where(a => a.LastName.ToLower().Contains(sSearch)
+                || a.FirstName.ToLower().Contains(sSearch)
+                || a.Curso.ToLower().Contains(sSearch)
+                || a.Cedula.StartsWith(sSearch)
+                ).OrderBy(a => a.LastName).Skip(iDisplayStart).Take(iDisplayLength).ToList();
+            else
+                usuarios = db.Users.OrderBy(a => a.LastName).Skip(iDisplayStart).Take(iDisplayLength).ToList();
+
+            var result = (from p in usuarios 
+                          select new User
+                          {
+                              UserId   = p.UserId,
+                              Curso    = p.Curso,
+                              LastName = p.FullName,
+                              Cedula   = p.Cedula,
+                              Photo    = p.Photo.Replace("~", ""),
+                          }
+                         ).Where(x => x.Cedula != "0000000000" && x.Cedula != "0000000001" && x.Cedula != "0000000002"
+                                 && x.Cedula != "0000000003").ToList();
+
+            StringBuilder sb = new StringBuilder();
+            sb.Clear();
+            sb.Append("{");
+            sb.Append("\"sEcho\": ");
+            sb.Append(sEcho);
+            sb.Append(",");
+            sb.Append("\"iTotalRecords\": ");
+            sb.Append(totalRecord);
+            sb.Append(",");
+            sb.Append("\"iTotalDisplayRecords\": ");
+            sb.Append(totalRecord);
+            sb.Append(",");
+            sb.Append("\"aaData\": ");
+            sb.Append(JsonConvert.SerializeObject(result));
+            sb.Append("}");
+            return sb.ToString();
+        }
+
+        public bool EsAdm(User user)
+        {
+            var userContext = new ApplicationDbContext();
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(userContext));
+
+            var userASP = userManager.FindByEmail(user.Cedula);
+
+            var rp = userASP != null && userManager.IsInRole(userASP.Id, "Admin");
+
+            return rp;
+        }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult ResetPass(int id)
+        {
+            var userContext = new ApplicationDbContext();
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(userContext));
+
+            var user = db.Users.Find(id);
+
+            if (user == null)
+            {
+                ModelState.AddModelError(string.Empty, "Error");
+                return RedirectToAction("Edit", new { id });
+            }
+
+            var userASP = userManager.FindByEmail(user.Cedula);
+
+            if (userASP == null)
+            {
+                ModelState.AddModelError(string.Empty, "Error");
+                return RedirectToAction("Edit", new { id });
+            }
+
+            userManager.RemovePassword(userASP.Id);
+            userManager.AddPassword(userASP.Id, user.Cedula);
+
+            TempData["DataPass"] = "* Contraseña reseteada correctamente";
+
+            return RedirectToAction("Edit", new { id });
+        }
 
         [Authorize(Roles = "Admin")]
         public ActionResult PDF()
@@ -72,24 +168,22 @@ namespace votaciones.Controllers
                     {
                         User u = new User();
 
-                        u.UserName = workSheet.Cells[row, 1].Value.ToString();
-                        u.LastName = workSheet.Cells[row, 2].Value.ToString();
+                        u.Cedula    = workSheet.Cells[row, 1].Value.ToString();
+                        u.LastName  = workSheet.Cells[row, 2].Value.ToString();
                         u.FirstName = workSheet.Cells[row, 3].Value.ToString();
-                        u.Cedula = workSheet.Cells[row, 4].Value.ToString();
-                        u.Adress = workSheet.Cells[row, 5].Value.ToString();
-                        u.Facultad = workSheet.Cells[row, 6].Value.ToString();
-                        u.Group = null;
-                        u.Photo = "~/Security/Content/Photos/noimage.png";
+                        u.Curso     = workSheet.Cells[row, 4].Value.ToString();
+                        u.Group     = null;
+                        u.Photo     = "~/Security/Content/Photos/noimage.png";
 
                         var userview = new UserView
                         {
-                            UserName = u.UserName,
+                            Cedula = u.Cedula,
                         };
 
                         var repetido = false;
 
                         var user = db.Users
-                            .Where(nu => nu.UserName == u.UserName)
+                            .Where(nu => nu.Cedula == u.Cedula)
                             .FirstOrDefault();
 
                         if (user != null)
@@ -137,11 +231,11 @@ namespace votaciones.Controllers
             var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             var connection = new SqlConnection(connectionString);
             var dataTable = new DataTable();
-            var sql = @"SELECT UserId, UserName, LastName + ' ' + FirstName 
-                        AS     Estudiante, Cedula, Facultad, Adress, Photo 
+            var sql = @"SELECT UserId, LastName + ' ' + FirstName 
+                        AS     Estudiante, Cedula, Curso 
                         FROM   Users 
-                        EXCEPT (SELECT UserId, UserName, LastName + ' ' + FirstName 
-                        AS     Estudiante, Cedula, Facultad, Adress, Photo  FROM Users WHERE Cedula = '0000000000')
+                        EXCEPT (SELECT UserId, LastName + ' ' + FirstName 
+                        AS     Estudiante, Cedula, Curso FROM Users WHERE Cedula LIKE '000000000%')
                         ORDER BY Estudiante";
 
             try
@@ -168,19 +262,17 @@ namespace votaciones.Controllers
         public ActionResult MySettings()
         {
             var user = db.Users
-                .Where(u => u.UserName == this.User.Identity.Name)
+                .Where(u => u.Cedula == this.User.Identity.Name)
                 .FirstOrDefault();
             var view = new UserSettingsView
             {
-                Adress = user.Adress,
-                Facultad = user.Facultad,
                 FirstName = user.FirstName,
-                Group = user.Group,
-                LastName = user.LastName,
-                Cedula = user.Cedula,
-                Photo = user.Photo,
-                UserId = user.UserId,
-                UserName = user.UserName,
+                Curso     = user.Curso,
+                Group     = user.Group,
+                LastName  = user.LastName,
+                Cedula    = user.Cedula,
+                Photo     = user.Photo,
+                UserId    = user.UserId,
             };
 
             return View(view);
@@ -195,12 +287,15 @@ namespace votaciones.Controllers
 
                 string path = string.Empty;
                 string pic = string.Empty;
+                string newGuid = Guid.NewGuid().ToString();
 
                 if (view.NewPhoto != null)
                 {
-                    pic = Path.GetFileName(view.NewPhoto.FileName);
+                    pic = String.Format("{0}.jpg", newGuid);
                     path = Path.Combine(Server.MapPath("~/Security/Content/Photos"), pic);
+
                     view.NewPhoto.SaveAs(path);
+
                     using (MemoryStream ms = new MemoryStream())
                     {
                         view.NewPhoto.InputStream.CopyTo(ms);
@@ -210,12 +305,11 @@ namespace votaciones.Controllers
 
                 var user = db.Users.Find(view.UserId);
 
-                user.Adress = view.Adress;
-                user.Facultad = view.Facultad;
                 user.FirstName = view.FirstName;
-                user.Group = view.Group;
-                user.LastName = view.LastName;
-                user.Cedula = view.Cedula;
+                user.Curso     = view.Curso;
+                user.Group     = view.Group;
+                user.LastName  = view.LastName;
+                user.Cedula    = view.Cedula;
 
                 if (!string.IsNullOrEmpty(pic))
                 {
@@ -240,67 +334,24 @@ namespace votaciones.Controllers
             {
                 var userContext = new ApplicationDbContext();
                 var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(userContext));
-                var userASP = userManager.FindByEmail(user.UserName);
+                var userASP = userManager.FindByEmail(user.Cedula);
 
                 if (userASP != null)
                 {
                     if (userManager.IsInRole(userASP.Id, "Admin"))
                     {
                         userManager.RemoveFromRole(userASP.Id, "Admin");
+                        TempData["DataAdm"] = "* Este usuario ha dejado de ser Administrador";
                     }
                     else
                     {
                         userManager.AddToRole(userASP.Id, "Admin");
+                        TempData["DataAdm"] = "* Este usuario ahora es Administrador";
                     }
                 }
             }
 
-            return RedirectToAction("Index");
-        }
-
-        // GET: Users
-        [Authorize(Roles = "Admin")]
-        public ActionResult Index()
-        {
-            var userContext = new ApplicationDbContext();
-            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(userContext));
-            var users = db.Users.ToList();
-            var usersView = new List<UserIndexView>();
-
-            foreach (var user in users)
-            {
-                var userASP = userManager.FindByEmail(user.UserName);
-
-                usersView.Add(new UserIndexView
-                {
-                    Adress = user.Adress,
-                    Candidates = user.Candidates,
-                    Facultad = user.Facultad,
-                    FirstName = user.FirstName,
-                    Group = user.Group,
-                    GroupMembers = user.GroupMembers,
-                    IsAdmin = userASP != null && userManager.IsInRole(userASP.Id, "Admin"), 
-                    LastName = user.LastName,
-                    Cedula = user.Cedula,
-                    Photo = user.Photo,
-                    UserId = user.UserId,
-                    UserName = user.UserName,
-                });
-            }
-
-            var j = (from itm in usersView
-                     where itm.UserName == "votacionempatada"
-                     select itm)
-                  .FirstOrDefault();
-            usersView.Remove(j);
-
-            var e = (from itm in usersView
-                     where itm.UserName == "votonulo"
-                     select itm)
-                  .FirstOrDefault();
-            usersView.Remove(e);
-
-            return View(usersView);
+            return RedirectToAction("Details", new { id });
         }
 
         // GET: Users/Details/5
@@ -311,12 +362,32 @@ namespace votaciones.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = db.Users.Find(id);
+
+            var userContext = new ApplicationDbContext();
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(userContext));
+
+            var user = db.Users.Find(id);
+            var userASP = userManager.FindByEmail(user.Cedula);
+
+            var userView = new UserIndexView
+            {
+                Candidates   = user.Candidates,
+                Curso        = user.Curso,
+                FirstName    = user.FirstName,
+                Group        = user.Group,
+                GroupMembers = user.GroupMembers,
+                IsAdmin      = userASP != null && userManager.IsInRole(userASP.Id, "Admin"),
+                LastName     = user.LastName,
+                Cedula       = user.Cedula,
+                Photo        = user.Photo,
+                UserId       = user.UserId,
+            };
+
             if (user == null)
             {
                 return HttpNotFound();
             }
-            return View(user);
+            return View(userView);
         }
 
         // GET: Users/Create
@@ -340,13 +411,16 @@ namespace votaciones.Controllers
             //Subir Imagen
 
             string path = string.Empty;
-            string pic = string.Empty;
+            string pic  = string.Empty;
+            string newGuid = Guid.NewGuid().ToString();
 
             if (userView.Photo != null)
             {
-                pic = Path.GetFileName(userView.Photo.FileName);
+                pic = String.Format("{0}.jpg", newGuid);
                 path = Path.Combine(Server.MapPath("~/Security/Content/Photos"), pic);
+
                 userView.Photo.SaveAs(path);
+
                 using (MemoryStream ms = new MemoryStream())
                 {
                     userView.Photo.InputStream.CopyTo(ms);
@@ -358,14 +432,12 @@ namespace votaciones.Controllers
 
             var user = new User
             {
-                Adress = userView.Adress,
-                Facultad = userView.Facultad,
                 FirstName = userView.FirstName,
-                Group = userView.Group,
-                LastName = userView.LastName,
-                Cedula = userView.Cedula,
-                Photo = string.IsNullOrEmpty(pic) ? string.Format("~/Security/Content/Photos/noimage.png") : string.Format("~/Security/Content/Photos/{0}",pic),
-                UserName = userView.UserName,
+                Curso     = userView.Curso,
+                Group     = userView.Group,
+                LastName  = userView.LastName,
+                Cedula    = userView.Cedula,
+                Photo     = string.IsNullOrEmpty(pic) ? string.Format("~/Security/Content/Photos/noimage.png") : string.Format("~/Security/Content/Photos/{0}",pic),
             };
 
             db.Users.Add(user);
@@ -379,9 +451,9 @@ namespace votaciones.Controllers
             {
                 if (ex.InnerException != null &&
                     ex.InnerException.InnerException != null && 
-                    ex.InnerException.InnerException.Message.Contains("UserNameIndex"))
+                    ex.InnerException.InnerException.Message.Contains("CedulaIndex"))
                 {
-                    ModelState.AddModelError(string.Empty, "El e-mail ya esta registrado");
+                    ModelState.AddModelError(string.Empty, "El número de celuda ingresado ya se encuentra registrado");
                 }
                 else
                 {
@@ -394,8 +466,6 @@ namespace votaciones.Controllers
             return RedirectToAction("Index");
 
         }
-
-        
 
         // GET: Users/Edit/5
         [Authorize(Roles = "Admin")]
@@ -415,24 +485,32 @@ namespace votaciones.Controllers
 
             var userView = new UserView
             {
-                Adress = user.Adress,
-                Facultad = user.Facultad,
                 FirstName = user.FirstName,
-                Group = user.Group,
-                LastName = user.LastName,
-                Cedula = user.Cedula,
-                UserId = user.UserId,
-                UserName = user.UserName,
+                Curso     = user.Curso,
+                Group     = user.Group,
+                LastName  = user.LastName,
+                Cedula    = user.Cedula,
+                UserId    = user.UserId,
             };
 
             List<SelectListItem> lst = new List<SelectListItem>();
 
-            lst.Add(new SelectListItem() { Text = "CAREN", Value = "CAREN" });
-            lst.Add(new SelectListItem() { Text = "CIYA", Value = "CIYA" });
-            lst.Add(new SelectListItem() { Text = "CCAA", Value = "CCAA" });
-            lst.Add(new SelectListItem() { Text = "CCHH", Value = "CCHH" });
+            lst.Add(new SelectListItem() { Text = "PROYECTO NAP", Value = "PROYECTO NAP" });
+            lst.Add(new SelectListItem() { Text = "2DO EGB",  Value = "2DO EGB" });
+            lst.Add(new SelectListItem() { Text = "3RO EGB",  Value = "3RO EGB" });
+            lst.Add(new SelectListItem() { Text = "4TO EGB",  Value = "4TO EGB" });
+            lst.Add(new SelectListItem() { Text = "5TO EGB",  Value = "5TO EGB" });
+            lst.Add(new SelectListItem() { Text = "6TO EGB",  Value = "6TO EGB" });
+            lst.Add(new SelectListItem() { Text = "7MO EGB",  Value = "7MO EGB" });
+            lst.Add(new SelectListItem() { Text = "8VO EGB",  Value = "8VO EGB" });
+            lst.Add(new SelectListItem() { Text = "9NO EGB",  Value = "9NO EGB" });
+            lst.Add(new SelectListItem() { Text = "10MO EGB", Value = "10MO EGB"});
+            lst.Add(new SelectListItem() { Text = "1RO BACH", Value = "1RO BACH"});
+            lst.Add(new SelectListItem() { Text = "2DO BACH", Value = "2DO BACH"});
+            lst.Add(new SelectListItem() { Text = "3RO BACH", Value = "3RO BACH"});
 
-            ViewBag.Facultad = new SelectList(lst, "Value", "Text", user.Facultad);
+            ViewBag.Curso = new SelectList(lst, "Value", "Text", user.Curso);
+
             return View(userView);
         }
 
@@ -449,12 +527,14 @@ namespace votaciones.Controllers
             //Subir Imagen
 
             string path = string.Empty;
-            string pic = string.Empty;
+            string pic  = string.Empty;
+            string newGuid = Guid.NewGuid().ToString();
 
             if (userView.Photo != null)
             {
-                pic = Path.GetFileName(userView.Photo.FileName);
+                pic = String.Format("{0}.jpg", newGuid);
                 path = Path.Combine(Server.MapPath("~/Security/Content/Photos"), pic);
+
                 userView.Photo.SaveAs(path);
                 using (MemoryStream ms = new MemoryStream())
                 {
@@ -465,12 +545,11 @@ namespace votaciones.Controllers
 
             var user = db.Users.Find(userView.UserId);
 
-            user.Adress = userView.Adress;
-            user.Facultad = userView.Facultad;
             user.FirstName = userView.FirstName;
-            user.Group = userView.Group;
-            user.LastName = userView.LastName;
-            user.Cedula = userView.Cedula;
+            user.Curso     = userView.Curso;
+            user.Group     = userView.Group;
+            user.LastName  = userView.LastName;
+            user.Cedula    = userView.Cedula;
 
             if (!string.IsNullOrEmpty(pic))
             {
@@ -500,13 +579,29 @@ namespace votaciones.Controllers
         }
 
         // POST: Users/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
             User user = db.Users.Find(id);
-            var userAsp = db.Users.Find(id).UserName;
-            db.Users.Remove(user);
+            var userAsp = db.Users.Find(id).Cedula;
+
+            if (user != null)
+            {
+                foreach (var item in user.VotingDetails.ToList())
+                {
+                    db.VotingDetails.Remove(item);
+                }
+
+                foreach (var item in user.GroupMembers.ToList())
+                {
+                    db.GroupMembers.Remove(item);
+                }
+
+                db.Users.Remove(user);
+            }
+
             try
             {
                 db.SaveChanges();

@@ -44,9 +44,10 @@
                     @Html.DisplayFor(model => model.DateTimeEnd)
                 </dd>
             </dl>
-            <img src="~/Content/Images/mesa.png" class="img-responsive" style="margin-left: auto; margin-right: auto; display: block; width:450px; height:450px; max-width:100%" />
+            <img src="~/Content/Images/mesa.png" class="img-responsive" style="margin-left:auto; margin-right:auto; display:block; width:450px; height:450px; max-width:100%" />
             <br />
             @Html.ActionLink("Volver a mis votaciones", "MyVotings", new { }, new { @class = "btn btn-success" })
+            @Html.ActionLink("Propuestas Electorales", "DownloadPropuesta", new { }, new { @class = "btn btn-primary" })
         </div>
     </div>
 
@@ -71,7 +72,7 @@
                 @for (int i = 0; i < Model.MyCandidates.Count; i++)
                 {
                     <tr>
-                        <td style="vertical-align:middle; font-style:italic; font-size:larger">
+                        <td style="vertical-align:middle; font-style:italic; font-size:medium">
 
                             @Html.DisplayFor(modelItem => Model.MyCandidates[i].User.FullName)<br />
                             @Html.DisplayFor(modelItem => Model.MyCandidates[i].User.Group)
@@ -79,7 +80,7 @@
                         <td>
                             @if (!string.IsNullOrEmpty(Model.MyCandidates[i].User.Photo))
                             {
-                                <img src="@Url.Content(Model.MyCandidates[i].User.Photo)" alt="Image" style="width:200px;height:200px;max-width:100%; height:auto; " />
+                                <img src="@Url.Content(Model.MyCandidates[i].User.Photo)" alt="Image" style="width:180px;height:180px;max-width:100%;height:auto;border-radius:50%;" />
                             }
                         </td>
                         <td style="vertical-align:middle">

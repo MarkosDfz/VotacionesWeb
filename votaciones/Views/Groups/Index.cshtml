@@ -31,10 +31,10 @@
 
     @foreach (var item in Model) {
         <tr>
-            <td>
+            <td style="vertical-align:middle">
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
-            <td style="text-align:center">
+            <td style="text-align:center; vertical-align:middle">
                 @Html.DisplayFor(modelItem => item.GroupMembers.Count)
             </td>
             <td>

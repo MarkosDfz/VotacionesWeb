@@ -11,6 +11,6 @@ namespace votaciones.Models
         public int VotingId { get; set; }
 
         [Required(ErrorMessage = "Se Debe Elegir un grupo")]
-        public int GroupId { get; set; }
+        public int[] GroupId { get; set; }
     }
 }

@@ -9,11 +9,17 @@
         <li>
             @if (this.User.IsInRole("Admin"))
             {
-                @Html.ActionLink("Hola " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Configuraciones" })
+                if (Session["nombre"] != null)
+                {
+                    @Html.ActionLink("Hola " + Session["nombre"].ToString() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Configuraciones" })
+                }
             }
             else
             {
-                @Html.ActionLink("Hola " + User.Identity.GetUserName() + "!", "MySettings", "Users", routeValues: null, htmlAttributes: new { title = "Configuraciones" })
+                if (Session["nombre"] != null)
+                {
+                    @Html.ActionLink("Hola " + Session["nombre"].ToString() + "!", "MySettings", "Users", routeValues: null, htmlAttributes: new { title = "Configuraciones" })
+                }
             }
         </li>
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Cerrar sesión</a></li>
@@ -23,7 +29,7 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Manual de Usuario", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Manual de Usuario", "DownloadManual", "Home", routeValues: null, htmlAttributes: new { id = "registerLink", target = "_blank"})</li>
         <li>@Html.ActionLink("Iniciar sesión", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
     </ul>
 }

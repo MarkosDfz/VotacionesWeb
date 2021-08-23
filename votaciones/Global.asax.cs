@@ -24,6 +24,8 @@ namespace votaciones
             this.CheckSuperUser();
             this.CheckDraw();
             this.CheckNull();
+            this.CheckEmp();
+            this.CheckNoVote();
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
@@ -41,21 +43,19 @@ namespace votaciones
             this.CheckRole("User", userContext);
 
             var user = db.Users
-                .Where(u => u.UserName.ToLower()
-                .Equals("markosdefaz@gmail.com"))
+                .Where(u => u.Cedula
+                .Equals("0123456789"))
                 .FirstOrDefault();
 
             if (user == null)
             {
                 user = new User
                 {
-                    Adress = "Latacunga",
                     FirstName = "Marcos",
-                    LastName = "Banda",
-                    Facultad = "CIYA",
-                    Cedula = "0503962169",
-                    UserName = "markosdefaz@gmail.com",
-                    Photo = "~/Security/Content/Photos/admin.jpg",
+                    LastName  = "Banda",
+                    Curso     = "NA",
+                    Cedula    = "0123456789",
+                    Photo     = "~/Security/Content/Photos/admin.jpg",
                 };
 
                 db.Users.Add(user);
@@ -63,16 +63,16 @@ namespace votaciones
 
             }
 
-            var userASP = userManager.FindByName(user.UserName);
+            var userASP = userManager.FindByName(user.Cedula);
             if (userASP == null)
             {
                 userASP = new ApplicationUser
                 {
-                    UserName = user.UserName,
-                    Email = user.UserName,
+                    UserName = user.Cedula,
+                    Email = user.Cedula,
                 };
 
-                userManager.Create(userASP, "Dfz666**");
+                userManager.Create(userASP, "123456");
             }
 
             userManager.AddToRole(userASP.Id, "Admin");
@@ -89,38 +89,24 @@ namespace votaciones
             this.CheckRole("User", userContext);
 
             var user = db.Users
-                .Where(u => u.UserName.ToLower()
-                .Equals("votacionempatada"))
+                .Where(u => u.Cedula
+                .Equals("0000000000"))
                 .FirstOrDefault();
 
             if (user == null)
             {
                 user = new User
                 {
-                    Adress = "null",
                     FirstName = "Empatada",
-                    LastName = "Votación",
-                    Facultad = "null",
-                    Cedula = "0000000000",
-                    UserName = "votacionempatada",
-                    Photo = "~/Security/Content/Photos/balance.png",
+                    LastName  = "Votaciï¿½n",
+                    Curso     = "NA",
+                    Cedula    = "0000000000",
+                    Photo     = "~/Security/Content/Photos/balance.png",
                 };
 
                 db.Users.Add(user);
                 db.SaveChanges();
 
-            }
-
-            var userASP = userManager.FindByName(user.UserName);
-            if (userASP == null)
-            {
-                userASP = new ApplicationUser
-                {
-                    UserName = user.UserName,
-                    Email = user.UserName,
-                };
-
-                userManager.Create(userASP, user.UserName);
             }
 
         }
@@ -135,40 +121,87 @@ namespace votaciones
             this.CheckRole("User", userContext);
 
             var user = db.Users
-                .Where(u => u.UserName.ToLower()
-                .Equals("votonulo"))
+                .Where(u => u.Cedula
+                .Equals("0000000001"))
                 .FirstOrDefault();
 
             if (user == null)
             {
                 user = new User
                 {
-                    Adress = "null",
                     FirstName = "Nulo",
-                    LastName = "Voto",
-                    Facultad = "null",
-                    Cedula = "0000000000",
-                    UserName = "votonulo",
-                    Photo = "~/Security/Content/Photos/novote.png",
+                    LastName  = "Voto",
+                    Curso     = "NA",
+                    Cedula    = "0000000001",
+                    Photo     = "~/Security/Content/Photos/novote.png",
                 };
 
                 db.Users.Add(user);
                 db.SaveChanges();
 
             }
+        }
 
-            var userASP = userManager.FindByName(user.UserName);
-            if (userASP == null)
+        private void CheckEmp()
+        {
+            var userContext = new ApplicationDbContext();
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(userContext));
+            var db = new DemocracyContext();
+
+            this.CheckRole("Admin", userContext);
+            this.CheckRole("User", userContext);
+
+            var user = db.Users
+                .Where(u => u.Cedula
+                .Equals("0000000002"))
+                .FirstOrDefault();
+
+            if (user == null)
             {
-                userASP = new ApplicationUser
+                user = new User
                 {
-                    UserName = user.UserName,
-                    Email = user.UserName,
+                    FirstName = "En Blanco",
+                    LastName = "Voto",
+                    Curso = "NA",
+                    Cedula = "0000000002",
+                    Photo = "~/Security/Content/Photos/empyvote.png",
                 };
 
-                userManager.Create(userASP, user.UserName);
-            }
+                db.Users.Add(user);
+                db.SaveChanges();
 
+            }
+        }
+
+        private void CheckNoVote()
+        {
+            var userContext = new ApplicationDbContext();
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(userContext));
+            var db = new DemocracyContext();
+
+            this.CheckRole("Admin", userContext);
+            this.CheckRole("User", userContext);
+
+            var user = db.Users
+                .Where(u => u.Cedula
+                .Equals("0000000003"))
+                .FirstOrDefault();
+
+            if (user == null)
+            {
+                user = new User
+                {
+                    FirstName = "No Sufragaron",
+                    LastName = "Estudiantes Que",
+                    Curso = "NA",
+                    Cedula = "0000000003",
+                    Photo = "~/Security/Content/Photos/noimage.png",
+                };
+
+                db.Users.Add(user);
+                db.SaveChanges();
+
+            }
         }
 
         private void CheckRole(string roleName, ApplicationDbContext userContext)

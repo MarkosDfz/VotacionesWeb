@@ -41,12 +41,12 @@ namespace votaciones.Models
 
     public class ChangePasswordViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "El campo {0} es requerido")]
         [DataType(DataType.Password)]
         [Display(Name = "Contraseña actual")]
         public string OldPassword { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(100, ErrorMessage = "{0} debe tener al menos {2} caracteres de longitud.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Contraseña nueva")]

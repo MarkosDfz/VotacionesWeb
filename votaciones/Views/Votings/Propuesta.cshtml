@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewBag.Title = "Propuesta";
+}
+
+<h2>Gestionar Propuestas</h2>
+
+<h4>Cargue un archivo tipo PDF para importar las Propuestas</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @using (Html.BeginForm("ImportPropuestas", "Votings", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+
+            <div class="text-success">
+                @TempData["DataPdf"]
+            </div>
+
+            <div class="text-danger">
+                @Html.Raw(ViewBag.Error)
+                <br />
+            </div>
+            <input type="file" name="pdffile" required />
+            <br />
+            <input type="submit" value="Importar" class="btn btn-primary" />
+            @Html.ActionLink("Volver", "Index", "Home", new { }, new { @class = "btn btn-success" })
+        }
+    </div>
+    <div class="col-md-6" style="text-align:center">
+        <img src="~/Content/Images/import1.png" class="img-responsive" style="width:55%; height:210px;margin-left: auto;margin-right: auto;display: block;" />
+    </div>
+</div>

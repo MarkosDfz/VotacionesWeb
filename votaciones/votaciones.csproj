@@ -251,10 +251,10 @@
       <SubType>Component</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Reports\Facultad.cs">
+    <Compile Include="Reports\Curso.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Facultad.rpt</DependentUpon>
+      <DependentUpon>Curso.rpt</DependentUpon>
       <SubType>Component</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
@@ -286,17 +286,16 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\Data\d.txt" />
     <Content Include="Content\Images\certificate.png" />
-    <Content Include="Content\Images\error403.png" />
     <Content Include="Content\Images\error404.png" />
     <Content Include="Content\Images\errorvoto.png" />
     <Content Include="Content\Images\finalizo.png" />
     <Content Include="Content\Images\forgot.png" />
+    <Content Include="Content\Images\img2.png" />
     <Content Include="Content\Images\import.png" />
+    <Content Include="Content\Images\import1.png" />
     <Content Include="Content\Images\login.png" />
     <Content Include="Content\Images\logo.png" />
-    <Content Include="Content\Images\logo1.png" />
     <Content Include="Content\Images\mail.png" />
     <Content Include="Content\Images\mesa.png" />
     <Content Include="Content\Images\network.png" />
@@ -304,14 +303,10 @@
     <Content Include="Content\Images\novote.png" />
     <Content Include="Content\Images\password.png" />
     <Content Include="Content\Images\pendientes.png" />
-    <Content Include="Content\Images\question.png" />
-    <Content Include="Content\Images\question1.png" />
+    <Content Include="Content\Images\propuestas.png" />
     <Content Include="Content\Images\repetido.png" />
     <Content Include="Content\Images\results.png" />
     <Content Include="Content\Images\settings.png" />
-    <Content Include="Content\Images\slide1.png" />
-    <Content Include="Content\Images\slide2.png" />
-    <Content Include="Content\Images\slide3.png" />
     <Content Include="Content\Images\userv.png" />
     <Content Include="Content\Images\voto.png" />
     <Content Include="Content\Images\votook.png" />
@@ -329,6 +324,7 @@
       <DependentUpon>DS.xsd</DependentUpon>
     </Content>
     <Content Include="Content\Formato\users.xlsx" />
+    <Content Include="Content\Data\manual.pdf" />
     <None Include="DS.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -372,8 +368,6 @@
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
     <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\Account\ForgotPassword.cshtml" />
-    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
@@ -420,6 +414,7 @@
     <Content Include="Views\Error\PageNotFound.cshtml" />
     <Content Include="Views\Votings\SuccessfulVote.cshtml" />
     <Content Include="Views\Users\ImportData.cshtml" />
+    <Content Include="Views\Votings\Propuesta.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -467,9 +462,9 @@
       <LastGenOutput>NoVote.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Reports\Facultad.rpt">
+    <Content Include="Reports\Curso.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>Facultad.cs</LastGenOutput>
+      <LastGenOutput>Curso.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

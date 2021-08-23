@@ -47,13 +47,13 @@ else
             <th>
                 @Html.DisplayNameFor(model => Model.Members[0].User.FullName)
             </th>
-            <th>
-                Correo
+            <th style="padding-left: 22px;">
+                Cédula
             </th>
-            <th>
+            <th style="padding-left: 20px;">
                 @Html.DisplayNameFor(model => Model.Members[0].User.Photo)
             </th>
-            <th>
+            <th style="padding-left: 20px;">
                 Acción
             </th>
         </tr>
@@ -61,19 +61,19 @@ else
         @for (int i = 0; i < Model.Members.Count; i++)
         {
             <tr>
-                <td>
+                <td style="vertical-align:middle">
                     @Html.DisplayFor(modelItem => Model.Members[i].User.FullName)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => Model.Members[i].User.UserName)
+                <td style="vertical-align:middle">
+                    @Html.DisplayFor(modelItem => Model.Members[i].User.Cedula)
                 </td>
-                <td>
+                <td style="vertical-align:middle">
                     @if (!string.IsNullOrEmpty(Model.Members[i].User.Photo))
                     {
-                        <img src="@Url.Content(Model.Members[i].User.Photo)" alt="Image" style="width:100px;height:100px;max-width:100%;border-radius:50%;" />
+                        <img src="@Url.Content(Model.Members[i].User.Photo)" alt="Image" style="width:60px;height:60px;max-width:100%;border-radius:50%;" />
                     }
                 </td>
-                <td>
+                <td style="vertical-align:middle">
                     <input type="button" class="btn btn-danger" value="Eliminar" onclick="miembro(@Model.Members[i].GroupMemberId,'@Model.Members[i].User.FullName')" />
                 </td>
             </tr>

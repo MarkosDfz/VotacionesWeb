@@ -6,7 +6,7 @@ namespace votaciones.Models
     public class ExternalLoginConfirmationViewModel
     {
         [Required]
-        [Display(Name = "Correo electrónico")]
+        [Display(Name = "Cédula")]
         public string Email { get; set; }
     }
 
@@ -42,18 +42,17 @@ namespace votaciones.Models
     public class ForgotViewModel
     {
         [Required]
-        [Display(Name = "Correo electrónico")]
+        [Display(Name = "Cédula")]
         public string Email { get; set; }
     }
 
     public class LoginViewModel
     {
-        [Required]
-        [Display(Name = "Correo electrónico")]
-        [EmailAddress]
+        [Required(ErrorMessage = "El campo {0} es requerido")]
+        [Display(Name = "Cédula")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "El campo {0} es requerido")]
         [DataType(DataType.Password)]
         [Display(Name = "Contraseña")]
         public string Password { get; set; }
@@ -65,8 +64,7 @@ namespace votaciones.Models
     public class RegisterViewModel
     {
         [Required]
-        [EmailAddress]
-        [Display(Name = "Correo electrónico")]
+        [Display(Name = "Cédula")]
         public string Email { get; set; }
 
         [Required]
@@ -84,8 +82,7 @@ namespace votaciones.Models
     public class ResetPasswordViewModel
     {
         [Required]
-        [EmailAddress]
-        [Display(Name = "Correo electrónico")]
+        [Display(Name = "Cédula")]
         public string Email { get; set; }
 
         [Required]
@@ -105,8 +102,7 @@ namespace votaciones.Models
     public class ForgotPasswordViewModel
     {
         [Required]
-        [EmailAddress]
-        [Display(Name = "Correo electrónico")]
+        [Display(Name = "Cédula")]
         public string Email { get; set; }
     }
 }

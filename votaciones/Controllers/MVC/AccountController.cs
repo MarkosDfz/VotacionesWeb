@@ -20,6 +20,7 @@ namespace votaciones.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private DemocracyContext db = new DemocracyContext();
 
         public AccountController()
         {
@@ -55,6 +56,19 @@ namespace votaciones.Controllers
             }
         }
 
+        public void firstname(LoginViewModel model)
+        {
+            var user = db.Users.Where(u => u.Cedula == model.Email).FirstOrDefault();
+            if (user != null)
+            {
+                Session["nombre"] = user.FirstName;
+                if (model.Email == model.Password)
+                {
+                    Session["modal"] = true;
+                }
+            }
+        }
+
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -82,6 +96,7 @@ namespace votaciones.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    firstname(model);
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -137,86 +152,7 @@ namespace votaciones.Controllers
             }
         }
 
-        //
-        // GET: /Account/Register
-        [AllowAnonymous]
-        public ActionResult Register()
-        {
-            return View();
-        }
 
-        //
-        // POST: /Account/Register
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterUserView userView)
-        {
-            if (ModelState.IsValid)
-            {
-                //Subir Imagen
-
-                string path = string.Empty;
-                string pic = string.Empty;
-
-                if (userView.Photo != null)
-                {
-                    pic = Path.GetFileName(userView.Photo.FileName);
-                    path = Path.Combine(Server.MapPath("~/Security/Content/Photos"), pic);
-                    userView.Photo.SaveAs(path);
-                    using (MemoryStream ms = new MemoryStream())
-                    {
-                        userView.Photo.InputStream.CopyTo(ms);
-                        byte[] array = ms.GetBuffer();
-                    }
-                }
-
-                //Guardar registro
-
-                var user = new User
-                {
-                    Adress = userView.Adress,
-                    FirstName = userView.FirstName,
-                    Group = userView.Group,
-                    LastName = userView.LastName,
-                    Cedula = userView.Cedula,
-                    Photo = string.IsNullOrEmpty(pic) ? string.Format("~/Security/Content/Photos/noimage.png") : string.Format("~/Security/Content/Photos/{0}", pic),
-                    UserName = userView.UserName,
-                };
-
-                var db = new DemocracyContext();
-
-                db.Users.Add(user);
-
-                try
-                {
-                    db.SaveChanges();
-                    var userASP = this.CreateASPUser(userView);
-                    await SignInManager.SignInAsync(userASP, isPersistent: false, rememberBrowser: false);
-                    return RedirectToAction("Index", "Home");
-                }
-                catch (Exception ex)
-                {
-                    if (ex.InnerException != null &&
-                        ex.InnerException.InnerException != null &&
-                        ex.InnerException.InnerException.Message.Contains("UserNameIndex"))
-                    {
-                        ModelState.AddModelError(string.Empty, "El e-mail ya esta registrado");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, ex.Message);
-                    }
-
-                    return View(userView);
-                }
-
-
-            }
-
-            // If we got this far, something failed, redisplay form
-            return View(userView);
-        }
 
         private ApplicationUser CreateASPUser(RegisterUserView userView)
         {
@@ -241,13 +177,13 @@ namespace votaciones.Controllers
 
             var userASP = new ApplicationUser
             {
-                UserName = userView.UserName,
-                Email = userView.UserName,
+                UserName = userView.Cedula,
+                Email = userView.Cedula,
             };
 
             userManager.Create(userASP, userView.Password);
 
-            userASP = userManager.FindByName(userView.UserName);
+            userASP = userManager.FindByName(userView.Cedula);
             userManager.AddToRole(userASP.Id, "User");
             return userASP;
         }
@@ -264,53 +200,7 @@ namespace votaciones.Controllers
             var result = await UserManager.ConfirmEmailAsync(userId, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
-
-        //
-        // GET: /Account/ForgotPassword
-        [AllowAnonymous]
-        public ActionResult ForgotPassword()
-        {
-            return View();
-        }
-
-        //
-        // POST: /Account/ForgotPassword
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                if (ModelState.IsValid)
-                {
-                    var user = await UserManager.FindByNameAsync(model.Email);
-                    if (user != null)
-                    {
-                        await Utilities.PasswordRecovery(model.Email);
-                        return RedirectToAction("ForgotPasswordConfirmation", "Account");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, "No encontramos tu email en el sistema, verifica el correo o contacta con soporte.");
-                    }
-                }
-
-                return View(model);
-
-            }
-
-            // Si llegamos a este punto, es que se ha producido un error y volvemos a mostrar el formulario
-            return View(model);
-        }
-
-        //
-        // GET: /Account/ForgotPasswordConfirmation
-        [AllowAnonymous]
-        public ActionResult ForgotPasswordConfirmation()
-        {
-            return View();
-        }
+    
 
         //
         // GET: /Account/ResetPassword
@@ -475,6 +365,8 @@ namespace votaciones.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            Session["nombre"] = null;
+            Session["modal"] = false;
             return RedirectToAction("Index", "Home");
         }
 
@@ -503,6 +395,7 @@ namespace votaciones.Controllers
                 }
             }
 
+            db.Dispose();
             base.Dispose(disposing);
         }
 
